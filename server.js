@@ -1,11 +1,38 @@
-const express = require('express');
+const express = require("express");
+const mongoose = require("mongoose");
+const path = require("path");
+
 const app = express();
-const port = process.env.PORT || 5000;
 
-// console.log that your server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`));
+//Initalise environment variables
+require("dotenv").config();
 
-// create a GET route
-app.get('/express_backend', (req, res) => {
-  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
+//Body Parser Middleware
+app.use(express.json());
+
+mongoose
+	.connect(process.env.MONGO_URI, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useCreateIndex: true,
+	})
+	.then(() => console.log("MongoDB Connected...."))
+	.catch((err) => console.error(err));
+
+app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
+
+//Serve static react in production
+if (process.env.NODE_ENV == "production") {
+	app.use(express.static(path.join(__dirname, "client/build")));
+	app.use("/assets", express.static(path.join(__dirname, "assets")));
+	app.get("*", (req, res) => {
+		res.sendFile(path.join(__dirname + "/client/build/index.html"));
+	});
+}
+
+//Listen in on port and print what port
+app.set("port", process.env.PORT || 5000);
+app.listen(app.get("port"), () => {
+	console.log(`Server started on port ${app.get("port")}`);
 });

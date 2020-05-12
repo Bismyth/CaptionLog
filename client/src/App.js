@@ -1,26 +1,22 @@
-import React,{useState,useEffect} from 'react';
-import './App.css';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadUser } from "./redux/actions/authActions";
 
-function App() {
-  const [data,setData] = useState({});
-  const [loaded, isLoaded] = useState(false);
-  useEffect(() => {
-      const fetchUser = async () => {
-          const res = await axios({
-              method: 'GET',
-              url: '/express_backend',
-          });
-          setData(res.data);
-          isLoaded(true);
-      }
-      fetchUser();
-  },[]);
-  return (
-    loaded
-    ? <div>{data.express}</div>
-    : <div>LOADING</div>
-  );
-}
+import Toolbar from "./components/Toolbar";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+
+const App = () => {
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(loadUser());
+	}, []);
+	return (
+		<div className="App">
+			<Toolbar />
+		</div>
+	);
+};
 
 export default App;
