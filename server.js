@@ -25,7 +25,6 @@ app.use("/api/auth", require("./routes/auth"));
 //Serve static react in production
 if (process.env.NODE_ENV == "production") {
 	app.use(express.static(path.join(__dirname, "client/build")));
-	app.use("/assets", express.static(path.join(__dirname, "assets")));
 	app.get("*", (req, res) => {
 		res.sendFile(path.join(__dirname + "/client/build/index.html"));
 	});
