@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const app = express();
-//Test deployment
+
 //Initalise environment variables
 require("dotenv").config();
 
