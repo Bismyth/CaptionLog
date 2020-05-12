@@ -1,0 +1,11 @@
+.content {
+	padding: 20px;
+	width: 100vw;
+}
+.logging {
+	width: 800px;
+	margin: auto;
+}
+.card-title {
+	font-weight: bold;
+}
