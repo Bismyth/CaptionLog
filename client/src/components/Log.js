@@ -30,19 +30,18 @@ const Log = (props) => {
 			//If token add to headers
 			if (token) config.headers["x-auth-token"] = token;
 			const result = await axios(
-				"/api/logs/" + props.match.params.id,
+				"/api/logs/view/" + props.match.params.id,
 				config
 			);
-			console.log(result.data);
 			setData(result.data);
 			setLoading(false);
 		};
 
 		fetchData();
-	}, []);
+	}, [props.match.params.id, token]);
 
 	return (
-		<Fragment>
+		<div className="content">
 			{loggedIn ? (
 				<div className="logging">
 					{!loading ? (
@@ -145,7 +144,7 @@ const Log = (props) => {
 			) : (
 				<Redirect to="/logs" />
 			)}
-		</Fragment>
+		</div>
 	);
 };
 

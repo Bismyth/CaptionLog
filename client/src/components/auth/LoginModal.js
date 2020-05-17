@@ -21,7 +21,7 @@ const LoginModal = (props) => {
 	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 	const [modal, setModal] = useState(false);
 	const [user, setUser] = useState({});
-	const [errorMsg, setError] = useState(null);
+	const [errors, setErrors] = useState(null);
 	const toggle = useCallback(
 		(e) => {
 			console.log(e);
@@ -42,9 +42,9 @@ const LoginModal = (props) => {
 	};
 	useEffect(() => {
 		if (serverError.id === "LOGIN_FAIL") {
-			setError(serverError.msg.msg);
+			setErrors(serverError.errors);
 		} else {
-			setError(null);
+			setErrors(null);
 		}
 		//If authenticated close modal
 		if (modal && isAuthenticated) {
@@ -59,7 +59,11 @@ const LoginModal = (props) => {
 			<Modal isOpen={modal} toggle={toggle} autoFocus={false}>
 				<ModalHeader toggle={toggle}>Login</ModalHeader>
 				<ModalBody>
-					{errorMsg ? <Alert color="danger">{errorMsg}</Alert> : null}
+					{errors
+						? errors.map((error) => (
+								<Alert color="danger">{error.msg}</Alert>
+						  ))
+						: null}
 					<Form onSubmit={onSubmit}>
 						<FormGroup>
 							<Label for="username">Username</Label>

@@ -6,6 +6,7 @@ import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
 import Logs from "./components/Logs";
 import Log from "./components/Log";
+import Search from "./components/Search";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -18,13 +19,12 @@ const App = () => {
 	return (
 		<Router>
 			<Toolbar />
-			<div className="content">
-				<Switch>
-					<Route path="/" exact component={Home} />
-					<Route path="/logs" exact component={Logs} />
-					<Route path="/logs/:id" component={Log} />
-				</Switch>
-			</div>
+			<Switch>
+				<Route path="/logs" exact component={Logs} />
+				<Route path="/logs/:id" component={Log} />
+				<Route path="/search/:value?/:field?" component={Search} />
+				<Route path="/" component={Home} />
+			</Switch>
 		</Router>
 	);
 };

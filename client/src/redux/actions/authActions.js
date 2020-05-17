@@ -44,7 +44,7 @@ export const register = (data) => (dispatch) => {
 		.catch((err) => {
 			dispatch(
 				returnErrors(
-					err.response.data,
+					err.response.data["errors"],
 					err.response.status,
 					REGISTER_FAIL
 				)
@@ -65,7 +65,11 @@ export const login = (data) => (dispatch) => {
 		})
 		.catch((err) => {
 			dispatch(
-				returnErrors(err.response.data, err.response.status, LOGIN_FAIL)
+				returnErrors(
+					err.response.data["errors"],
+					err.response.status,
+					LOGIN_FAIL
+				)
 			);
 			dispatch({ type: LOGIN_FAIL });
 		});
