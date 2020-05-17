@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
+const { checkSchema, validationResult } = require("express-validator");
 
 //Import Environment Variables
 require("dotenv").config();
@@ -11,20 +12,38 @@ require("dotenv").config();
 const User = require("../models/User");
 //@route POST api/auth
 //@desc  Auth User
-//@acess Public
-router.post("/", (req, res) => {
+//@access Public
+const validator = {
+	username: {
+		exists: {
+			errorMessage: "Please provide username",
+		},
+		escape: true,
+	},
+	password: {
+		exists: {
+			errorMessage: "Please provide password",
+		},
+	},
+};
+router.post("/", checkSchema(validator), (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty())
+		return res.status(422).json({ errors: errors.array() });
 	const { username, password } = req.body;
-	//Simple Validation
-	if (!username || !password)
-		return res.status(400).json({ msg: "Please enter all fields" });
 
 	User.findOne({ username }).then((user) => {
-		if (!user) return res.status(400).json({ msg: "User does not exists" });
+		if (!user)
+			return res
+				.status(400)
+				.json({ errors: [{ msg: "User does not exists" }] });
 
 		//Compare Hashed Password
 		bcrypt.compare(password, user.password).then((isMatch) => {
 			if (!isMatch)
-				return res.status(400).json({ msg: "Invalid Password" });
+				return res
+					.status(400)
+					.json({ errors: [{ msg: "Invaid Password" }] });
 			jwt.sign(
 				{ id: user.id, access: user.access },
 				process.env.JWT_SECRET,
@@ -48,8 +67,8 @@ router.post("/", (req, res) => {
 });
 
 //@route GET api/auth/user
-//@desc  Get user data
-//@acess Private
+//@desc  Authenticate User and return data
+//@access Private
 router.get("/user", auth, (req, res) => {
 	User.findById(req.user.id)
 		.select("-password")
