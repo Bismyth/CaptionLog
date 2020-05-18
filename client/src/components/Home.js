@@ -1,6 +1,12 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setPage } from "../redux/actions/pageActions";
 const Home = () => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(setPage("Home"));
+	}, [dispatch]);
 	return (
 		<div className="content">
 			<h1>Home</h1>

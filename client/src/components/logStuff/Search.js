@@ -1,33 +1,27 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-	Card,
-	CardBody,
-	CardTitle,
-	CardText,
-	Button,
-	Spinner,
 	InputGroup,
 	Input,
 	InputGroupAddon,
 	InputGroupText,
-	Alert,
 	Form,
 	Container,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
-import searchIcon from "../Magnifying_glass_icon.svg";
-
+import searchIcon from "../../Magnifying_glass_icon.svg";
+import "./scroll.css";
+import LogListItem from "./LogListItem";
 const Search = (props) => {
 	const history = useHistory();
-	const loggedIn = useSelector((state) => state.auth.isAuthenticated);
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [search, setSearch] = useState(props.match.params.value || "a");
 	const [field, setField] = useState(props.match.params.field || "title");
 	const [value, setValue] = useState(decodeURIComponent(search));
 	useEffect(() => {
+		var updatedUrl = `/search/${encodeURIComponent(search)}/${field}`;
+		if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
 		const fetchData = async () => {
 			setLoading(true);
 			const result = await axios(
@@ -37,9 +31,18 @@ const Search = (props) => {
 			setLoading(false);
 		};
 		fetchData();
-	}, [search, field]);
+	}, [search, field, history]);
+	useEffect(() => {
+		var val = props.match.params.value;
+		var fie = props.match.params.field;
+		if (val) {
+			setSearch(val);
+			setValue(val);
+		}
+		if (fie) setField(fie);
+	}, [props.match.params.value, props.match.params.field]);
 	return (
-		<div style={{ height: "calc(100vh - 56px)", overflowY: "scroll" }}>
+		<div id="scroll">
 			<div className="content">
 				<Container>
 					<h1>Search</h1>
@@ -63,7 +66,6 @@ const Search = (props) => {
 						</InputGroupAddon>
 						<Input
 							placeholder="Search..."
-							autoFocus={true}
 							onChange={(e) => {
 								setValue(e.target.value);
 							}}
@@ -77,40 +79,15 @@ const Search = (props) => {
 						className="ml-auto"
 						onChange={(e) => {
 							setField(e.target.value);
+							setSearch(value);
 						}}
+						value={field}
 					>
 						<option value="title">Title</option>
 						<option value="description">Description</option>
 					</Input>
 				</Form>
-
-				{!loading ? (
-					data.length > 0 ? (
-						data.map(({ _id, title, description }) => (
-							<Card key={_id}>
-								<CardBody>
-									<CardTitle>{title}</CardTitle>
-									<CardText>{description}</CardText>
-									{loggedIn ? (
-										<Button
-											onClick={() => {
-												history.push("/logs/" + _id);
-											}}
-										>
-											More Info
-										</Button>
-									) : (
-										<Fragment />
-									)}
-								</CardBody>
-							</Card>
-						))
-					) : (
-						<Alert color="info">No Results Found</Alert>
-					)
-				) : (
-					<Spinner color="primary" />
-				)}
+				<LogListItem loading={loading} data={data} />
 			</div>
 		</div>
 	);

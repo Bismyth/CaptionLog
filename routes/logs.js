@@ -7,6 +7,7 @@ require("dotenv").config();
 
 //Importing old Model
 const OldLog = require("../models/OldLog");
+const Log = require("../models/Log");
 //@route GET api/logs
 //@desc  Return Logs
 //@access Public

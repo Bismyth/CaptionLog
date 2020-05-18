@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 const Toolbar = (props) => {
 	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 	const isLoading = useSelector((state) => state.auth.isLoading);
+	const page = useSelector((state) => state.page.page);
 	const user = useSelector((state) => state.auth.user);
 	const [isOpen, toggle] = useState(false);
 	const authLinks = (
@@ -46,12 +47,20 @@ const Toolbar = (props) => {
 					<Collapse isOpen={isOpen} navbar>
 						<Nav className="mr-auto" navbar>
 							<NavItem>
-								<NavLink tag={Link} to="/">
+								<NavLink
+									tag={Link}
+									to="/"
+									active={page === "Home"}
+								>
 									Home
 								</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink tag={Link} to="/logs">
+								<NavLink
+									tag={Link}
+									to="/logs"
+									active={page === "Logs"}
+								>
 									Logs
 								</NavLink>
 							</NavItem>
