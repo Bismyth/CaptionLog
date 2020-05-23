@@ -5,7 +5,7 @@ const path = require("path");
 const app = express();
 
 //Initalise environment variables
-require("dotenv").config();
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 //Body Parser Middleware
 app.use(express.json());
