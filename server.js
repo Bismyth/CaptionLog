@@ -10,6 +10,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 //Body Parser Middleware
 app.use(express.json());
 
+//Connect to Server
 mongoose
 	.connect(process.env.MONGO_URI, {
 		useNewUrlParser: true,
@@ -19,6 +20,7 @@ mongoose
 	.then(() => console.log("MongoDB Connected...."))
 	.catch((err) => console.error(err));
 
+//Initialise Routes
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
