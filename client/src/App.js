@@ -7,26 +7,27 @@ import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
 import Log from "./components/logStuff/Log";
 import Search from "./components/logStuff/Search";
-
+import NewLogForm from "./components/logStuff/NewLogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 const App = () => {
-	const dispatch = useDispatch();
-	useEffect(() => {
-		dispatch(loadUser());
-	}, [dispatch]);
-	return (
-		<Router>
-			<Toolbar />
-			<Switch>
-				<Route path="/logs/:id?" component={Logs} />
-				<Route path="/log/:id" component={Log} />
-				<Route path="/search/:value?/:field?" component={Search} />
-				<Route path="/" component={Home} />
-			</Switch>
-		</Router>
-	);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(loadUser());
+    }, [dispatch]);
+    return (
+        <Router>
+            <Toolbar />
+            <Switch>
+                <Route path="/logs/:id?" component={Logs} />
+                <Route path="/log/:id" component={Log} />
+                <Route path="/newLog" component={NewLogForm} />
+                <Route path="/search/:value?/:field?" component={Search} />
+                <Route path="/" component={Home} />
+            </Switch>
+        </Router>
+    );
 };
 
 export default App;
