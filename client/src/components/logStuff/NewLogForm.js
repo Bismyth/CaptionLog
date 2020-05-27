@@ -13,32 +13,35 @@ import {
 import "./fade.css";
 
 const NewLog = () => {
+    /*  - Add movie info (to database as well) 
+        - add dropdown editor of form values 
+        - Add dropdown for video_source and caption_source and genre
+        - Build out transferer
+    */
+    const digBlank = {
+        name: "",
+        length: "",
+        location: "",
+    };
+    const physBlank = {
+        name: "",
+        location: "",
+        copiesHeld: "",
+    };
     const blankForm = {
-        title: undefined,
-        year: undefined,
-        description: undefined,
-        genre: undefined,
+        title: "",
+        year: "",
+        description: "",
+        genre: "",
         copyrightInfo: {
-            teacherName: undefined,
-            captionSource: undefined,
-            dateOfCompletion: undefined,
-            videoSource: undefined,
-            originalLocation: undefined,
+            teacherName: "",
+            captionSource: "",
+            dateOfCompletion: "",
+            videoSource: "",
+            originalLocation: "",
         },
-        digitalInfo: [
-            {
-                name: undefined,
-                length: undefined,
-                location: undefined,
-            },
-        ],
-        physicalInfo: [
-            {
-                name: undefined,
-                location: undefined,
-                copiesHeld: undefined,
-            },
-        ],
+        digitalInfo: [],
+        physicalInfo: [],
     };
     const [data, setData] = useState(blankForm);
     const [loading, setLoading] = useState(false);
@@ -73,7 +76,13 @@ const NewLog = () => {
         }
     };
     const addArr = (key) => {
-        setData({ ...data, [key]: [...data[key], blankForm[key][0]] });
+        setData({
+            ...data,
+            [key]: [
+                ...data[key],
+                { digitalInfo: digBlank, physicalInfo: physBlank }[key],
+            ],
+        });
     };
     const removeArr = (key, index) => {
         setData({
@@ -94,9 +103,15 @@ const NewLog = () => {
                                 title: "Title",
                                 year: "Year",
                                 description: "Description",
+                                genre: "Genre",
                             };
                             if (
-                                ["title", "year", "description"].includes(key)
+                                [
+                                    "title",
+                                    "year",
+                                    "description",
+                                    "genre",
+                                ].includes(key)
                             ) {
                                 return (
                                     <FormGroup row key={key}>
@@ -110,6 +125,7 @@ const NewLog = () => {
                                                         title: "text",
                                                         year: "number",
                                                         description: "textarea",
+                                                        genre: "text",
                                                     }[key]
                                                 }
                                                 id={key}
