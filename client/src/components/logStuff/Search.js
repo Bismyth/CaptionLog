@@ -25,7 +25,7 @@ const Search = (props) => {
         const fetchData = async () => {
             setLoading(true);
             const result = await axios(
-                `/api/logs/search?value=${search}&field=${field}`
+                `/api/logs?value=${search}&field=${field}`
             );
             setData(result.data);
             setLoading(false);

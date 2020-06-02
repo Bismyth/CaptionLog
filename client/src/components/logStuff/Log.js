@@ -23,21 +23,17 @@ const Log = (props) => {
         const fetchData = async () => {
             setLoading(true);
             var config = {};
-            var query = "";
+            var query = "/api/logs/" + props.match.params.id;
             if (loggedIn) {
                 config.headers = {
                     "Content-type": "application/json",
                 };
-                if (token) config.headers["x-auth-token"] = token;
-                query = "/api/logs/fview/" + props.match.params.id;
-            } else {
-                query = "/api/logs/pview/" + props.match.params.id;
+                config.headers["x-auth-token"] = token;
             }
             const result = await axios(query, config);
             setData(result.data);
             setLoading(false);
         };
-
         fetchData();
     }, [props.match.params.id, token, loggedIn]);
 

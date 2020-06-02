@@ -10,6 +10,7 @@ import {
     InputGroupText,
     InputGroupAddon,
     Container,
+    Button,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -22,7 +23,7 @@ const Logs = (props) => {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState(props.match.params.id || "a");
+    const [search, setSearch] = useState(props.match.params.search || "a");
     const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     const [value, setValue] = useState("");
     useEffect(() => {
@@ -35,8 +36,8 @@ const Logs = (props) => {
             setLoading(true);
             const result =
                 decodeURIComponent(search) === "#"
-                    ? await axios(`/api/logs/view?search=[0-9]`)
-                    : await axios(`/api/logs/view?search=${search}`);
+                    ? await axios(`/api/logs?search=[0-9]`)
+                    : await axios(`/api/logs?search=${search}`);
 
             setData(result.data);
             setLoading(false);
@@ -44,12 +45,23 @@ const Logs = (props) => {
         fetchData();
     }, [search, history]);
     useEffect(() => {
-        if (props.match.params.id) setSearch(props.match.params.id);
-    }, [props.match.params.id]);
+        if (props.match.params.search) setSearch(props.match.params.search);
+    }, [props.match.params.search]);
     return (
         <div id="scroll">
             <Container className="content">
-                <h1>Logs</h1>
+                <div>
+                    <h1 className="mr-auto">Logs</h1>
+                    <Button
+                        className="ml-auto"
+                        onClick={() => {
+                            history.push("/newLog");
+                        }}
+                    >
+                        +New Log
+                    </Button>
+                </div>
+
                 <Pagination
                     aria-label="Alphabet Navigation"
                     size="sm"

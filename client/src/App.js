@@ -7,7 +7,7 @@ import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
 import Log from "./components/logStuff/Log";
 import Search from "./components/logStuff/Search";
-import NewLogForm from "./components/logStuff/NewLogForm";
+import LogForm from "./components/logStuff/LogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -20,9 +20,10 @@ const App = () => {
         <Router>
             <Toolbar />
             <Switch>
-                <Route path="/logs/:id?" component={Logs} />
+                <Route path="/logs/:search?" component={Logs} />
                 <Route path="/log/:id" component={Log} />
-                <Route path="/newLog" component={NewLogForm} />
+                <Route path="/newLog" component={LogForm} />
+                <Route path="/edit/:id" component={LogForm} />
                 <Route path="/search/:value?/:field?" component={Search} />
                 <Route path="/" component={Home} />
             </Switch>
