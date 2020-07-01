@@ -17,15 +17,30 @@ const App = () => {
         dispatch(loadUser());
     }, [dispatch]);
     return (
-        <Router>
+        <Router basename={`${process.env.PUBLIC_URL}`}>
             <Toolbar />
             <Switch>
-                <Route path="/logs/:search?" component={Logs} />
-                <Route path="/log/:id" component={Log} />
-                <Route path="/newLog" component={LogForm} />
-                <Route path="/edit/:id" component={LogForm} />
-                <Route path="/search/:value?/:field?" component={Search} />
-                <Route path="/" component={Home} />
+                <Route
+                    path={`${process.env.PUBLIC_URL}/logs/:search?`}
+                    component={Logs}
+                />
+                <Route
+                    path={`${process.env.PUBLIC_URL}/log/:id`}
+                    component={Log}
+                />
+                <Route
+                    path={`${process.env.PUBLIC_URL}/newLog`}
+                    component={LogForm}
+                />
+                <Route
+                    path={`${process.env.PUBLIC_URL}/edit/:id`}
+                    component={LogForm}
+                />
+                <Route
+                    path={`${process.env.PUBLIC_URL}/search/:value?/:field?`}
+                    component={Search}
+                />
+                <Route path={`${process.env.PUBLIC_URL}/`} component={Home} />
             </Switch>
         </Router>
     );

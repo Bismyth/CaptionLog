@@ -32,13 +32,17 @@ const Logs = (props) => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
     useEffect(() => {
-        var updatedUrl = "logs/" + encodeURIComponent(search);
+        var updatedUrl = `${process.env.PUBLIC_URL}/logs/${encodeURIComponent(
+            search
+        )}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
             const result =
                 decodeURIComponent(search) === "#"
-                    ? await axios(`/caption/api/logs?search=[0-9]`)
+                    ? await axios(
+                          `${process.env.PUBLIC_URL}/api/logs?search=[0-9]`
+                      )
                     : await axios(
                           `${process.env.PUBLIC_URL}/api/logs?search=${search}`
                       );
@@ -63,7 +67,9 @@ const Logs = (props) => {
                             style={{ float: "right" }}
                             className="ml-auto"
                             onClick={() => {
-                                history.push("/newLog");
+                                history.push(
+                                    `${process.env.PUBLIC_URL}/newLog`
+                                );
                             }}
                         >
                             +New Log
@@ -95,7 +101,9 @@ const Logs = (props) => {
                 <Form
                     onSubmit={(e) => {
                         history.push(
-                            `/search/${encodeURIComponent(value)}/title`
+                            `${
+                                process.env.PUBLIC_URL
+                            }/search/${encodeURIComponent(value)}/title`
                         );
                         e.preventDefault();
                     }}
