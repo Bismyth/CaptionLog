@@ -51,7 +51,7 @@ const Toolbar = (props) => {
                             <NavItem>
                                 <NavLink
                                     tag={Link}
-                                    to={`${process.env.PUBLIC_URL}`}
+                                    to={`/`}
                                     active={page === "Home"}
                                 >
                                     Home
@@ -60,7 +60,7 @@ const Toolbar = (props) => {
                             <NavItem>
                                 <NavLink
                                     tag={Link}
-                                    to={`${process.env.PUBLIC_URL}/logs`}
+                                    to={`/logs`}
                                     active={page === "Logs"}
                                 >
                                     Logs

@@ -12,6 +12,10 @@ import LogForm from "./components/logStuff/LogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
+export const history = createBrowserHistory({
+    basename: process.env.PUBLIC_URL,
+});
+
 const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -32,9 +36,5 @@ const App = () => {
         </Router>
     );
 };
-
-export const history = createBrowserHistory({
-    basename: process.env.PUBLIC_URL,
-});
 
 export default App;
