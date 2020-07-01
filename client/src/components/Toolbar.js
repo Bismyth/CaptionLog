@@ -60,7 +60,7 @@ const Toolbar = (props) => {
                             <NavItem>
                                 <NavLink
                                     tag={Link}
-                                    to="/logs"
+                                    to="logs"
                                     active={page === "Logs"}
                                 >
                                     Logs
