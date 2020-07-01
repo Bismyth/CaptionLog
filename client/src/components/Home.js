@@ -10,7 +10,7 @@ const Home = () => {
     }, [dispatch]);
     return (
         <Container className="content">
-            <h1>Home</h1>
+            <h1>Home </h1>
         </Container>
     );
 };
