@@ -38,8 +38,8 @@ const Logs = (props) => {
             setLoading(true);
             const result =
                 decodeURIComponent(search) === "#"
-                    ? await axios(`./api/logs?search=[0-9]`)
-                    : await axios(`./api/logs?search=${search}`);
+                    ? await axios(`/caption/api/logs?search=[0-9]`)
+                    : await axios(`/caption/api/logs?search=${search}`);
 
             setData(result.data);
             setLoading(false);
