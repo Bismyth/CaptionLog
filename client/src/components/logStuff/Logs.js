@@ -32,7 +32,7 @@ const Logs = (props) => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
     useEffect(() => {
-        var updatedUrl = "/logs/" + encodeURIComponent(search);
+        var updatedUrl = "logs/" + encodeURIComponent(search);
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
