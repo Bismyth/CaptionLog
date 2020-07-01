@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import {
     Pagination,
@@ -18,7 +18,9 @@ import searchIcon from "../../Magnifying_glass_icon.svg";
 import "./scroll.css";
 import { setPage } from "../../redux/actions/pageActions";
 import LogListItem from "./LogListItem";
+import { useSelector } from "react-redux";
 const Logs = (props) => {
+    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const history = useHistory();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
@@ -51,15 +53,22 @@ const Logs = (props) => {
         <div id="scroll">
             <Container className="content">
                 <div>
-                    <h1 className="mr-auto">Logs</h1>
-                    <Button
-                        className="ml-auto"
-                        onClick={() => {
-                            history.push("/newLog");
-                        }}
-                    >
-                        +New Log
-                    </Button>
+                    <h1 style={{ display: "inline-block" }} className="mr-auto">
+                        Logs
+                    </h1>
+                    {loggedIn ? (
+                        <Button
+                            style={{ float: "right" }}
+                            className="ml-auto"
+                            onClick={() => {
+                                history.push("/newLog");
+                            }}
+                        >
+                            +New Log
+                        </Button>
+                    ) : (
+                        <Fragment />
+                    )}
                 </div>
 
                 <Pagination

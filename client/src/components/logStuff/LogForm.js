@@ -12,12 +12,12 @@ import {
     Alert,
 } from "reactstrap";
 import "./fade.css";
-import { useHistory } from "react-router-dom";
+
+import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const LogForm = (props) => {
-    /*  
-        - add dropdown editor of form values 
+    /*
         - Add dropdown for video_source and caption_source and genre
         - Build out transferer
     */
@@ -51,7 +51,6 @@ const LogForm = (props) => {
     const [data, setData] = useState(blankForm);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [formType, setFormType] = useState("media");
     const history = useHistory();
     useEffect(() => {
         if (props.match.params.id) {
@@ -70,9 +69,6 @@ const LogForm = (props) => {
                     if (result.data) {
                         setError("");
                         setData(result.data);
-                        if (result.data.movieInfo) {
-                            setFormType("movie");
-                        }
                     } else {
                         setError("No Log with that ID found");
                     }
@@ -87,9 +83,8 @@ const LogForm = (props) => {
         }
     }, [props.match.params.id, loggedIn, token]);
 
-    useEffect(() => {
-        console.log("FormType Change");
-        console.log(formType);
+    const changeFormType = (e) => {
+        var formType = e.target.value;
         if (formType === "movie") {
             digBlank.current = {
                 length: "",
@@ -114,9 +109,8 @@ const LogForm = (props) => {
             const { movieInfo, ...nData } = data;
             setData(nData);
         }
-    }, [formType]);
+    };
     const changeValue = (e, level, index) => {
-        console.log(`${e.target.name} : ${e.target.value}, ${level}, ${index}`);
         if (level === undefined) {
             setData({
                 ...data,
@@ -148,6 +142,7 @@ const LogForm = (props) => {
             ],
         });
     };
+    const submit = async () => {};
     const removeArr = (key, index) => {
         setData({
             ...data,
@@ -158,6 +153,7 @@ const LogForm = (props) => {
     };
     return (
         <div id="scroll">
+            {!loggedIn ? <Redirect to="/logs" /> : <Fragment />}
             <Container className="content">
                 <div>
                     <Button
@@ -175,10 +171,7 @@ const LogForm = (props) => {
                     </h1>
                     <Input
                         type="select"
-                        value={formType}
-                        onChange={(e) => {
-                            setFormType(e.target.value);
-                        }}
+                        onChange={changeFormType}
                         className="ml-auto mb-4"
                         style={{ width: "auto" }}
                     >
