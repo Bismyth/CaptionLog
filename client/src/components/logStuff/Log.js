@@ -23,7 +23,7 @@ const Log = (props) => {
         const fetchData = async () => {
             setLoading(true);
             var config = {};
-            var query = `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}`;
+            var query = `/api/logs/${props.match.params.id}`;
             if (loggedIn) {
                 config.headers = {
                     "Content-type": "application/json",

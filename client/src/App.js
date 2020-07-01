@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/authActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
@@ -18,33 +19,22 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        <Router basename={"/subdirectory"}>
+        <Router>
             <Toolbar />
             <Switch>
-                <Route
-                    path={`${process.env.PUBLIC_URL}/logs/:search?`}
-                    component={Logs}
-                />
-                <Route
-                    path={`${process.env.PUBLIC_URL}/log/:id`}
-                    component={Log}
-                />
-                <Route
-                    path={`${process.env.PUBLIC_URL}/newLog`}
-                    component={LogForm}
-                />
-                <Route
-                    path={`${process.env.PUBLIC_URL}/edit/:id`}
-                    component={LogForm}
-                />
-                <Route
-                    path={`${process.env.PUBLIC_URL}/search/:value?/:field?`}
-                    component={Search}
-                />
-                <Route path={`${process.env.PUBLIC_URL}/`} component={Home} />
+                <Route path={`/logs/:search?`} component={Logs} />
+                <Route path={`/log/:id`} component={Log} />
+                <Route path={`/newLog`} component={LogForm} />
+                <Route path={`/edit/:id`} component={LogForm} />
+                <Route path={`/search/:value?/:field?`} component={Search} />
+                <Route path={`/`} component={Home} />
             </Switch>
         </Router>
     );
 };
+
+export const history = createBrowserHistory({
+    basename: process.env.PUBLIC_URL,
+});
 
 export default App;

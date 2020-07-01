@@ -21,7 +21,7 @@ const LogListItem = (props) => {
                             <CardBody>
                                 <CardTitle className="d-flex">
                                     <Link
-                                        to={`${process.env.PUBLIC_URL}/log/" + ${_id}`}
+                                        to={`/log/" + ${_id}`}
                                         className="text-dark"
                                     >
                                         {title}

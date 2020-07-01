@@ -32,20 +32,14 @@ const Logs = (props) => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
     useEffect(() => {
-        var updatedUrl = `${process.env.PUBLIC_URL}/logs/${encodeURIComponent(
-            search
-        )}`;
+        var updatedUrl = `/logs/${encodeURIComponent(search)}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
             const result =
                 decodeURIComponent(search) === "#"
-                    ? await axios(
-                          `${process.env.PUBLIC_URL}/api/logs?search=[0-9]`
-                      )
-                    : await axios(
-                          `${process.env.PUBLIC_URL}/api/logs?search=${search}`
-                      );
+                    ? await axios(`api/logs?search=[0-9]`)
+                    : await axios(`/api/logs?search=${search}`);
 
             setData(result.data);
             setLoading(false);
@@ -67,9 +61,7 @@ const Logs = (props) => {
                             style={{ float: "right" }}
                             className="ml-auto"
                             onClick={() => {
-                                history.push(
-                                    `${process.env.PUBLIC_URL}/newLog`
-                                );
+                                history.push(`/newLog`);
                             }}
                         >
                             +New Log
