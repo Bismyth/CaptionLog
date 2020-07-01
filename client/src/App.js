@@ -16,8 +16,15 @@ const App = () => {
     useEffect(() => {
         dispatch(loadUser());
     }, [dispatch]);
+
     return (
-        <Router basename={`${process.env.PUBLIC_URL}`}>
+        <Router
+            basename={
+                process.env.PUBLIC_URL == "https://dec.shenton.wa.edu.au"
+                    ? "/caption"
+                    : "/"
+            }
+        >
             <Toolbar />
             <Switch>
                 <Route
