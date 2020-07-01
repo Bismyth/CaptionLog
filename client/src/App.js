@@ -18,13 +18,7 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        <Router
-            basename={
-                process.env.PUBLIC_URL == "https://dec.shenton.wa.edu.au"
-                    ? "/caption"
-                    : "/"
-            }
-        >
+        <Router basename={"/subdirectory"}>
             <Toolbar />
             <Switch>
                 <Route
