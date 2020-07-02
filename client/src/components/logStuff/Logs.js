@@ -66,7 +66,9 @@ const Logs = (props) => {
                             style={{ float: "right" }}
                             className="ml-auto"
                             onClick={() => {
-                                history.push(`/newLog`);
+                                history.push(
+                                    `${process.env.PUBLIC_URL}/newLog`
+                                );
                             }}
                         >
                             +New Log

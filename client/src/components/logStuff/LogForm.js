@@ -63,7 +63,7 @@ const LogForm = (props) => {
                     };
                     config.headers["x-auth-token"] = token;
                     const result = await axios(
-                        "/api/logs/" + props.match.params.id + "?type=new",
+                        `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}?type=new`,
                         config
                     );
                     if (result.data) {

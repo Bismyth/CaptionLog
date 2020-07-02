@@ -20,12 +20,14 @@ const Search = (props) => {
     const [field, setField] = useState(props.match.params.field || "title");
     const [value, setValue] = useState(decodeURIComponent(search));
     useEffect(() => {
-        var updatedUrl = `/search/${encodeURIComponent(search)}/${field}`;
+        var updatedUrl = `${process.env.PUBLIC_URL}/search/${encodeURIComponent(
+            search
+        )}/${field}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
             const result = await axios(
-                `/api/logs?value=${search}&field=${field}`
+                `${process.env.PUBLIC_URL}/api/logs?value=${search}&field=${field}`
             );
             setData(result.data);
             setLoading(false);
