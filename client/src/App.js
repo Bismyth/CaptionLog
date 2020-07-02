@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/authActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import history from "./history";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
@@ -12,10 +12,6 @@ import LogForm from "./components/logStuff/LogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-export const history = createBrowserHistory({
-    basename: process.env.PUBLIC_URL,
-});
-
 const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -23,7 +19,7 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        <Router>
+        <Router history={history}>
             <Toolbar />
             <Switch>
                 <Route path={`/logs/:search?`} component={Logs} />
