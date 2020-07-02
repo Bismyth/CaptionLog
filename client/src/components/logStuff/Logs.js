@@ -31,20 +31,20 @@ const Logs = (props) => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
     useEffect(() => {
-        var updatedUrl = `/logs/${encodeURIComponent(search)}`;
+        var updatedUrl = `logs/${encodeURIComponent(search)}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
             const result =
                 decodeURIComponent(search) === "#"
                     ? await axios(`api/logs?search=[0-9]`)
-                    : await axios(`/api/logs?search=${search}`);
+                    : await axios(`api/logs?search=${search}`);
 
             setData(result.data);
             setLoading(false);
         };
         fetchData();
-    }, [search, history]);
+    }, [search]);
     useEffect(() => {
         if (props.match.params.search) setSearch(props.match.params.search);
     }, [props.match.params.search]);
