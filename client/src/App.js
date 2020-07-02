@@ -10,6 +10,7 @@ import Search from "./components/logStuff/Search";
 import LogForm from "./components/logStuff/LogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { createBrowserHistory } from "history";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -17,8 +18,11 @@ const App = () => {
         dispatch(loadUser());
     }, [dispatch]);
 
+    const history = createBrowserHistory({
+        basename: process.env.PUBLIC_URL,
+    });
     return (
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router basename={process.env.PUBLIC_URL} history={history}>
             <Toolbar />
             <Switch>
                 <Route path={`/logs/:search?`} component={Logs} />
