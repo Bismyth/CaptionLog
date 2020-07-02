@@ -13,6 +13,8 @@ import LoginModal from "./auth/LoginModal";
 import Logout from "./auth/Logout";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import logo from "../MainLogo.svg";
+import "./Toolbar.css";
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const isLoading = useSelector((state) => state.auth.isLoading);
@@ -39,16 +41,33 @@ const Toolbar = (props) => {
         </Fragment>
     );
     return (
-        <div>
-            <Navbar color="dark" dark expand="sm" className="mb-2">
+        <Fragment>
+            <Navbar
+                className="topbar"
+                style={{ padding: "0px", background: "#1c3664" }}
+                dark
+            >
+                <Container>
+                    <Nav className="ml-auto" navbar>
+                        {isLoading ? (
+                            <Fragment />
+                        ) : isAuthenticated ? (
+                            authLinks
+                        ) : (
+                            guestLinks
+                        )}
+                    </Nav>
+                </Container>
+            </Navbar>
+            <Navbar color="light" light expand="md" className="mb-2">
                 <Container>
                     <NavbarBrand tag={Link} to="./">
-                        CaptionLog
+                        <img src={logo} className="logo" alt="Logo" />
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="mr-auto" navbar>
-                            <NavItem>
+                            <NavItem className="b1 bl">
                                 <NavLink
                                     tag={Link}
                                     to={`/`}
@@ -67,19 +86,10 @@ const Toolbar = (props) => {
                                 </NavLink>
                             </NavItem>
                         </Nav>
-                        <Nav className="ml-auto" navbar>
-                            {isLoading ? (
-                                <Fragment />
-                            ) : isAuthenticated ? (
-                                authLinks
-                            ) : (
-                                guestLinks
-                            )}
-                        </Nav>
                     </Collapse>
                 </Container>
             </Navbar>
-        </div>
+        </Fragment>
     );
 };
 export default Toolbar;
