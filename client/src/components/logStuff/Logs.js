@@ -31,15 +31,19 @@ const Logs = (props) => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
     useEffect(() => {
-        var updatedUrl = `logs/${encodeURIComponent(search)}`;
+        console.log(process.env.PUBLIC_URL);
+        var updatedUrl = `/logs/${encodeURIComponent(search)}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
             const result =
                 decodeURIComponent(search) === "#"
-                    ? await axios(`api/logs?search=[0-9]`)
-                    : await axios(`api/logs?search=${search}`);
-
+                    ? await axios(
+                          `${process.env.PUBLIC_URL}/api/logs?search=[0-9]`
+                      )
+                    : await axios(
+                          `${process.env.PUBLIC_URL}/api/logs?search=${search}`
+                      );
             setData(result.data);
             setLoading(false);
         };

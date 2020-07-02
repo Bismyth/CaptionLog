@@ -42,7 +42,7 @@ const Toolbar = (props) => {
         <div>
             <Navbar color="dark" dark expand="sm" className="mb-2">
                 <Container>
-                    <NavbarBrand tag={Link} to="/">
+                    <NavbarBrand tag={Link} to="./">
                         CaptionLog
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
@@ -51,7 +51,7 @@ const Toolbar = (props) => {
                             <NavItem>
                                 <NavLink
                                     tag={Link}
-                                    to={`/`}
+                                    to={`./`}
                                     active={page === "Home"}
                                 >
                                     Home
@@ -60,7 +60,7 @@ const Toolbar = (props) => {
                             <NavItem>
                                 <NavLink
                                     tag={Link}
-                                    to={`/logs`}
+                                    to={`./logs`}
                                     active={page === "Logs"}
                                 >
                                     Logs

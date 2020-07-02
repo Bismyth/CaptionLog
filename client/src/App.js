@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/authActions";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import history from "./history";
+import { Switch, Route } from "react-router-dom";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
@@ -19,17 +18,17 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        <Router history={history} basename={process.env.PUBLIC_URL}>
+        <Fragment>
             <Toolbar />
             <Switch>
-                <Route path={`./logs/:search?`} component={Logs} />
-                <Route path={`./log/:id`} component={Log} />
-                <Route path={`./newLog`} component={LogForm} />
-                <Route path={`./edit/:id`} component={LogForm} />
-                <Route path={`./search/:value?/:field?`} component={Search} />
-                <Route path={`./`} component={Home} />
+                <Route path={`/logs/:search?`} component={Logs} />
+                <Route path={`/log/:id`} component={Log} />
+                <Route path={`/newLog`} component={LogForm} />
+                <Route path={`/edit/:id`} component={LogForm} />
+                <Route path={`/search/:value?/:field?`} component={Search} />
+                <Route path={`/`} component={Home} />
             </Switch>
-        </Router>
+        </Fragment>
     );
 };
 
