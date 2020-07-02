@@ -12,7 +12,7 @@ import {
     Container,
     Button,
 } from "reactstrap";
-import { useHistory } from "react-router-dom";
+import history from "./history";
 import { useDispatch } from "react-redux";
 import searchIcon from "../../Magnifying_glass_icon.svg";
 import "./scroll.css";
@@ -21,7 +21,6 @@ import LogListItem from "./LogListItem";
 import { useSelector } from "react-redux";
 const Logs = (props) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const history = useHistory();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
