@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from "react";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/authActions";
-import { Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
@@ -10,6 +10,7 @@ import Search from "./components/logStuff/Search";
 import LogForm from "./components/logStuff/LogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import history from "./history";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        <Fragment>
+        <Router basename={process.env.PUBLIC_URL} history={history}>
             <Toolbar />
             <Switch>
                 <Route path={`/logs/:search?`} component={Logs} />
@@ -28,7 +29,7 @@ const App = () => {
                 <Route path={`/search/:value?/:field?`} component={Search} />
                 <Route path={`/`} component={Home} />
             </Switch>
-        </Fragment>
+        </Router>
     );
 };
 
