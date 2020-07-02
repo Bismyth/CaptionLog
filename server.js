@@ -23,7 +23,7 @@ mongoose
 //Initialise Routes
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
-app.use("/caption/api/logs", require("./routes/logs"));
+app.use("/api/logs", require("./routes/logs"));
 app.get("/api", (req, res) => {
     res.send("Backend Working!");
 });
