@@ -12,8 +12,8 @@ import {
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./scroll.css";
-import history from "../../history";
 const Log = (props) => {
+    const history = useHistory();
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
     const [data, setData] = useState([]);

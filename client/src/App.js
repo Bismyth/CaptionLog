@@ -10,7 +10,6 @@ import Search from "./components/logStuff/Search";
 import LogForm from "./components/logStuff/LogForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import history from "./history";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -19,7 +18,7 @@ const App = () => {
     }, [dispatch]);
 
     return (
-        <Router basename={process.env.PUBLIC_URL} history={history}>
+        <Router basename={process.env.PUBLIC_URL}>
             <Toolbar />
             <Switch>
                 <Route path={`/logs/:search?`} component={Logs} />
