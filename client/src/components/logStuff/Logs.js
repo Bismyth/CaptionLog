@@ -12,7 +12,7 @@ import {
     Container,
     Button,
 } from "reactstrap";
-import history from "./history";
+import history from "../../history";
 import { useDispatch } from "react-redux";
 import searchIcon from "../../Magnifying_glass_icon.svg";
 import "./scroll.css";
