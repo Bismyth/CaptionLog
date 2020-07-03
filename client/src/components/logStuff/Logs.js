@@ -98,9 +98,7 @@ const Logs = (props) => {
                 <Form
                     onSubmit={(e) => {
                         history.push(
-                            `${
-                                process.env.PUBLIC_URL
-                            }/search/${encodeURIComponent(value)}/title`
+                            `/search/${encodeURIComponent(value)}/title`
                         );
                         e.preventDefault();
                     }}
