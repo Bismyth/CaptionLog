@@ -14,7 +14,6 @@ import Logout from "./auth/Logout";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../MainLogo.svg";
-import "./Toolbar.css";
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const isLoading = useSelector((state) => state.auth.isLoading);
@@ -59,10 +58,15 @@ const Toolbar = (props) => {
                     </Nav>
                 </Container>
             </Navbar>
-            <Navbar color="light" light expand="md" className="mb-2">
+            <Navbar color="light" light expand="md">
                 <Container>
                     <NavbarBrand tag={Link} to="./">
-                        <img src={logo} className="logo" alt="Logo" />
+                        <img
+                            src={logo}
+                            className="logo"
+                            alt="Logo"
+                            style={{ height: "50px" }}
+                        />
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
                     <Collapse isOpen={isOpen} navbar>
