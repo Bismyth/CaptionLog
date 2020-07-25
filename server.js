@@ -24,9 +24,6 @@ mongoose
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
-app.get("/api", (req, res) => {
-    res.send("Backend Working!");
-});
 
 //Serve static react in production
 if (process.env.NODE_ENV == "production") {

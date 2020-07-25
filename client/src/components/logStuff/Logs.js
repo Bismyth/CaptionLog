@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import searchIcon from "../../Magnifying_glass_icon.svg";
+import searchIcon from "../../icons/search-black-24dp.svg";
 import "./scroll.css";
 import { setPage } from "../../redux/actions/pageActions";
 import LogListItem from "./LogListItem";
@@ -48,7 +48,7 @@ const Logs = (props) => {
             setLoading(false);
         };
         fetchData();
-    }, [search]);
+    }, [search, history]);
     useEffect(() => {
         if (props.match.params.search) setSearch(props.match.params.search);
     }, [props.match.params.search]);
@@ -64,9 +64,7 @@ const Logs = (props) => {
                             style={{ float: "right" }}
                             className="ml-auto"
                             onClick={() => {
-                                history.push(
-                                    `${process.env.PUBLIC_URL}/newLog`
-                                );
+                                history.push(`/newLog`);
                             }}
                         >
                             +New Log

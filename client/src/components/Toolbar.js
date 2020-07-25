@@ -45,6 +45,7 @@ const Toolbar = (props) => {
                 className="topbar"
                 style={{ padding: "0px", background: "#1c3664" }}
                 dark
+                expand="md"
             >
                 <Container>
                     <Nav className="ml-auto" navbar>

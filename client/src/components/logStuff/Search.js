@@ -9,7 +9,7 @@ import {
     Container,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import searchIcon from "../../Magnifying_glass_icon.svg";
+import searchIcon from "../../icons/search-black-24dp.svg";
 import "./scroll.css";
 import LogListItem from "./LogListItem";
 const Search = (props) => {

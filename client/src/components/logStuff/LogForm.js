@@ -15,7 +15,7 @@ import "./fade.css";
 
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import SelectFile from "./SelectFile";
 const LogForm = (props) => {
     /*
         - Add dropdown for video_source and caption_source and genre
@@ -110,6 +110,14 @@ const LogForm = (props) => {
             setData(nData);
         }
     };
+    const selectFile = (file, i) => {
+        console.log(file);
+        changeValue(
+            { target: { name: "location", value: file } },
+            "digitalInfo",
+            i
+        );
+    };
     const changeValue = (e, level, index) => {
         if (level === undefined) {
             setData({
@@ -164,7 +172,7 @@ const LogForm = (props) => {
                     >
                         Back
                     </Button>
-                    <h1 className>
+                    <h1>
                         {props.match.path.includes("edit")
                             ? "Edit Log"
                             : "New Log"}
@@ -336,6 +344,45 @@ const LogForm = (props) => {
                                                 length: "Length",
                                                 location: "Location",
                                             };
+                                            if (key === "location") {
+                                                return (
+                                                    <FormGroup row key={key}>
+                                                        <Label for={key} xs={2}>
+                                                            {titles[key]}
+                                                        </Label>
+                                                        <Col xs={8}>
+                                                            <Input
+                                                                type="text"
+                                                                id={key}
+                                                                name={key}
+                                                                placeholder={
+                                                                    titles[
+                                                                        key
+                                                                    ] + "..."
+                                                                }
+                                                                value={value}
+                                                                onChange={(
+                                                                    e
+                                                                ) => {
+                                                                    changeValue(
+                                                                        e,
+                                                                        "digitalInfo",
+                                                                        i
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </Col>
+                                                        <Col xs={2}>
+                                                            <SelectFile
+                                                                selectedFile={
+                                                                    selectFile
+                                                                }
+                                                                index={i}
+                                                            />
+                                                        </Col>
+                                                    </FormGroup>
+                                                );
+                                            }
                                             if (
                                                 Object.keys(titles).includes(
                                                     key
