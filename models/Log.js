@@ -9,6 +9,7 @@ const DigitalInfoSchema = new Schema({
 });
 
 const CopyrightInfoSchema = new Schema({
+    _id: false,
     teacherName: String,
     captionSource: String,
     videoSouce: String,
@@ -27,6 +28,7 @@ const PhysicalMediaSchema = new Schema({
 });
 
 const MovieInfoSchema = new Schema({
+    _id: false,
     year: Number,
     rating: String,
 });
@@ -42,7 +44,7 @@ const LogSchema = new Schema({
     genre: {
         type: String,
     },
-    movieInfo: MovieInfoSchema,
+    movieInfo: { type: MovieInfoSchema, default: {} },
     copyrightInfo: { type: CopyrightInfoSchema, required: true },
     digitalInfo: [DigitalInfoSchema],
     physicalInfo: [PhysicalMediaSchema],

@@ -16,6 +16,7 @@ mongoose
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
+        useFindAndModify: false,
     })
     .then(() => console.log("MongoDB Connected...."))
     .catch((err) => console.error(err));
@@ -24,6 +25,7 @@ mongoose
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
+app.use("/api/lists", require("./routes/lists"));
 
 //Serve static react in production
 if (process.env.NODE_ENV == "production") {
