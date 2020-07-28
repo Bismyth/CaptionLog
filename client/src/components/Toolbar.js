@@ -41,14 +41,9 @@ const Toolbar = (props) => {
     );
     return (
         <Fragment>
-            <Navbar
-                className="topbar"
-                style={{ padding: "0px", background: "#1c3664" }}
-                dark
-                expand="md"
-            >
+            <Navbar className="topbar p-0" dark color="sBlue">
                 <Container>
-                    <Nav className="ml-auto" navbar>
+                    <Nav navbar className="flex-row ml-auto">
                         {isLoading ? (
                             <Fragment />
                         ) : isAuthenticated ? (

@@ -43,7 +43,7 @@ const Search = (props) => {
     }, [props.match.params.value, props.match.params.field]);
     return (
         <div id="scroll">
-            <Container>
+            <Container className="content">
                 <h1>Search</h1>
 
                 <Form

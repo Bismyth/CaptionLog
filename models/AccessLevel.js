@@ -1,4 +1,1 @@
-module.exports = {
-	full: "full",
-	basic: "basic",
-};
+module.exports = ["full", "basic"];

@@ -1,0 +1,90 @@
+{
+    "digBlank": {
+        "name": "",
+        "length": "",
+        "location": ""
+    },
+    "digBlankCV": {
+        "name": "",
+        "length": "",
+        "clickviewUrl": ""
+    },
+    "physBlank": {
+        "name": "",
+        "location": "",
+        "copiesHeld": ""
+    },
+    "blankForm": {
+        "title": "",
+        "description": "",
+        "genre": "",
+        "copyrightInfo": {
+            "teacherName": "",
+            "captionSource": "",
+            "dateOfCompletion": "",
+            "videoSource": "",
+            "originalLocation": ""
+        },
+        "digitalInfo": [],
+        "physicalInfo": []
+    },
+    "format": {
+        "main": {
+            "title": { "name": "Title", "type": "text" },
+            "description": { "name": "Description", "type": "textarea" },
+            "genre": { "name": "Genre", "type": "select" }
+        },
+        "movieInfo": {
+            "year": { "name": "Year", "type": "number" },
+            "rating": { "name": "Rating", "type": "text" }
+        },
+        "copyrightInfo": {
+            "teacherName": { "name": "Teacher's Name", "type": "text" },
+            "captionSource": { "name": "Caption Source", "type": "select" },
+            "dateOfCompletion": {
+                "name": "Date of Completion",
+                "type": "date"
+            },
+            "videoSource": { "name": "Video Source", "type": "select" },
+            "originalLocation": { "name": "Original Location", "type": "text" }
+        }
+    },
+    "config": {
+        "digitalInfo": {
+            "details": {
+                "name": "Digital Media:",
+                "arrName": "digitalInfo",
+                "button": [
+                    { "name": "Add Digital Info Record" },
+                    { "name": "Add Clickview Record", "action": "CV" }
+                ]
+            },
+            "format": {
+                "name": { "name": "Name", "type": "text" },
+                "length": { "name": "Length", "type": "text" },
+                "location": { "name": "Location", "type": "text" },
+                "clickviewUrl": {
+                    "name": "Clickview URL",
+                    "type": "text"
+                }
+            }
+        },
+        "physicalInfo": {
+            "details": {
+                "name": "Physical Media:",
+                "arrName": "physicalInfo",
+                "button": [{ "name": "Add Physical Info Record" }]
+            },
+            "format": {
+                "name": { "name": "Name", "type": "text" },
+                "location": { "name": "Location", "type": "text" },
+                "copiesHeld": { "name": "Copies Held", "type": "number" }
+            }
+        }
+    },
+    "selectors": [
+        { "source": "captionSource", "loc": "copyrightInfo/captionSource" },
+        { "source": "genre", "loc": "main/genre" },
+        { "source": "videoSource", "loc": "copyrightInfo/videoSource" }
+    ]
+}

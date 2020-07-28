@@ -7,17 +7,15 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-    Label,
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import "./scroll.css";
 import BackButton from "../BackButton";
-const Log = (props) => {
+const OldLog = (props) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [movie, setMovie] = useState(false);
     const display = {
         description: "Description:",
         disks: "Disks:",
@@ -32,7 +30,7 @@ const Log = (props) => {
         const fetchData = async () => {
             setLoading(true);
             var config = {
-                url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}`,
+                url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}?type=old`,
                 method: "get",
             };
             if (loggedIn) {
@@ -42,8 +40,6 @@ const Log = (props) => {
                 config.headers["x-auth-token"] = token;
             }
             const result = await axios(config);
-            console.log(result.data);
-            setMovie(Object.keys(result.data.movieInfo).length > 0);
             setData(result.data);
             setLoading(false);
         };
@@ -57,18 +53,37 @@ const Log = (props) => {
                     <Fragment>
                         <div className="d-flex align-items-center mb-2">
                             <BackButton className="mr-1" />
-                            <h2>
-                                {data.title +
-                                    (movie ? ` (${data.movieInfo.year})` : "")}
-                            </h2>
+                            <h2>{data.title}</h2>
                         </div>
-                        {movie ? (
-                            <p>{`Rated ${data.movieInfo.rating}`}</p>
-                        ) : (
-                            <Fragment />
-                        )}
-                        <h2>Description</h2>
-                        <p>{data.description}</p>
+                        <ListGroup>
+                            {Object.entries(data).map(([key, value]) => {
+                                if (Object.keys(display).includes(key))
+                                    return (
+                                        <ListGroupItem key={key}>
+                                            <ListGroupItemHeading>
+                                                {display[key]}
+                                            </ListGroupItemHeading>
+                                            <ListGroupItemText>
+                                                {value}
+                                            </ListGroupItemText>
+                                        </ListGroupItem>
+                                    );
+                                else return <Fragment key={key} />;
+                            })}
+                            <ListGroupItem>
+                                <ListGroupItemHeading>
+                                    {data.completed
+                                        ? "Completed"
+                                        : "Incomplete"}
+                                </ListGroupItemHeading>
+                                <ListGroupItemText>
+                                    Completed on{" "}
+                                    {new Date(
+                                        data.date_of_completion
+                                    ).toString()}
+                                </ListGroupItemText>
+                            </ListGroupItem>
+                        </ListGroup>
                     </Fragment>
                 ) : (
                     <Spinner color="primary" />
@@ -78,4 +93,4 @@ const Log = (props) => {
     );
 };
 
-export default Log;
+export default OldLog;

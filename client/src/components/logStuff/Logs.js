@@ -36,14 +36,12 @@ const Logs = (props) => {
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
-            const result =
-                decodeURIComponent(search) === "#"
-                    ? await axios(
-                          `${process.env.PUBLIC_URL}/api/logs?search=[0-9]`
-                      )
-                    : await axios(
-                          `${process.env.PUBLIC_URL}/api/logs?search=${search}`
-                      );
+            var term = decodeURIComponent(search) === "#" ? "[0-9]" : search;
+            var config = {
+                method: "get",
+                url: `${process.env.PUBLIC_URL}/api/logs?search=${term}`,
+            };
+            const result = await axios(config);
             setData(result.data);
             setLoading(false);
         };

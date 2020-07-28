@@ -12,10 +12,9 @@ import {
     ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-import "./scroll.css";
-import folderIcon from "../../icons/folder-black-24dp.svg";
-import backIcon from "../../icons/keyboard_return-black-24dp.svg";
-import "./selecting.css";
+import "../scroll.css";
+import folderIcon from "../../../icons/folder-black-24dp.svg";
+import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useSelector } from "react-redux";
 const SelectFile = (props) => {
     const root = { id: "/", name: "Content", isDir: true };
@@ -99,7 +98,9 @@ const SelectFile = (props) => {
     };
     return (
         <Fragment>
-            <Button onClick={toggle}>Select File</Button>
+            <Button style={props.style} onClick={toggle}>
+                Select File
+            </Button>
             <Modal isOpen={modal} toggle={toggle} autoFocus={false} size="lg">
                 <ModalHeader toggle={toggle}>Select File</ModalHeader>
                 <ModalBody>
@@ -107,7 +108,7 @@ const SelectFile = (props) => {
                         <img
                             src={backIcon}
                             alt="goUp"
-                            className="up"
+                            className="link-arrow"
                             onClick={goUp}
                             style={{ paddingRight: "5px" }}
                         />

@@ -1,9 +1,21 @@
+:root {
+    --sBlue: #1c3664;
+}
+.bg-sBlue {
+    background-color: var(--sBlue);
+}
+
 .content {
-	padding: 20px;
+    padding: 20px;
 }
 .card-title {
-	font-weight: bold;
+    font-weight: bold;
 }
 .pagination-sm .page-link {
-	padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.link-arrow:hover {
+    opacity: 60%;
+    cursor: pointer;
 }
