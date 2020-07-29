@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const auth = require("../middleware/auth");
 const { checkSchema, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
@@ -43,7 +44,7 @@ const validator = {
         escape: true,
     },
 };
-router.post("/", checkSchema(validator), (req, res) => {
+router.post("/", checkSchema(validator), auth, (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
