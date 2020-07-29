@@ -16,6 +16,6 @@
 }
 
 .link-arrow:hover {
-    opacity: 60%;
+    opacity: 0.6;
     cursor: pointer;
 }
