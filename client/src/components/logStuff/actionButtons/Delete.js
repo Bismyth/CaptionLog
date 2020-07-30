@@ -40,7 +40,7 @@ const Edit = (props) => {
                 alt="Delete"
                 className={`link-arrow ${props.className}`}
             />
-            <Popover target={`d-${props.id}`} isOpen={pOpen} toggle={toggle}>
+            <Popover target={`d-${props.id}`} isOpen={pOpen} toggle={toggle} placement={"left"}>
                 <PopoverHeader>Delete</PopoverHeader>
                 <PopoverBody>
                     Are you sure you want to delete?
