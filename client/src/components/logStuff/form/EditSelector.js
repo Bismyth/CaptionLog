@@ -31,9 +31,7 @@ const EditSelector = (props) => {
             {!loading ? (
                 <ListGroup>
                     {data.map((value) => (
-                        <ListGroupItem key={value._id}>
-                            {value.name}
-                        </ListGroupItem>
+                        <ListGroupItem key={value._id}>{value.name}</ListGroupItem>
                     ))}
                 </ListGroup>
             ) : (

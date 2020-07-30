@@ -1,14 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import {
-    Spinner,
-    Form,
-    Input,
-    Container,
-    Alert,
-    Button,
-    FormGroup,
-} from "reactstrap";
+import { Spinner, Form, Input, Container, Alert, Button, FormGroup } from "reactstrap";
 import "../fade.css";
 import formData from "./FormData.json";
 import { useHistory, Redirect } from "react-router-dom";
@@ -20,50 +12,51 @@ const LogForm = (props) => {
     /*
         - Build out transferer
     */
-    const {
-        digBlank,
-        digBlankCV,
-        physBlank,
-        blankForm,
-        format,
-        config,
-        selectors,
-    } = formData;
+    const { digBlank, digBlankCV, physBlank, blankForm, config, selectors } = formData;
+    const [format, updateFormat] = useState(formData.format);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const [edit, setEdit] = useState(false);
     const token = useSelector((state) => state.auth.token);
     const [data, setData] = useState(blankForm);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState([false, false]);
     const [errors, setErrors] = useState([]);
     const history = useHistory();
     const [sLoading, setSLoading] = useState(false);
     useEffect(() => {
-        if (props.match.params.id) {
-            const fetchData = async () => {
-                setLoading(true);
-                var config = {};
-                config.headers = {
-                    "Content-type": "application/json",
+        const fetchData = async () => {
+            setLoading((l) => {
+                return [true, l[1]];
+            });
+            if (props.match.params.id && token) {
+                var config = {
+                    method: "get",
+                    url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}`,
+                    headers: {
+                        "Content-type": "application/json",
+                        "x-auth-token": token,
+                    },
                 };
-                config.headers["x-auth-token"] = token;
-                const result = await axios(
-                    `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}?type=new`,
-                    config
-                );
+                const result = await axios(config);
                 if (result.data) {
                     setErrors([]);
                     setData(result.data);
+                    setEdit(true);
                 } else {
                     setErrors([{ msg: "No Log with that ID found" }]);
                 }
-                setLoading(false);
-            };
-            fetchData();
-        }
-    }, [props.match.params.id, loggedIn, token]);
+            }
+            setLoading((l) => {
+                return [false, l[1]];
+            });
+        };
+        fetchData();
+    }, [props.match.params.id, token]);
     useEffect(() => {
         const fetchSelectors = async () => {
-            setLoading(true);
-            selectors.forEach(async (selector) => {
+            setLoading((l) => {
+                return [l[0], true];
+            });
+            await selectors.forEach(async (selector) => {
                 var config = {
                     method: "get",
                     url: `${process.env.PUBLIC_URL}/api/lists/${selector.source}`,
@@ -74,16 +67,33 @@ const LogForm = (props) => {
                 };
                 const result = await axios(config);
                 const [head, key] = selector.loc.split("/");
-                format[head][key].values = [
-                    { _id: "invalid", name: format[head][key].name + "..." },
-                    ...result.data,
-                ];
+                updateFormat((v) => {
+                    return {
+                        ...v,
+                        [head]: {
+                            ...v[head],
+                            [key]: {
+                                ...v[head][key],
+                                values: [
+                                    {
+                                        _id: "invalid",
+                                        name: v[head][key].name + "...",
+                                    },
+                                    ...result.data,
+                                ],
+                            },
+                        },
+                    };
+                });
             });
-            setLoading(false);
+            setLoading((l) => {
+                return [l[0], false];
+            });
         };
-        fetchSelectors();
-    });
-
+        if (token) {
+            fetchSelectors();
+        }
+    }, [token, selectors]);
     const changeFormType = (e) => {
         var formType = e.target.value;
         if (formType === "movie") {
@@ -94,11 +104,7 @@ const LogForm = (props) => {
         }
     };
     const selectFile = (file, i) => {
-        changeValue(
-            { target: { name: "location", value: file } },
-            "digitalInfo",
-            i
-        );
+        changeValue({ target: { name: "location", value: file } }, "digitalInfo", i);
     };
     const changeValue = (e, level, index) => {
         if (level === undefined) {
@@ -143,7 +149,7 @@ const LogForm = (props) => {
     const submit = (e) => {
         setSLoading(true);
         var config = {
-            method: "post",
+            method: edit ? "put" : "post",
             url: `${process.env.PUBLIC_URL}/api/logs`,
             headers: {
                 "Content-type": "application/json",
@@ -157,32 +163,24 @@ const LogForm = (props) => {
             })
             .catch((err) => {
                 setSLoading(false);
-                console.log(err.response.data["errors"]);
                 setErrors(err.response.data["errors"]);
             });
     };
     return (
-        <div id="scroll">
-            {!loggedIn ? <Redirect to="/logs" /> : <Fragment />}
-            <Container className="content">
-                <div className="d-flex align-items-center mb-2">
-                    <BackButton className="mr-1" />
-                    <h1>
-                        {props.match.path.includes("edit")
-                            ? "Edit Log"
-                            : "New Log"}
-                    </h1>
-                    <Input
-                        type="select"
-                        onChange={changeFormType}
-                        className="ml-auto w-auto"
-                    >
-                        <option value="media">Media</option>
-                        <option value="movie">Movie</option>
-                    </Input>
-                </div>
-
-                {!loading ? (
+        <Container className="content">
+            {loading.every((v) => {
+                return !v;
+            }) ? (
+                <Fragment>
+                    {!loggedIn && loggedIn !== null ? <Redirect to="/logs" /> : <Fragment />}
+                    <div className="d-flex align-items-center mb-2">
+                        <BackButton className="mr-1" />
+                        <h1>{edit ? "Edit Log" : "New Log"}</h1>
+                        <Input type="select" onChange={changeFormType} className="ml-auto w-auto">
+                            <option value="media">Media</option>
+                            <option value="movie">Movie</option>
+                        </Input>
+                    </div>
                     <Form>
                         {errors.length > 0 ? (
                             errors.map(({ msg }, i) => (
@@ -193,11 +191,7 @@ const LogForm = (props) => {
                         ) : (
                             <Fragment />
                         )}
-                        <FormSection
-                            data={data}
-                            format={format.main}
-                            update={changeValue}
-                        />
+                        <FormSection data={data} format={format.main} update={changeValue} />
 
                         {data.movieInfo ? (
                             <Fragment>
@@ -235,20 +229,16 @@ const LogForm = (props) => {
                             array={{ add: addArr, rm: removeArr }}
                         />
                         <FormGroup className="mt-3">
-                            <Button
-                                color="primary"
-                                onClick={submit}
-                                disabled={sLoading}
-                            >
-                                Submit
+                            <Button color="primary" onClick={submit} disabled={sLoading}>
+                                {edit ? "Save" : "Submit"}
                             </Button>
                         </FormGroup>
                     </Form>
-                ) : (
-                    <Spinner color="primary" />
-                )}
-            </Container>
-        </div>
+                </Fragment>
+            ) : (
+                <Spinner color="primary" />
+            )}
+        </Container>
     );
 };
 

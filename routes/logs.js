@@ -49,63 +49,35 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post(
-    "/",
-    checkSchema(require("../validationSchema/newLog")),
-    auth,
-    (req, res) => {
-        const errors = validationResult(req);
-        console.log(req.body);
-        if (!errors.isEmpty())
-            return res.status(422).json({ errors: errors.array() });
-        const newLog = new Log(req.body);
-        newLog
-            .save()
-            .then((log) => {
-                res.json(log);
-            })
-            .catch((err) => {
-                console.error(err);
-                res.send(err);
-            });
-    }
-);
-
-router.delete(
-    "/",
-    checkSchema({
-        id: { exists: { errorMessage: "Please Provide an ID" }, escape: true },
-    }),
-    auth,
-    (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(422).json({ errors: errors.array() });
-        if (req.user.access !== "full")
-            return res
-                .status(401)
-                .json({ msg: "You don't have privilege to do that" });
-        if (req.body.type == "old") {
-            OldLog.findByIdAndDelete(req.body.id, (err, data) => {
-                if (err) console.error(error);
-                res.json({ msg: "Deleted Successfully" });
-            });
-        } else {
-            Log.findByIdAndDelete(req.body.id, (err, data) => {
-                if (err) console.error(error);
-                res.json({ msg: "Deleted Successfully" });
-            });
+router.post("/", checkSchema(require("../validationSchema/newLog")), auth, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    const newLog = new Log(req.body);
+    newLog.save((err, doc) => {
+        if (err) {
+            console.error(err);
+            return res.status(500);
         }
-    }
-);
+        res.json(doc);
+    });
+});
+
+router.put("/", checkSchema(require("../validationSchema/newLog")), auth, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    Log.findByIdAndUpdate(req.body._id, req.body, (err, doc) => {
+        if (err) {
+            console.error(err);
+            return res.status(500);
+        }
+        res.json(doc);
+    });
+});
 
 router.post("/scan", auth, (req, res) => {
     var basePath = process.env.MEDIA_ROOT;
-    if (!req.body.path)
-        res.status(400).json({ errors: [{ msg: "Missing Path" }] });
-    var sanitizedPath = path
-        .normalize(req.body.path)
-        .replace(/^(\.\.(\/|\\|$))+/, "");
+    if (!req.body.path) res.status(400).json({ errors: [{ msg: "Missing Path" }] });
+    var sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.(\/|\\|$))+/, "");
     var search = path.join(basePath, sanitizedPath);
     var rfiles = [];
     fs.readdir(search, { withFileTypes: true }, (err, files) => {
@@ -134,10 +106,7 @@ router.get("/:id", (req, res) => {
 
     if (req.header("x-auth-token")) {
         try {
-            const decoded = jwt.verify(
-                req.header("x-auth-token"),
-                process.env.JWT_SECRET
-            );
+            const decoded = jwt.verify(req.header("x-auth-token"), process.env.JWT_SECRET);
         } catch (e) {
             console.error(e);
             return res.status(400).json({ msg: "Token is not valid" });
@@ -150,15 +119,19 @@ router.get("/:id", (req, res) => {
                 : "title description copyrightInfo.dateOfCompletion movieInfo"
         );
     }
-    if (query === undefined)
-        return res.status(500).json({ msg: "Token is Weird" });
+    if (query === undefined) return res.status(500).json({ msg: "Token is Weird" });
     query.exec((err, data) => {
-        if (err) console.error(err);
+        if (err) {
+            console.error(err);
+            return res.status(400).send("Bad Request");
+        }
         res.json(data);
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", auth, (req, res) => {
+    if (req.user.access !== "full")
+        return res.status(401).json({ msg: "You don't have privilege to do that" });
     var id = req.params.id;
     if (req.body.old) {
         OldLog.findByIdAndDelete(id, (err, doc) => {

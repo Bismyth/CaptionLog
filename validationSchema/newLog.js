@@ -8,7 +8,6 @@ module.exports = {
     description: {
         exists: { errorMessage: "Missing Description", escape: true },
     },
-    genre: { escape: true },
 
     "movieInfo.year": {
         isInt: true,
@@ -18,7 +17,7 @@ module.exports = {
     "movieInfo.rating": { escape: true, optional: true },
     "copyrightInfo.teacherName": { escape: true },
     "copyrightInfo.captionSource": {
-        exists: { errorMessage: "Missing Caption Source", escape: true },
+        exists: { errorMessage: "Missing Caption Source" },
     },
     "copyrightInfo.dateOfCompletion": {
         exists: true,
@@ -26,7 +25,6 @@ module.exports = {
         escape: true,
         isLength: { options: { min: 1 } },
     },
-    "copyrightInfo.videoSource": { escape: true },
     "copyrightInfo.originalLocation": { escape: true },
 
     "digitalInfo.*.name": {
@@ -36,11 +34,9 @@ module.exports = {
         escape: true,
     },
     "digitalInfo.*.location": {
-        escape: true,
         optional: true,
     },
     "digitalInfo.*.clickviewUrl": {
-        escape: true,
         optional: true,
     },
 

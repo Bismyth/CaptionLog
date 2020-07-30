@@ -1,11 +1,5 @@
 import React, { Fragment, useState } from "react";
-import {
-    Button,
-    ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-} from "reactstrap";
+import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
 const FormMSection = (props) => {
@@ -28,9 +22,7 @@ const FormMSection = (props) => {
                             >
                                 &times;
                             </Button>
-                            <h4 className="w-100">{`${config.details.name} ${
-                                i + 1
-                            }`}</h4>
+                            <h4 className="w-100">{`${config.details.name} ${i + 1}`}</h4>
                             {selectFile && value.location !== undefined ? (
                                 <SelectFile
                                     style={{ width: "10%" }}
@@ -47,6 +39,7 @@ const FormMSection = (props) => {
                             update={(e) => {
                                 update(e, config.details.arrName, i);
                             }}
+                            uniqueID={{ sig: config.details.arrName[0], index: i }}
                         />
                     </Fragment>
                 );
@@ -67,12 +60,7 @@ const FormMSection = (props) => {
                         {config.details.button.map(({ name, action }) => {
                             return (
                                 <DropdownItem
-                                    onClick={() =>
-                                        array.add(
-                                            config.details.arrName,
-                                            action
-                                        )
-                                    }
+                                    onClick={() => array.add(config.details.arrName, action)}
                                     key={name}
                                 >
                                     {name}

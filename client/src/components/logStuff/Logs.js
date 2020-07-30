@@ -1,24 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import {
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    Form,
-    Input,
-    InputGroup,
-    InputGroupText,
-    InputGroupAddon,
-    Container,
-    Button,
-} from "reactstrap";
+import { Pagination, PaginationItem, PaginationLink, Form, Container, Button } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import searchIcon from "../../icons/search-black-24dp.svg";
 import "./scroll.css";
 import { setPage } from "../../redux/actions/pageActions";
 import LogListItem from "./LogListItem";
 import { useSelector } from "react-redux";
+import SearchBar from "./SearchBar";
 const Logs = (props) => {
     const history = useHistory();
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
@@ -51,77 +40,55 @@ const Logs = (props) => {
         if (props.match.params.search) setSearch(props.match.params.search);
     }, [props.match.params.search]);
     return (
-        <div id="scroll">
-            <Container className="content">
-                <div>
-                    <h1 style={{ display: "inline-block" }} className="mr-auto">
-                        Logs
-                    </h1>
-                    {loggedIn ? (
-                        <Button
-                            style={{ float: "right" }}
-                            className="ml-auto"
-                            onClick={() => {
-                                history.push(`/newLog`);
-                            }}
-                        >
-                            +New Log
-                        </Button>
-                    ) : (
-                        <Fragment />
-                    )}
-                </div>
+        <Container className="content">
+            <div>
+                <h1 style={{ display: "inline-block" }} className="mr-auto">
+                    Logs
+                </h1>
+                {loggedIn ? (
+                    <Button
+                        style={{ float: "right" }}
+                        className="ml-auto"
+                        onClick={() => {
+                            history.push(`/newLog`);
+                        }}
+                    >
+                        +New Log
+                    </Button>
+                ) : (
+                    <Fragment />
+                )}
+            </div>
 
-                <Pagination
-                    aria-label="Alphabet Navigation"
-                    size="sm"
-                    style={{
-                        flexWrap: "wrap",
-                        justifyContent: "center",
-                    }}
-                >
-                    {alphabet.map((char) => (
-                        <PaginationItem key={char} active={search === char}>
-                            <PaginationLink
-                                onClick={() => setSearch(char.toLowerCase())}
-                                className="bg-darkgray"
-                            >
-                                {char}
-                            </PaginationLink>
-                        </PaginationItem>
-                    ))}
-                </Pagination>
-                <Form
-                    onSubmit={(e) => {
-                        history.push(
-                            `/search/${encodeURIComponent(value)}/title`
-                        );
-                        e.preventDefault();
-                    }}
-                >
-                    <InputGroup className="mb-3">
-                        <InputGroupAddon addonType="prepend">
-                            <InputGroupText>
-                                <img
-                                    src={searchIcon}
-                                    alt="search"
-                                    style={{ height: "20px" }}
-                                />
-                            </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                            placeholder="Search..."
-                            onChange={(e) => {
-                                setValue(e.target.value);
-                            }}
-                            value={value}
-                            name="search"
-                        />
-                    </InputGroup>
-                </Form>
-                <LogListItem loading={loading} data={data} />
-            </Container>
-        </div>
+            <Pagination
+                aria-label="Alphabet Navigation"
+                size="sm"
+                style={{
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                }}
+            >
+                {alphabet.map((char) => (
+                    <PaginationItem key={char} active={search === char}>
+                        <PaginationLink
+                            onClick={() => setSearch(char.toLowerCase())}
+                            className="bg-darkgray"
+                        >
+                            {char}
+                        </PaginationLink>
+                    </PaginationItem>
+                ))}
+            </Pagination>
+            <Form
+                onSubmit={(e) => {
+                    history.push(`/search/${encodeURIComponent(value)}/title`);
+                    e.preventDefault();
+                }}
+            >
+                <SearchBar className="mb-3" value={value} update={setValue} />
+            </Form>
+            <LogListItem loading={loading} data={data} />
+        </Container>
     );
 };
 

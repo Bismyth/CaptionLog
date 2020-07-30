@@ -11,11 +11,14 @@ import {
 import { useSelector } from "react-redux";
 import "./scroll.css";
 import BackButton from "../BackButton";
+import Delete from "./actionButtons/Delete";
+import { useHistory } from "react-router-dom";
 const OldLog = (props) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const history = useHistory();
     const display = {
         description: "Description:",
         disks: "Disks:",
@@ -29,6 +32,7 @@ const OldLog = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
+            var result;
             var config = {
                 url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}?type=old`,
                 method: "get",
@@ -39,57 +43,53 @@ const OldLog = (props) => {
                 };
                 config.headers["x-auth-token"] = token;
             }
-            const result = await axios(config);
+            try {
+                result = await axios(config);
+            } catch (e) {
+                history.goBack();
+            }
+
             setData(result.data);
             setLoading(false);
         };
         fetchData();
-    }, [props.match.params.id, token, loggedIn]);
-
+    }, [props.match.params.id, token, loggedIn, history]);
     return (
-        <div id="scroll">
-            <Container className="content">
-                {!loading ? (
-                    <Fragment>
-                        <div className="d-flex align-items-center mb-2">
-                            <BackButton className="mr-1" />
-                            <h2>{data.title}</h2>
+        <Container className="content">
+            {!loading ? (
+                <Fragment>
+                    <div className="d-flex align-items-center mb-2">
+                        <BackButton className="mr-1" />
+                        <h2>{data.title}</h2>
+                        <div className="ml-auto">
+                            <Delete id={data._id} old={true} />
                         </div>
-                        <ListGroup>
-                            {Object.entries(data).map(([key, value]) => {
-                                if (Object.keys(display).includes(key))
-                                    return (
-                                        <ListGroupItem key={key}>
-                                            <ListGroupItemHeading>
-                                                {display[key]}
-                                            </ListGroupItemHeading>
-                                            <ListGroupItemText>
-                                                {value}
-                                            </ListGroupItemText>
-                                        </ListGroupItem>
-                                    );
-                                else return <Fragment key={key} />;
-                            })}
-                            <ListGroupItem>
-                                <ListGroupItemHeading>
-                                    {data.completed
-                                        ? "Completed"
-                                        : "Incomplete"}
-                                </ListGroupItemHeading>
-                                <ListGroupItemText>
-                                    Completed on{" "}
-                                    {new Date(
-                                        data.date_of_completion
-                                    ).toString()}
-                                </ListGroupItemText>
-                            </ListGroupItem>
-                        </ListGroup>
-                    </Fragment>
-                ) : (
-                    <Spinner color="primary" />
-                )}
-            </Container>
-        </div>
+                    </div>
+                    <ListGroup>
+                        {Object.entries(data).map(([key, value]) => {
+                            if (Object.keys(display).includes(key))
+                                return (
+                                    <ListGroupItem key={key}>
+                                        <ListGroupItemHeading>{display[key]}</ListGroupItemHeading>
+                                        <ListGroupItemText>{value}</ListGroupItemText>
+                                    </ListGroupItem>
+                                );
+                            else return <Fragment key={key} />;
+                        })}
+                        <ListGroupItem>
+                            <ListGroupItemHeading>
+                                {data.completed ? "Completed" : "Incomplete"}
+                            </ListGroupItemHeading>
+                            <ListGroupItemText>
+                                Completed on {new Date(data.date_of_completion).toString()}
+                            </ListGroupItemText>
+                        </ListGroupItem>
+                    </ListGroup>
+                </Fragment>
+            ) : (
+                <Spinner color="primary" />
+            )}
+        </Container>
     );
 };
 

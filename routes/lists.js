@@ -41,8 +41,7 @@ router.get("/captionSource", (req, res) => {
 });
 router.post("/captionSource", checkSchema(validatorN), auth, (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     const { name } = req.body;
     const newCaptionSource = new CaptionSource({ name });
     newCaptionSource
@@ -56,8 +55,7 @@ router.post("/captionSource", checkSchema(validatorN), auth, (req, res) => {
 });
 router.put("/captionSource", checkSchema(validatorIDN), auth, (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     const { name, id } = req.body;
     CaptionSource.findByIdAndUpdate(id, { name }, (err, data) => {
         if (err) console.error(err);
@@ -66,8 +64,7 @@ router.put("/captionSource", checkSchema(validatorIDN), auth, (req, res) => {
 });
 router.delete("/captionSource", checkSchema(validatorID), auth, (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() });
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     const { id } = req.body;
     CaptionSource.findByIdAndDelete(id, (err, data) => {
         if (err) console.error(err);
@@ -86,5 +83,4 @@ router.get("/videoSource", (req, res) => {
         res.json(data);
     });
 });
-
 module.exports = router;

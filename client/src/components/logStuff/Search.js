@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-    InputGroup,
-    Input,
-    InputGroupAddon,
-    InputGroupText,
-    Form,
-    Container,
-} from "reactstrap";
+import { Input, Form, Container } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import searchIcon from "../../icons/search-black-24dp.svg";
 import "./scroll.css";
 import LogListItem from "./LogListItem";
+import SearchBar from "./SearchBar";
 const Search = (props) => {
     const history = useHistory();
     const [data, setData] = useState([]);
@@ -42,53 +35,31 @@ const Search = (props) => {
         if (fie) setField(fie);
     }, [props.match.params.value, props.match.params.field]);
     return (
-        <div id="scroll">
-            <Container className="content">
-                <h1>Search</h1>
-
-                <Form
-                    onSubmit={(e) => {
-                        setSearch(e.target.search.value);
-                        e.preventDefault();
+        <Container className="content">
+            <h1>Search</h1>
+            <Form
+                onSubmit={(e) => {
+                    setSearch(e.target.search.value);
+                    e.preventDefault();
+                }}
+                className="mb-3"
+            >
+                <SearchBar className="mb-1" value={value} update={setValue} />
+                <Input
+                    type="select"
+                    className="ml-auto w-auto"
+                    onChange={(e) => {
+                        setField(e.target.value);
+                        setSearch(value);
                     }}
-                    className="mb-3"
+                    value={field}
                 >
-                    <InputGroup className="mb-1">
-                        <InputGroupAddon addonType="prepend">
-                            <InputGroupText>
-                                <img
-                                    src={searchIcon}
-                                    alt="search"
-                                    style={{ height: "20px" }}
-                                />
-                            </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                            placeholder="Search..."
-                            onChange={(e) => {
-                                setValue(e.target.value);
-                            }}
-                            value={value}
-                            name="search"
-                        />
-                    </InputGroup>
-                    <Input
-                        style={{ width: "auto" }}
-                        type="select"
-                        className="ml-auto"
-                        onChange={(e) => {
-                            setField(e.target.value);
-                            setSearch(value);
-                        }}
-                        value={field}
-                    >
-                        <option value="title">Title</option>
-                        <option value="description">Description</option>
-                    </Input>
-                </Form>
-                <LogListItem loading={loading} data={data} />
-            </Container>
-        </div>
+                    <option value="title">Title</option>
+                    <option value="description">Description</option>
+                </Input>
+            </Form>
+            <LogListItem loading={loading} data={data} />
+        </Container>
     );
 };
 

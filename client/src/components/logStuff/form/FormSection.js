@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { FormGroup, Label, Col, Input } from "reactstrap";
 const FormSection = (props) => {
-    const { data, format, update } = props;
+    const { data, format, update, uniqueID } = props;
     return (
         <Fragment>
             {Object.entries(data).map(([key, value]) => {
@@ -15,30 +15,29 @@ const FormSection = (props) => {
                                 {format[key].values !== undefined ? (
                                     <Input
                                         type={format[key].type}
-                                        id={key}
+                                        id={
+                                            uniqueID
+                                                ? `${uniqueID.sig}-${key}-${uniqueID.index}`
+                                                : key
+                                        }
                                         name={key}
                                         value={value}
                                         onChange={update}
                                     >
-                                        {format[key].values.map(
-                                            ({ _id, name }) => (
-                                                <option
-                                                    key={_id}
-                                                    value={
-                                                        _id === "invalid"
-                                                            ? ""
-                                                            : name
-                                                    }
-                                                >
-                                                    {name}
-                                                </option>
-                                            )
-                                        )}
+                                        {format[key].values.map(({ _id, name }) => (
+                                            <option key={_id} value={_id === "invalid" ? "" : name}>
+                                                {name}
+                                            </option>
+                                        ))}
                                     </Input>
                                 ) : (
                                     <Input
                                         type={format[key].type}
-                                        id={key}
+                                        id={
+                                            uniqueID
+                                                ? `${uniqueID.sig}-${key}-${uniqueID.index}`
+                                                : key
+                                        }
                                         name={key}
                                         placeholder={format[key].name + "..."}
                                         value={value}

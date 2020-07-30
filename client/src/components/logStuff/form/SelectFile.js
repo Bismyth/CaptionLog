@@ -162,11 +162,7 @@ const SelectFile = (props) => {
                     </ListGroup>
                 </ModalBody>
                 <ModalFooter>
-                    <Button
-                        color="primary"
-                        disabled={fileSelected === ""}
-                        onClick={selectFile}
-                    >
+                    <Button color="primary" disabled={fileSelected === ""} onClick={selectFile}>
                         Select File
                     </Button>
                 </ModalFooter>

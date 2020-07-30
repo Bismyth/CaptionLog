@@ -21,16 +21,18 @@ const App = () => {
     return (
         <Router basename={process.env.PUBLIC_URL}>
             <Toolbar />
-            <Switch>
-                <Route path={`/logs/:search?`} component={Logs} />
-                <Route path={`/oldLog/:id`} component={OldLog} />
-                <Route path={`/log/:id`} component={Log} />
-                <Route path={`/newLog`} component={LogForm} />
-                <Route path={`/edit/:id`} component={LogForm} />
-                <Route path={`/modi`} component={EditSelector} />
-                <Route path={`/search/:value?/:field?`} component={Search} />
-                <Route path={`/`} component={Home} />
-            </Switch>
+            <div id="scroll">
+                <Switch>
+                    <Route path={`/logs/:search?`} component={Logs} />
+                    <Route path={`/oldLog/:id`} component={OldLog} />
+                    <Route path={`/log/:id`} component={Log} />
+                    <Route path={`/newLog`} component={LogForm} />
+                    <Route path={`/edit/:id`} component={LogForm} />
+                    <Route path={`/modi`} component={EditSelector} />
+                    <Route path={`/search/:value?/:field?`} component={Search} />
+                    <Route path={`/`} component={Home} />
+                </Switch>
+            </div>
         </Router>
     );
 };

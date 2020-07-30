@@ -44,7 +44,7 @@ const LogSchema = new Schema({
     genre: {
         type: String,
     },
-    movieInfo: { type: MovieInfoSchema, default: {} },
+    movieInfo: MovieInfoSchema,
     copyrightInfo: { type: CopyrightInfoSchema, required: true },
     digitalInfo: [DigitalInfoSchema],
     physicalInfo: [PhysicalMediaSchema],

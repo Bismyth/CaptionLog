@@ -1,34 +1,33 @@
-import React, { Fragment } from "react";
-import {
-    Card,
-    CardBody,
-    Button,
-    CardText,
-    CardTitle,
-    Alert,
-    Spinner,
-} from "reactstrap";
+import React, { Fragment, useState, useEffect } from "react";
+import { Card, CardBody, CardText, CardTitle, Alert, Spinner } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import editButton from "../../icons/edit-black-24dp.svg";
-import deleteButton from "../../icons/delete-black-24dp.svg";
+import Edit from "./actionButtons/Edit";
+import Delete from "./actionButtons/Delete";
 
 const LogListItem = (props) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const [data, setData] = useState(props.data);
+    const removeItem = (id) => {
+        setData((d) => {
+            return d.filter((v) => {
+                return v._id !== id;
+            });
+        });
+    };
+    useEffect(() => {
+        setData(props.data);
+    }, [props.data]);
     return (
         <div id="accordion">
             {!props.loading ? (
-                props.data.length > 0 ? (
-                    props.data.map(({ _id, title, description, old }) => (
+                data.length > 0 ? (
+                    data.map(({ _id, title, description, old }) => (
                         <Card key={_id}>
                             <CardBody>
                                 <CardTitle className="d-flex">
                                     <Link
-                                        to={
-                                            old
-                                                ? `/oldLog/${_id}`
-                                                : `/log/${_id}`
-                                        }
+                                        to={old ? `/oldLog/${_id}` : `/log/${_id}`}
                                         className="text-dark"
                                     >
                                         {title}
@@ -36,16 +35,12 @@ const LogListItem = (props) => {
                                     <div className="ml-auto mr-3">
                                         {loggedIn ? (
                                             <Fragment>
-                                                <img
-                                                    src={editButton}
-                                                    alt="Edit"
-                                                    className="link-arrow mr-1"
-                                                />
-                                                <img
-                                                    src={deleteButton}
-                                                    alt="Delete"
-                                                    className="link-arrow"
-                                                />
+                                                {old ? (
+                                                    <Fragment />
+                                                ) : (
+                                                    <Edit className="mr-1" id={_id} />
+                                                )}
+                                                <Delete id={_id} old={old} update={removeItem} />
                                             </Fragment>
                                         ) : (
                                             <Fragment />
