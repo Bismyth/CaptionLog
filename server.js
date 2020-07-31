@@ -26,6 +26,7 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
 app.use("/api/lists", require("./routes/lists"));
+app.use("/api/video", require("./routes/video"));
 
 //Serve static react in production
 if (process.env.NODE_ENV == "production") {

@@ -7,6 +7,7 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
+    Button,
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import "./scroll.css";
@@ -14,7 +15,7 @@ import BackButton from "../BackButton";
 import logDisplay from "./LogDisplay.json";
 import Edit from "./actionButtons/Edit";
 import Delete from "./actionButtons/Delete";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import LogHeader from "./LogHeader";
 import { classHeading } from "../../config";
 const Log = (props) => {
@@ -47,6 +48,10 @@ const Log = (props) => {
         };
         fetchData();
     }, [props.match.params.id, token, history]);
+    useEffect(() => {
+        const fetchData = async () => {};
+        fetchData();
+    });
     return (
         <Container className="content">
             {!loading ? (
@@ -109,6 +114,19 @@ const Log = (props) => {
                                                                     );
                                                                 }
                                                             })}
+                                                        {value.location && key === "digitalInfo" ? (
+                                                            <Button
+                                                                tag={Link}
+                                                                to={`/video/${data._id}/${value._id}`}
+                                                                className="ml-auto"
+                                                            >
+                                                                Go to Video
+                                                            </Button>
+                                                        ) : value.clickviewUrl ? (
+                                                            <Fragment></Fragment>
+                                                        ) : (
+                                                            <Fragment />
+                                                        )}
                                                     </ListGroupItemText>
                                                 </ListGroupItem>
                                             ))}

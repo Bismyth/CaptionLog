@@ -2,39 +2,34 @@ import React, { Fragment } from "react";
 import { FormGroup, Label, Col, Input } from "reactstrap";
 
 const FormSection = (props) => {
-    const { data, format, update, uniqueID } = props;
+    const { data, format, update, section, selectors, index } = props;
     return (
         <Fragment>
-            {Object.entries(format).map(([key, { name, type, values }]) => (
+            {Object.entries(format).map(([key, { name, type }]) => (
                 <FormGroup row key={key}>
                     <Label for={key} xs={2}>
                         {name}
                     </Label>
                     <Col xs={10}>
-                        {values !== undefined ? (
-                            <Input
-                                type={type}
-                                id={uniqueID ? `${uniqueID.sig}-${key}-${uniqueID.index}` : key}
-                                name={key}
-                                value={data[key]}
-                                onChange={update}
-                            >
-                                {format[key].values.map(({ _id, name }) => (
-                                    <option key={_id} value={_id === "invalid" ? "" : name}>
-                                        {name}
-                                    </option>
-                                ))}
-                            </Input>
-                        ) : (
-                            <Input
-                                type={type}
-                                id={uniqueID ? `${uniqueID.sig}-${key}-${uniqueID.index}` : key}
-                                name={key}
-                                placeholder={name + "..."}
-                                value={data[key]}
-                                onChange={update}
-                            />
-                        )}
+                        <Input
+                            type={type}
+                            id={`${section[0]}-${key}-${index}`}
+                            name={key}
+                            value={data[key]}
+                            placeholder={name + "..."}
+                            onChange={(e) => {
+                                update(e, section, index);
+                            }}
+                            children={
+                                Object.keys(selectors || {}).includes(key)
+                                    ? selectors[key].map(({ _id, name }) => (
+                                          <option key={_id} value={_id === "invalid" ? "" : name}>
+                                              {name}
+                                          </option>
+                                      ))
+                                    : null
+                            }
+                        />
                     </Col>
                 </FormGroup>
             ))}
@@ -42,4 +37,8 @@ const FormSection = (props) => {
     );
 };
 
-export default FormSection;
+export default React.memo(FormSection, ({ data: pdata, format: pformat }, { data: ndata }) => {
+    return Object.keys(pformat).every((v) => {
+        return pdata[v] === ndata[v];
+    });
+});

@@ -8,21 +8,30 @@ import { useSelector } from "react-redux";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
-import { classHeading } from "../../../config";
+import { classHeading, asyncForEach } from "../../../config";
 const LogForm = (props) => {
     /*
         - Build out transferer
     */
-    const { digBlank, digBlankCV, physBlank, movieBlank, blankForm, config, selectors } = formData;
-    const [format, updateFormat] = useState(formData.format);
+    const {
+        digBlank,
+        digBlankCV,
+        physBlank,
+        movieBlank,
+        blankForm,
+        format,
+        config,
+        selectorsFormat,
+    } = formData;
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const [edit, setEdit] = useState(false);
     const token = useSelector((state) => state.auth.token);
+    const [edit, setEdit] = useState(false);
+    const [selectors, updateSelectors] = useState({});
     const [data, setData] = useState(blankForm);
     const [loading, setLoading] = useState([false, false]);
+    const [sLoading, setSLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const history = useHistory();
-    const [sLoading, setSLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             setLoading((l) => {
@@ -52,12 +61,13 @@ const LogForm = (props) => {
         };
         fetchData();
     }, [props.match.params.id, token]);
+
     useEffect(() => {
         const fetchSelectors = async () => {
             setLoading((l) => {
                 return [l[0], true];
             });
-            await selectors.forEach(async (selector) => {
+            await asyncForEach(selectorsFormat, async (selector) => {
                 var config = {
                     method: "get",
                     url: `/api/lists/${selector.source}`,
@@ -66,17 +76,28 @@ const LogForm = (props) => {
                         "x-auth-token": token,
                     },
                 };
-                const result = await axios(config);
+                var result;
+                try {
+                    result = await axios(config);
+                } catch (e) {
+                    history.goBack();
+                }
+
                 const [head, key] = selector.loc.split("/");
-                updateFormat((v) => {
-                    v[head][key].values = [
-                        {
-                            _id: "invalid",
-                            name: v[head][key].name + "...",
+                updateSelectors((v) => {
+                    return {
+                        ...v,
+                        [head]: {
+                            ...v[head],
+                            [key]: [
+                                {
+                                    _id: "invalid",
+                                    name: format[head][key].name + "...",
+                                },
+                                ...result.data,
+                            ],
                         },
-                        ...result.data,
-                    ];
-                    return v;
+                    };
                 });
             });
             setLoading((l) => {
@@ -86,7 +107,7 @@ const LogForm = (props) => {
         if (token) {
             fetchSelectors();
         }
-    }, [token, selectors]);
+    }, [token, selectorsFormat, format, history]);
     const changeFormType = (e) => {
         var formType = e.target.value;
         setData((d) => {
@@ -100,7 +121,7 @@ const LogForm = (props) => {
     const changeValue = useCallback((e, level, index) => {
         const { name, value } = e.target;
         setData((d) => {
-            if (level === undefined) return { ...d, [name]: value };
+            if (level === "main") return { ...d, [name]: value };
             else if (index === undefined)
                 return {
                     ...d,
@@ -188,7 +209,13 @@ const LogForm = (props) => {
                         ) : (
                             <Fragment />
                         )}
-                        <FormSection data={data} format={format.main} update={changeValue} />
+                        <FormSection
+                            data={data}
+                            format={format.main}
+                            update={changeValue}
+                            selectors={selectors.main}
+                            section="main"
+                        />
 
                         {data.movieInfo ? (
                             <Fragment>
@@ -196,9 +223,9 @@ const LogForm = (props) => {
                                 <FormSection
                                     data={data.movieInfo}
                                     format={format.movieInfo}
-                                    update={(e) => {
-                                        changeValue(e, "movieInfo");
-                                    }}
+                                    update={changeValue}
+                                    selectors={selectors.movieInfo}
+                                    section="movieInfo"
                                 />
                             </Fragment>
                         ) : (
@@ -208,9 +235,9 @@ const LogForm = (props) => {
                         <FormSection
                             data={data.copyrightInfo}
                             format={format.copyrightInfo}
-                            update={(e) => {
-                                changeValue(e, "copyrightInfo");
-                            }}
+                            update={changeValue}
+                            selectors={selectors.copyrightInfo}
+                            section="copyrightInfo"
                         />
                         <FormMSection
                             data={data.digitalInfo}
@@ -218,12 +245,14 @@ const LogForm = (props) => {
                             update={changeValue}
                             array={{ add: addArr, rm: removeArr }}
                             selectFile={selectFile}
+                            selectors={selectors.digitalInfo}
                         />
                         <FormMSection
                             data={data.physicalInfo}
                             config={config.physicalInfo}
                             update={changeValue}
                             array={{ add: addArr, rm: removeArr }}
+                            selectors={selectors.physicalInfo}
                         />
                         <FormGroup className="mt-3">
                             <Button color="primary" onClick={submit} disabled={sLoading}>

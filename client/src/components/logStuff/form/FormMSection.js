@@ -2,9 +2,9 @@ import React, { Fragment, useState } from "react";
 import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
-import { classHeading } from "../../../config";
+import { classHeading, keepLikeValues } from "../../../config";
 const FormMSection = (props) => {
-    const { data, config, update, array, selectFile } = props;
+    const { data, config, update, array, selectFile, selectors } = props;
     const [isOpen, setOpen] = useState(false);
     const toggle = () => setOpen(!isOpen);
     return (
@@ -36,11 +36,11 @@ const FormMSection = (props) => {
                         </div>
                         <FormSection
                             data={value}
-                            format={config.format}
-                            update={(e) => {
-                                update(e, config.details.arrName, i);
-                            }}
-                            uniqueID={{ sig: config.details.arrName[0], index: i }}
+                            format={keepLikeValues(config.format, value)}
+                            update={update}
+                            selectors={selectors}
+                            index={i}
+                            section={config.details.arrName}
                         />
                     </Fragment>
                 );

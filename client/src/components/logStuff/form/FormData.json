@@ -86,7 +86,7 @@
             }
         }
     },
-    "selectors": [
+    "selectorsFormat": [
         { "source": "captionSource", "loc": "copyrightInfo/captionSource" },
         { "source": "genre", "loc": "main/genre" },
         { "source": "videoSource", "loc": "copyrightInfo/videoSource" }

@@ -11,6 +11,7 @@ import Log from "./components/logStuff/Log";
 import Search from "./components/logStuff/Search";
 import LogForm from "./components/logStuff/form/LogForm";
 import EditSelector from "./components/logStuff/form/EditSelector";
+import Video from "./components/logStuff/Video";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -29,6 +30,7 @@ const App = () => {
                     <Route path={`/logs/:search?`} component={Logs} />
                     <Route path={`/oldLog/:id`} component={OldLog} />
                     <Route path={`/log/:id`} component={Log} />
+                    <Route path={`/video/:id/:vid`} component={Video} />
                     <Route path={`/newLog`} component={LogForm} />
                     <Route path={`/edit/:id`} component={LogForm} />
                     <Route path={`/modi`} component={EditSelector} />

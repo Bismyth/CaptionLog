@@ -6,12 +6,18 @@ const path = require("path");
 const { checkSchema, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const junk = require("junk");
+const { getVideoDurationInSeconds } = require("get-video-duration");
 //Import Environment Variables
 require("dotenv").config();
 
 //Importing old Model
 const OldLog = require("../models/OldLog");
 const Log = require("../models/Log");
+var asyncForEach = async (array, callback) => {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
+};
 
 //@route GET api/logs
 //@desc  Return Logs
@@ -50,9 +56,24 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", checkSchema(require("../validationSchema/newLog")), auth, (req, res) => {
+router.post("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    await asyncForEach(req.body.digitalInfo, async (v, i) => {
+        if (v.location) {
+            const video = path.join(process.env.MEDIA_ROOT, v.location);
+            if (fs.existsSync(video)) {
+                const seconds = await getVideoDurationInSeconds(video);
+                var measuredTime = new Date(null);
+                measuredTime.setSeconds(seconds);
+                if (seconds < 3600) {
+                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(14, 5);
+                } else {
+                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(11, 8);
+                }
+            }
+        }
+    });
     const newLog = new Log(req.body);
     newLog.save((err, doc) => {
         if (err) {
@@ -63,9 +84,24 @@ router.post("/", checkSchema(require("../validationSchema/newLog")), auth, (req,
     });
 });
 
-router.put("/", checkSchema(require("../validationSchema/newLog")), auth, (req, res) => {
+router.put("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    await asyncForEach(req.body.digitalInfo, async (v, i) => {
+        if (v.location) {
+            const video = path.join(process.env.MEDIA_ROOT, v.location);
+            if (fs.existsSync(video)) {
+                const seconds = await getVideoDurationInSeconds(video);
+                var measuredTime = new Date(null);
+                measuredTime.setSeconds(seconds);
+                if (seconds < 3600) {
+                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(14, 5);
+                } else {
+                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(11, 8);
+                }
+            }
+        }
+    });
     Log.findByIdAndUpdate(req.body._id, req.body, (err, doc) => {
         if (err) {
             console.error(err);
@@ -117,7 +153,7 @@ router.get("/:id", (req, res) => {
         query = Source.findById(req.params.id).select(
             req.query.type
                 ? "title description completed date_of_completion"
-                : "title description copyrightInfo.dateOfCompletion movieInfo"
+                : "title description copyrightInfo.dateOfCompletion movieInfo digitalInfo physicalInfo"
         );
     }
     query.exec((err, data) => {

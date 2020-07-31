@@ -49,7 +49,7 @@ const Toolbar = (props) => {
             <Navbar color="light" light expand="md">
                 <Container>
                     <NavbarBrand tag={Link} to="./">
-                        {/* <Logo className="logo" alt="logo" /> */}
+                        <Logo className="logo w-auto" alt="logo" style={{ height: "50px" }} />
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
                     <Collapse isOpen={isOpen} navbar>
