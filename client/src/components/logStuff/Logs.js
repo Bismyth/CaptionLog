@@ -28,7 +28,7 @@ const Logs = (props) => {
             var term = decodeURIComponent(search) === "#" ? "[0-9]" : search;
             var config = {
                 method: "get",
-                url: `${process.env.PUBLIC_URL}/api/logs?search=${term}`,
+                url: `/api/logs?search=${term}`,
             };
             const result = await axios(config);
             setData(result.data);

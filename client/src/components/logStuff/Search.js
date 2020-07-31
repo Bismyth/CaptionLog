@@ -17,9 +17,7 @@ const Search = (props) => {
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         const fetchData = async () => {
             setLoading(true);
-            const result = await axios(
-                `${process.env.PUBLIC_URL}/api/logs?value=${search}&field=${field}`
-            );
+            const result = await axios(`/api/logs?value=${search}&field=${field}`);
             setData(result.data);
             setLoading(false);
         };

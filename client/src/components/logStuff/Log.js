@@ -29,7 +29,7 @@ const Log = (props) => {
             setLoading(true);
             var result;
             var config = {
-                url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}`,
+                url: `/api/logs/${props.match.params.id}`,
                 method: "get",
             };
             if (loggedIn) {

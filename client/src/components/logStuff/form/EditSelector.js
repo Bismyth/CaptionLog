@@ -12,7 +12,7 @@ const EditSelector = (props) => {
             setLoading(true);
             var config = {
                 method: "get",
-                url: `${process.env.PUBLIC_URL}/api/lists/${source}`,
+                url: `/api/lists/${source}`,
                 headers: {
                     "Content-type": "application/json",
                     "x-auth-token": token,

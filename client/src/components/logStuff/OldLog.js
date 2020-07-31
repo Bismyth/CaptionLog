@@ -34,7 +34,7 @@ const OldLog = (props) => {
             setLoading(true);
             var result;
             var config = {
-                url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}?type=old`,
+                url: `/api/logs/${props.match.params.id}?type=old`,
                 method: "get",
             };
             if (loggedIn) {

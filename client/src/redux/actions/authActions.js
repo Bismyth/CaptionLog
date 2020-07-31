@@ -17,7 +17,7 @@ export const loadUser = () => (dispatch, getState) => {
     dispatch({ type: USER_LOADING });
 
     axios
-        .get(`${process.env.PUBLIC_URL}/api/auth/user`, tokenConfig(getState))
+        .get(`/api/auth/user`, tokenConfig(getState))
         .then((res) => {
             dispatch({
                 type: USER_LOADED,
@@ -37,40 +37,29 @@ export const register = (data) => (dispatch) => {
     const body = JSON.stringify(data);
 
     axios
-        .post(`${process.env.PUBLIC_URL}/api/users`, body, config)
+        .post(`/api/users`, body, config)
         .then((res) => {
             dispatch({ type: REGISTER_SUCCESS, payload: res.data });
         })
         .catch((err) => {
-            dispatch(
-                returnErrors(
-                    err.response.data["errors"],
-                    err.response.status,
-                    REGISTER_FAIL
-                )
-            );
+            dispatch(returnErrors(err.response.data["errors"], err.response.status, REGISTER_FAIL));
             dispatch({ type: REGISTER_FAIL });
         });
 };
 //Login User
+
 export const login = (data) => (dispatch) => {
     const config = jsonHeader();
 
     const body = JSON.stringify(data);
 
     axios
-        .post(`${process.env.PUBLIC_URL}/api/auth`, body, config)
+        .post(`/api/auth`, body, config)
         .then((res) => {
             dispatch({ type: LOGIN_SUCCESS, payload: res.data });
         })
         .catch((err) => {
-            dispatch(
-                returnErrors(
-                    err.response.data["errors"],
-                    err.response.status,
-                    LOGIN_FAIL
-                )
-            );
+            dispatch(returnErrors(err.response.data["errors"], err.response.status, LOGIN_FAIL));
             dispatch({ type: LOGIN_FAIL });
         });
 };
@@ -79,7 +68,6 @@ export const logout = () => {
     return { type: LOGOUT_SUCCESS };
 };
 
-//Setup Token and Header
 export const jsonHeader = () => {
     return {
         headers: {
@@ -87,6 +75,7 @@ export const jsonHeader = () => {
         },
     };
 };
+
 export const tokenConfig = (getState) => {
     //Get token
     const token = getState().auth.token;

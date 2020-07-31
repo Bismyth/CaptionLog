@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const { checkSchema, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const junk = require("junk");
 //Import Environment Variables
 require("dotenv").config();
 
@@ -84,7 +85,7 @@ router.post("/scan", auth, (req, res) => {
         if (err) res.status(500).json({ errors: [{ msg: err }] });
         else if (files === undefined) res.json([]);
         else {
-            files.forEach((file) => {
+            files.filter(junk.not).forEach((file) => {
                 rfiles.push({
                     id: path.join(sanitizedPath, file.name),
                     name: file.name,

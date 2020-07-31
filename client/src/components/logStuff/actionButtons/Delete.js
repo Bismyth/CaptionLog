@@ -16,7 +16,7 @@ const Delete = ({ id, old, update, className }) => {
     const deleteLog = () => {
         var config = {
             method: "delete",
-            url: `${process.env.PUBLIC_URL}/api/logs/${id}`,
+            url: `/api/logs/${id}`,
             headers: {
                 "Content-type": "application/json",
                 "x-auth-token": token,

@@ -37,7 +37,7 @@ const SelectFile = (props) => {
             const fetchFile = async () => {
                 var config = {
                     method: "post",
-                    url: `${process.env.PUBLIC_URL}/api/logs/scan`,
+                    url: `/api/logs/scan`,
                     data: { path: currentDIR },
                 };
                 config.headers = {

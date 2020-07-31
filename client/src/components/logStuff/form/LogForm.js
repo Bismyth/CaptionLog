@@ -30,7 +30,7 @@ const LogForm = (props) => {
             if (props.match.params.id && token) {
                 var config = {
                     method: "get",
-                    url: `${process.env.PUBLIC_URL}/api/logs/${props.match.params.id}`,
+                    url: `/api/logs/${props.match.params.id}`,
                     headers: {
                         "Content-type": "application/json",
                         "x-auth-token": token,
@@ -59,7 +59,7 @@ const LogForm = (props) => {
             await selectors.forEach(async (selector) => {
                 var config = {
                     method: "get",
-                    url: `${process.env.PUBLIC_URL}/api/lists/${selector.source}`,
+                    url: `/api/lists/${selector.source}`,
                     headers: {
                         "Content-type": "application/json",
                         "x-auth-token": token,
@@ -146,7 +146,7 @@ const LogForm = (props) => {
         setSLoading(true);
         var config = {
             method: edit ? "put" : "post",
-            url: `${process.env.PUBLIC_URL}/api/logs`,
+            url: `/api/logs`,
             headers: {
                 "Content-type": "application/json",
                 "x-auth-token": token,
