@@ -13,7 +13,7 @@ import LoginModal from "./auth/LoginModal";
 import Logout from "./auth/Logout";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import logo from "../MainLogo.svg";
+import { ReactComponent as Logo } from "../MainLogo.svg";
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const isLoading = useSelector((state) => state.auth.isLoading);
@@ -23,9 +23,7 @@ const Toolbar = (props) => {
     const authLinks = (
         <Fragment>
             <NavItem>
-                <span className="navbar-text mr-3">
-                    {user ? `Welcome ${user.username}` : ""}
-                </span>
+                <span className="navbar-text mr-3">{user ? `Welcome ${user.username}` : ""}</span>
             </NavItem>
             <NavItem>
                 <Logout />
@@ -44,44 +42,25 @@ const Toolbar = (props) => {
             <Navbar className="topbar p-0" dark color="sBlue">
                 <Container>
                     <Nav navbar className="flex-row ml-auto">
-                        {isLoading ? (
-                            <Fragment />
-                        ) : isAuthenticated ? (
-                            authLinks
-                        ) : (
-                            guestLinks
-                        )}
+                        {isLoading ? <Fragment /> : isAuthenticated ? authLinks : guestLinks}
                     </Nav>
                 </Container>
             </Navbar>
             <Navbar color="light" light expand="md">
                 <Container>
                     <NavbarBrand tag={Link} to="./">
-                        <img
-                            src={logo}
-                            className="logo"
-                            alt="Logo"
-                            style={{ height: "50px" }}
-                        />
+                        {/* <Logo className="logo" alt="logo" /> */}
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="mr-auto" navbar>
                             <NavItem className="b1 bl">
-                                <NavLink
-                                    tag={Link}
-                                    to={`/`}
-                                    active={page === "Home"}
-                                >
+                                <NavLink tag={Link} to={`/`} active={page === "Home"}>
                                     Home
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink
-                                    tag={Link}
-                                    to={`/logs`}
-                                    active={page === "Logs"}
-                                >
+                                <NavLink tag={Link} to={`/logs`} active={page === "Logs"}>
                                     Logs
                                 </NavLink>
                             </NavItem>

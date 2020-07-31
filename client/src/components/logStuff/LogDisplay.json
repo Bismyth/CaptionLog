@@ -20,12 +20,5 @@
             { "heading": "Physical Media", "multi": "true" },
             { "renderPart": "Location: {location}", "value": "location", "align": "left" }
         ]
-    },
-    "ratingColours": {
-        "E": "#818286",
-        "G": "#33a02c",
-        "PG": "#ffff00",
-        "M": "#00a0c6",
-        "MA15+": "#ff0000"
     }
 }

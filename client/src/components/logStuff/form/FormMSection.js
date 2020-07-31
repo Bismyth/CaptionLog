@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
+import { classHeading } from "../../../config";
 const FormMSection = (props) => {
     const { data, config, update, array, selectFile } = props;
     const [isOpen, setOpen] = useState(false);
@@ -11,7 +12,7 @@ const FormMSection = (props) => {
             {data.map((value, i) => {
                 return (
                     <Fragment key={i}>
-                        <div className="d-flex align-items-center mb-2">
+                        <div className={classHeading}>
                             <Button
                                 className="mr-2"
                                 color="danger"

@@ -17,7 +17,9 @@ module.exports = {
     "movieInfo.rating": { escape: true, optional: true },
     "copyrightInfo.teacherName": { escape: true },
     "copyrightInfo.captionSource": {
-        exists: { errorMessage: "Missing Caption Source" },
+        exists: true,
+        errorMessage: "Missing Caption Source",
+        isLength: { options: { min: 1 } },
     },
     "copyrightInfo.dateOfCompletion": {
         exists: true,
@@ -26,7 +28,6 @@ module.exports = {
         isLength: { options: { min: 1 } },
     },
     "copyrightInfo.originalLocation": { escape: true },
-
     "digitalInfo.*.name": {
         escape: true,
     },

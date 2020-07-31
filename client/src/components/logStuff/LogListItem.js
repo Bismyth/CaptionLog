@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Edit from "./actionButtons/Edit";
 import Delete from "./actionButtons/Delete";
+import LogHeader from "./LogHeader";
 
 const LogListItem = (props) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
@@ -19,10 +20,10 @@ const LogListItem = (props) => {
         setData(props.data);
     }, [props.data]);
     return (
-        <div id="accordion">
+        <Fragment>
             {!props.loading ? (
                 data.length > 0 ? (
-                    data.map(({ _id, title, description, old }) => (
+                    data.map(({ _id, title, description, old, movieInfo }) => (
                         <Card key={_id}>
                             <CardBody>
                                 <CardTitle className="d-flex">
@@ -30,7 +31,11 @@ const LogListItem = (props) => {
                                         to={old ? `/oldLog/${_id}` : `/log/${_id}`}
                                         className="text-dark"
                                     >
-                                        {title}
+                                        {old ? (
+                                            title
+                                        ) : (
+                                            <LogHeader title={title} movieInfo={movieInfo} />
+                                        )}
                                     </Link>
                                     <div className="ml-auto mr-3">
                                         {loggedIn ? (
@@ -57,7 +62,7 @@ const LogListItem = (props) => {
             ) : (
                 <Spinner color="primary" />
             )}
-        </div>
+        </Fragment>
     );
 };
 

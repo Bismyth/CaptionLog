@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
             .sort("title")
             .lean();
         query = Log.find({ title: new RegExp(`^${req.query.search}`, "i") })
-            .select("title description")
+            .select("title description movieInfo")
             .sort("title")
             .lean();
     } else {
@@ -36,7 +36,7 @@ router.get("/", (req, res) => {
         query = Log.find({
             [req.query.field]: new RegExp(req.query.value, "i"),
         })
-            .select("title description")
+            .select("title description movieInfo")
             .lean();
     }
     Promise.all([query, queryO]).then((results) => {
@@ -102,7 +102,7 @@ router.post("/scan", auth, (req, res) => {
 //@access Public but more info is private
 router.get("/:id", (req, res) => {
     var query, Source;
-    if (req.query.type) Source = OldLog;
+    if (req.query.type === "old") Source = OldLog;
     else Source = Log;
 
     if (req.header("x-auth-token")) {
@@ -120,7 +120,6 @@ router.get("/:id", (req, res) => {
                 : "title description copyrightInfo.dateOfCompletion movieInfo"
         );
     }
-    if (query === undefined) return res.status(500).json({ msg: "Token is Weird" });
     query.exec((err, data) => {
         if (err) {
             console.error(err);

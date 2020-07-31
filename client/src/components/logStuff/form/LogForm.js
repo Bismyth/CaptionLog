@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
+import { classHeading } from "../../../config";
 const LogForm = (props) => {
     /*
         - Build out transferer
@@ -169,7 +170,7 @@ const LogForm = (props) => {
             }) ? (
                 <Fragment>
                     {!loggedIn && loggedIn !== null ? <Redirect to="/logs" /> : <Fragment />}
-                    <div className="d-flex align-items-center mb-2">
+                    <div className={classHeading}>
                         <BackButton className="mr-1" />
                         <h1>{edit ? "Edit Log" : "New Log"}</h1>
                         <Input type="select" onChange={changeFormType} className="ml-auto w-auto">

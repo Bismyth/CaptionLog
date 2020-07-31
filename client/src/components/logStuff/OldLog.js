@@ -13,8 +13,8 @@ import "./scroll.css";
 import BackButton from "../BackButton";
 import Delete from "./actionButtons/Delete";
 import { useHistory } from "react-router-dom";
+import { classHeading } from "../../config";
 const OldLog = (props) => {
-    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,28 +37,27 @@ const OldLog = (props) => {
                 url: `/api/logs/${props.match.params.id}?type=old`,
                 method: "get",
             };
-            if (loggedIn) {
+            if (token) {
                 config.headers = {
                     "Content-type": "application/json",
+                    "x-auth-token": token,
                 };
-                config.headers["x-auth-token"] = token;
             }
             try {
                 result = await axios(config);
             } catch (e) {
                 history.goBack();
             }
-
             setData(result.data);
             setLoading(false);
         };
         fetchData();
-    }, [props.match.params.id, token, loggedIn, history]);
+    }, [props.match.params.id, token, history]);
     return (
         <Container className="content">
             {!loading ? (
                 <Fragment>
-                    <div className="d-flex align-items-center mb-2">
+                    <div className={classHeading}>
                         <BackButton className="mr-1" />
                         <h2>{data.title}</h2>
                         <div className="ml-auto">

@@ -7,7 +7,6 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-    Badge,
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import "./scroll.css";
@@ -16,14 +15,14 @@ import logDisplay from "./LogDisplay.json";
 import Edit from "./actionButtons/Edit";
 import Delete from "./actionButtons/Delete";
 import { useHistory } from "react-router-dom";
+import LogHeader from "./LogHeader";
+import { classHeading } from "../../config";
 const Log = (props) => {
-    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [movie, setMovie] = useState(false);
     const history = useHistory();
-    const { format, ratingColours } = logDisplay;
+    const { format } = logDisplay;
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -32,43 +31,30 @@ const Log = (props) => {
                 url: `/api/logs/${props.match.params.id}`,
                 method: "get",
             };
-            if (loggedIn) {
+            if (token) {
                 config.headers = {
                     "Content-type": "application/json",
+                    "x-auth-token": token,
                 };
-                config.headers["x-auth-token"] = token;
             }
             try {
                 result = await axios(config);
             } catch (e) {
                 history.goBack();
             }
-            if (result.data) setMovie(result.data.movieInfo !== undefined);
             setData(result.data);
             setLoading(false);
         };
         fetchData();
-    }, [props.match.params.id, token, loggedIn, history]);
+    }, [props.match.params.id, token, history]);
     return (
         <Container className="content">
             {!loading ? (
                 <Fragment>
-                    <div className="d-flex align-items-center mb-2">
+                    <div className={classHeading}>
                         <BackButton className="mr-1" />
                         <h2>
-                            {data.title}
-                            {movie ? ` (${data.movieInfo.year}) ` : ""}
-                            {movie ? (
-                                <Badge
-                                    style={{
-                                        backgroundColor: ratingColours[data.movieInfo.rating],
-                                    }}
-                                >
-                                    {data.movieInfo.rating}
-                                </Badge>
-                            ) : (
-                                <Fragment />
-                            )}
+                            <LogHeader title={data.title} movieInfo={data.movieInfo} />
                         </h2>
                         <div className="ml-auto">
                             <Edit id={data._id} />
