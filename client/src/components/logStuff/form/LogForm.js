@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useCallback } from "react";
 import axios from "axios";
 import { Spinner, Form, Input, Container, Alert, Button, FormGroup } from "reactstrap";
 import "../fade.css";
@@ -12,7 +12,7 @@ const LogForm = (props) => {
     /*
         - Build out transferer
     */
-    const { digBlank, digBlankCV, physBlank, blankForm, config, selectors } = formData;
+    const { digBlank, digBlankCV, physBlank, movieBlank, blankForm, config, selectors } = formData;
     const [format, updateFormat] = useState(formData.format);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [edit, setEdit] = useState(false);
@@ -68,22 +68,14 @@ const LogForm = (props) => {
                 const result = await axios(config);
                 const [head, key] = selector.loc.split("/");
                 updateFormat((v) => {
-                    return {
-                        ...v,
-                        [head]: {
-                            ...v[head],
-                            [key]: {
-                                ...v[head][key],
-                                values: [
-                                    {
-                                        _id: "invalid",
-                                        name: v[head][key].name + "...",
-                                    },
-                                    ...result.data,
-                                ],
-                            },
+                    v[head][key].values = [
+                        {
+                            _id: "invalid",
+                            name: v[head][key].name + "...",
                         },
-                    };
+                        ...result.data,
+                    ];
+                    return v;
                 });
             });
             setLoading((l) => {
@@ -96,56 +88,60 @@ const LogForm = (props) => {
     }, [token, selectors]);
     const changeFormType = (e) => {
         var formType = e.target.value;
-        if (formType === "movie") {
-            setData((d) => ({ movieInfo: { year: "", rating: "" }, ...d }));
-        } else if (formType === "media") {
-            const { movieInfo, ...nData } = data;
-            setData(nData);
-        }
-    };
-    const selectFile = (file, i) => {
-        changeValue({ target: { name: "location", value: file } }, "digitalInfo", i);
-    };
-    const changeValue = (e, level, index) => {
-        if (level === undefined) {
-            setData({
-                ...data,
-                [e.target.name]: e.target.value,
-            });
-        } else if (index === undefined) {
-            setData({
-                ...data,
-                [level]: { ...data[level], [e.target.name]: e.target.value },
-            });
-        } else {
-            setData({
-                ...data,
-                [level]: data[level].map((v, i) =>
-                    i === index ? { ...v, [e.target.name]: e.target.value } : v
-                ),
-            });
-        }
-    };
-    const addArr = (key, ex) => {
-        var insert = {};
-        if (ex === "CV") insert = digBlankCV;
-        else insert = { digitalInfo: digBlank, physicalInfo: physBlank }[key];
-        if (data.movieInfo !== undefined) {
-            delete insert["name"];
-        }
-        setData({
-            ...data,
-            [key]: [...data[key], insert],
+        setData((d) => {
+            if (formType === "movie") return { movieInfo: movieBlank, ...d };
+            else if (formType === "media") {
+                var { movieInfo, ...nData } = d;
+                return nData;
+            }
         });
     };
-    const removeArr = (key, index) => {
-        setData({
-            ...data,
-            [key]: data[key].filter((v, i) => {
-                return index !== i;
-            }),
+    const changeValue = useCallback((e, level, index) => {
+        const { name, value } = e.target;
+        setData((d) => {
+            if (level === undefined) return { ...d, [name]: value };
+            else if (index === undefined)
+                return {
+                    ...d,
+                    [level]: { ...d[level], [name]: value },
+                };
+            else
+                return {
+                    ...d,
+                    [level]: d[level].map((v, i) => (i === index ? { ...v, [name]: value } : v)),
+                };
         });
-    };
+    }, []);
+    const selectFile = useCallback(
+        (file, i) => {
+            changeValue({ target: { name: "location", value: file } }, "digitalInfo", i);
+        },
+        [changeValue]
+    );
+    const addArr = useCallback(
+        (key, ex) => {
+            var insert = {};
+            if (ex === "CV") insert = digBlankCV;
+            else insert = { digitalInfo: digBlank, physicalInfo: physBlank }[key];
+            setData((d) => {
+                return {
+                    ...d,
+                    [key]: [...d[key], insert],
+                };
+            });
+        },
+        [digBlank, digBlankCV, physBlank]
+    );
+    const removeArr = useCallback((key, index) => {
+        setData((d) => {
+            return {
+                ...d,
+                [key]: d[key].filter((v, i) => {
+                    return index !== i;
+                }),
+            };
+        });
+    }, []);
     const submit = (e) => {
         setSLoading(true);
         var config = {

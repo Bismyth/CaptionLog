@@ -18,7 +18,7 @@
         ],
         "physicalInfo": [
             { "heading": "Physical Media", "multi": "true" },
-            { "renderPart": "Location: {length}", "value": "length", "align": "left" }
+            { "renderPart": "Location: {location}", "value": "location", "align": "left" }
         ]
     },
     "ratingColours": {

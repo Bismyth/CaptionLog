@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/authActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import axios from "axios";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
 import Logs from "./components/logStuff/Logs";
@@ -12,6 +13,8 @@ import LogForm from "./components/logStuff/form/LogForm";
 import EditSelector from "./components/logStuff/form/EditSelector";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+
+axios.defaults.baseURL = process.env.PUBLIC_URL;
 
 const App = () => {
     const dispatch = useDispatch();

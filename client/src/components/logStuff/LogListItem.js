@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useCallback } from "react";
 import { Card, CardBody, CardText, CardTitle, Alert, Spinner } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,13 +8,13 @@ import Delete from "./actionButtons/Delete";
 const LogListItem = (props) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [data, setData] = useState(props.data);
-    const removeItem = (id) => {
+    const removeItem = useCallback((id) => {
         setData((d) => {
             return d.filter((v) => {
                 return v._id !== id;
             });
         });
-    };
+    }, []);
     useEffect(() => {
         setData(props.data);
     }, [props.data]);
@@ -61,4 +61,4 @@ const LogListItem = (props) => {
     );
 };
 
-export default LogListItem;
+export default React.memo(LogListItem);

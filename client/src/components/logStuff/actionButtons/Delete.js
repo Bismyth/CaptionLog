@@ -8,7 +8,7 @@ import noButton from "../../../icons/clear-black-24dp.svg";
 import yesButton from "../../../icons/done-black-24dp.svg";
 import { useHistory } from "react-router-dom";
 
-const Edit = (props) => {
+const Delete = ({ id, old, update, className }) => {
     const token = useSelector((state) => state.auth.token);
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
@@ -16,16 +16,16 @@ const Edit = (props) => {
     const deleteLog = () => {
         var config = {
             method: "delete",
-            url: `${process.env.PUBLIC_URL}/api/logs/${props.id}`,
+            url: `${process.env.PUBLIC_URL}/api/logs/${id}`,
             headers: {
                 "Content-type": "application/json",
                 "x-auth-token": token,
             },
-            data: { old: props.old === true },
+            data: { old: old === true },
         };
         axios(config)
             .then(() => {
-                if (props.update) props.update(props.id);
+                if (update) update(id);
                 else history.goBack();
             })
             .catch((err) => {
@@ -35,12 +35,12 @@ const Edit = (props) => {
     return (
         <Fragment>
             <img
-                id={`d-${props.id}`}
+                id={`d-${id}`}
                 src={deleteButton}
                 alt="Delete"
-                className={`link-arrow ${props.className}`}
+                className={`link-arrow ${className}`}
             />
-            <Popover target={`d-${props.id}`} isOpen={pOpen} toggle={toggle} placement={"left"}>
+            <Popover target={`d-${id}`} isOpen={pOpen} toggle={toggle} placement={"left"}>
                 <PopoverHeader>Delete</PopoverHeader>
                 <PopoverBody>
                     Are you sure you want to delete?
@@ -53,4 +53,4 @@ const Edit = (props) => {
     );
 };
 
-export default Edit;
+export default Delete;
