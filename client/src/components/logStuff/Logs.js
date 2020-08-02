@@ -23,18 +23,15 @@ const Logs = (props) => {
     useEffect(() => {
         var updatedUrl = `/logs/${encodeURIComponent(search)}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
-        const fetchData = async () => {
-            setLoading(true);
-            var term = decodeURIComponent(search) === "#" ? "[0-9]" : search;
-            var config = {
-                method: "get",
-                url: `/api/logs?search=${term}`,
-            };
-            const result = await axios(config);
+        setLoading(true);
+        var term = decodeURIComponent(search) === "#" ? "[0-9]" : search;
+        axios({
+            method: "get",
+            url: `/api/logs?search=${term}`,
+        }).then((result) => {
             setData(result.data);
             setLoading(false);
-        };
-        fetchData();
+        });
     }, [search, history]);
     useEffect(() => {
         if (props.match.params.search) setSearch(props.match.params.search);

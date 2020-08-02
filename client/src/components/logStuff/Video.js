@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import ReactPlayer from "react-player/file";
+import ReactPlayer from "react-player";
 import { Container, Alert } from "reactstrap";
 import BackButton from "../BackButton";
 import { classHeading } from "../../config";
@@ -17,7 +17,7 @@ const Video = (props) => {
             {error ? <Alert color="danger">{error}</Alert> : <Fragment />}
             <ReactPlayer
                 url={`/api/video/${id}/${vid}`}
-                className="w-100 h-auto"
+                className="w-100 h-100"
                 onError={() => {
                     setError("Video can't be found");
                 }}

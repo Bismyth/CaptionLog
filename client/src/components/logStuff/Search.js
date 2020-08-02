@@ -15,13 +15,11 @@ const Search = (props) => {
     useEffect(() => {
         var updatedUrl = `/search/${encodeURIComponent(search)}/${field}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
-        const fetchData = async () => {
-            setLoading(true);
-            const result = await axios(`/api/logs?value=${search}&field=${field}`);
+        setLoading(true);
+        axios({ method: "get", url: `/api/logs?value=${search}&field=${field}` }).then((result) => {
             setData(result.data);
             setLoading(false);
-        };
-        fetchData();
+        });
     }, [search, field, history]);
     useEffect(() => {
         var val = props.match.params.value;

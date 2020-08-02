@@ -33,34 +33,36 @@ const LogForm = (props) => {
     const [errors, setErrors] = useState([]);
     const history = useHistory();
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading((l) => {
-                return [true, l[1]];
-            });
-            if (props.match.params.id && token) {
-                var config = {
-                    method: "get",
-                    url: `/api/logs/${props.match.params.id}`,
-                    headers: {
-                        "Content-type": "application/json",
-                        "x-auth-token": token,
-                    },
-                };
-                const result = await axios(config);
-                if (result.data) {
-                    setErrors([]);
-                    setData(result.data);
-                    setEdit(true);
-                } else {
-                    setErrors([{ msg: "No Log with that ID found" }]);
-                }
-            }
-            setLoading((l) => {
-                return [false, l[1]];
-            });
-        };
-        fetchData();
-    }, [props.match.params.id, token]);
+        setLoading((l) => {
+            return [true, l[1]];
+        });
+        if (props.match.params.id && token) {
+            var config = {
+                method: "get",
+                url: `/api/logs/${props.match.params.id}`,
+                headers: {
+                    "Content-type": "application/json",
+                    "x-auth-token": token,
+                },
+            };
+            axios(config)
+                .then((result) => {
+                    if (result.data) {
+                        setErrors([]);
+                        setData(result.data);
+                        setEdit(true);
+                    } else {
+                        setErrors([{ msg: "No Log with that ID found" }]);
+                    }
+                    setLoading((l) => {
+                        return [false, l[1]];
+                    });
+                })
+                .catch((error) => {
+                    history.goBack();
+                });
+        }
+    }, [props.match.params.id, token, history]);
 
     useEffect(() => {
         const fetchSelectors = async () => {

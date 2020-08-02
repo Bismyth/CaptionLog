@@ -20,6 +20,7 @@ import LogHeader from "./LogHeader";
 import { classHeading } from "../../config";
 const Log = (props) => {
     const token = useSelector((state) => state.auth.token);
+    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
@@ -58,10 +59,14 @@ const Log = (props) => {
                         <h2>
                             <LogHeader title={data.title} movieInfo={data.movieInfo} />
                         </h2>
-                        <div className="ml-auto">
-                            <Edit id={data._id} />
-                            <Delete id={data._id} old={false} />
-                        </div>
+                        {loggedIn ? (
+                            <div className="ml-auto">
+                                <Edit id={data._id} />
+                                <Delete id={data._id} old={false} />
+                            </div>
+                        ) : (
+                            <Fragment />
+                        )}
                     </div>
                     {Object.entries(format).map(([key, [{ heading, multi }, ...entries]]) => {
                         if (multi) {

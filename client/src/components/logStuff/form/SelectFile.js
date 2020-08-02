@@ -34,17 +34,15 @@ const SelectFile = (props) => {
     useEffect(() => {
         if (modal) {
             setLoading(true);
-            const fetchFile = async () => {
-                var config = {
-                    method: "post",
-                    url: `/api/logs/scan`,
-                    data: { path: currentDIR },
-                };
-                config.headers = {
+            axios({
+                method: "post",
+                url: `/api/logs/scan`,
+                data: { path: currentDIR },
+                headers: {
                     "Content-type": "application/json",
-                };
-                config.headers["x-auth-token"] = token;
-                const result = await axios(config);
+                    "x-auth-token": token,
+                },
+            }).then((result) => {
                 const sorted = result.data.sort((a, b) => {
                     if (a.isDir) {
                         if (b.isDir) {
@@ -62,8 +60,7 @@ const SelectFile = (props) => {
                 });
                 setFiles(sorted);
                 setLoading(false);
-            };
-            fetchFile();
+            });
         }
     }, [currentDIR, modal, token]);
     const fileDown = (e, file) => {

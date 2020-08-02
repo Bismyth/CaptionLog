@@ -16,6 +16,7 @@ import { useHistory } from "react-router-dom";
 import { classHeading } from "../../config";
 const OldLog = (props) => {
     const token = useSelector((state) => state.auth.token);
+    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
@@ -30,28 +31,25 @@ const OldLog = (props) => {
         other: "Other: ",
     };
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            var result;
-            var config = {
-                url: `/api/logs/${props.match.params.id}?type=old`,
-                method: "get",
-            };
-            if (token) {
-                config.headers = {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                };
-            }
-            try {
-                result = await axios(config);
-            } catch (e) {
-                history.goBack();
-            }
-            setData(result.data);
-            setLoading(false);
+        setLoading(true);
+        var config = {
+            url: `/api/logs/${props.match.params.id}?type=old`,
+            method: "get",
         };
-        fetchData();
+        if (token) {
+            config.headers = {
+                "Content-type": "application/json",
+                "x-auth-token": token,
+            };
+        }
+        axios(config)
+            .then((result) => {
+                setData(result.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                history.goBack();
+            });
     }, [props.match.params.id, token, history]);
     return (
         <Container className="content">
@@ -60,9 +58,13 @@ const OldLog = (props) => {
                     <div className={classHeading}>
                         <BackButton className="mr-1" />
                         <h2>{data.title}</h2>
-                        <div className="ml-auto">
-                            <Delete id={data._id} old={true} />
-                        </div>
+                        {loggedIn ? (
+                            <div className="ml-auto">
+                                <Delete id={data._id} old={true} />
+                            </div>
+                        ) : (
+                            <Fragment />
+                        )}
                     </div>
                     <ListGroup>
                         {Object.entries(data).map(([key, value]) => {
