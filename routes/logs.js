@@ -151,7 +151,7 @@ router.get("/:id", (req, res) => {
         query = Source.findById(req.params.id);
     } else {
         query = Source.findById(req.params.id).select(
-            req.query.type
+            req.query.type === "old"
                 ? "title description completed date_of_completion"
                 : "title description copyrightInfo.dateOfCompletion movieInfo digitalInfo physicalInfo"
         );
