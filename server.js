@@ -40,5 +40,5 @@ if (process.env.NODE_ENV == "production") {
 //Listen in on port and print what port
 app.set("port", process.env.PORT || 5000);
 app.listen(app.get("port"), () => {
-    console.log(`Server started on port ${app.get("port")}`);
+    console.log(`Server started on port: ${app.get("port")}`);
 });
