@@ -14,22 +14,24 @@ import BackButton from "../BackButton";
 import Delete from "./actionButtons/Delete";
 import { useHistory } from "react-router-dom";
 import { classHeading } from "../../config";
+
+const display = {
+    description: "Description:",
+    disks: "Disks:",
+    length: "Length:",
+    genre: "Genre:",
+    caption_source: "Caption Source:",
+    original_copy_location: "Original Copy Location:",
+    video_source: "Video Source:",
+    other: "Other: ",
+};
 const OldLog = (props) => {
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
-    const display = {
-        description: "Description:",
-        disks: "Disks:",
-        length: "Length:",
-        genre: "Genre:",
-        caption_source: "Caption Source:",
-        original_copy_location: "Original Copy Location:",
-        video_source: "Video Source:",
-        other: "Other: ",
-    };
+
     useEffect(() => {
         setLoading(true);
         var config = {

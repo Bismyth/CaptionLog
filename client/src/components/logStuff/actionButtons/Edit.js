@@ -2,10 +2,10 @@ import React from "react";
 import editButton from "../../../icons/edit-black-24dp.svg";
 import { Link } from "react-router-dom";
 
-const Edit = (props) => {
+const Edit = ({ id, className }) => {
     return (
-        <Link to={`/edit/${props.id}`}>
-            <img src={editButton} alt="Edit" className={`link-arrow ${props.className}`} />
+        <Link to={`/edit/${id}`}>
+            <img src={editButton} alt="Edit" className={`link-arrow ${className}`} />
         </Link>
     );
 };

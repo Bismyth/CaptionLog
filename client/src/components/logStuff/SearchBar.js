@@ -1,9 +1,9 @@
 import React from "react";
 import searchIcon from "../../icons/search-black-24dp.svg";
 import { InputGroup, Input, InputGroupAddon, InputGroupText } from "reactstrap";
-const SearchBar = (props) => {
+const SearchBar = ({ className, update, value }) => {
     return (
-        <InputGroup className={props.className}>
+        <InputGroup className={className}>
             <InputGroupAddon addonType="prepend">
                 <InputGroupText>
                     <img src={searchIcon} alt="search" />
@@ -12,9 +12,9 @@ const SearchBar = (props) => {
             <Input
                 placeholder="Search..."
                 onChange={(e) => {
-                    props.update(e.target.value);
+                    update(e.target.value);
                 }}
-                value={props.value}
+                value={value}
                 name="search"
             />
         </InputGroup>

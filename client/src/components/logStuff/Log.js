@@ -12,23 +12,27 @@ import {
 import { useSelector } from "react-redux";
 import "./scroll.css";
 import BackButton from "../BackButton";
-import logDisplay from "./LogDisplay.json";
+import { format } from "./LogDisplay.json";
 import Edit from "./actionButtons/Edit";
 import Delete from "./actionButtons/Delete";
 import { useHistory, Link } from "react-router-dom";
 import LogHeader from "./LogHeader";
 import { classHeading } from "../../config";
-const Log = (props) => {
+
+const Log = ({
+    match: {
+        params: { id },
+    },
+}) => {
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
-    const { format } = logDisplay;
     useEffect(() => {
         setLoading(true);
         var config = {
-            url: `/api/logs/${props.match.params.id}`,
+            url: `/api/logs/${id}`,
             method: "get",
         };
         if (token) {
@@ -45,11 +49,7 @@ const Log = (props) => {
             .catch((err) => {
                 history.goBack();
             });
-    }, [props.match.params.id, token, history]);
-    useEffect(() => {
-        const fetchData = async () => {};
-        fetchData();
-    });
+    }, [id, token, history]);
     return (
         <Container className="content">
             {!loading ? (

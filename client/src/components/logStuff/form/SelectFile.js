@@ -16,8 +16,9 @@ import "../scroll.css";
 import folderIcon from "../../../icons/folder-black-24dp.svg";
 import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useSelector } from "react-redux";
-const SelectFile = (props) => {
-    const root = { id: "/", name: "Content", isDir: true };
+
+const root = { id: "/", name: "Content", isDir: true };
+const SelectFile = ({ selectedFile, index, style }) => {
     const [loading, setLoading] = useState(true);
     const [files, setFiles] = useState([]);
     const [folderChain, setFolderChain] = useState([root]);
@@ -90,12 +91,12 @@ const SelectFile = (props) => {
         }
     };
     const selectFile = (e) => {
-        props.selectedFile(fileSelected, props.index);
+        selectedFile(fileSelected, index);
         setModal(!modal);
     };
     return (
         <Fragment>
-            <Button style={props.style} onClick={toggle}>
+            <Button style={style} onClick={toggle}>
                 Select File
             </Button>
             <Modal isOpen={modal} toggle={toggle} autoFocus={false} size="lg">

@@ -2,27 +2,28 @@ import React, { useState, useEffect, Fragment, useCallback } from "react";
 import axios from "axios";
 import { Spinner, Form, Input, Container, Alert, Button, FormGroup } from "reactstrap";
 import "../fade.css";
-import formData from "./FormData.json";
+import {
+    digBlank,
+    digBlankCV,
+    physBlank,
+    movieBlank,
+    blankForm,
+    format,
+    config,
+    selectorsFormat,
+} from "./FormData.json";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
 import { classHeading, asyncForEach } from "../../../config";
-const LogForm = (props) => {
-    /*
-        - Build out transferer
-    */
-    const {
-        digBlank,
-        digBlankCV,
-        physBlank,
-        movieBlank,
-        blankForm,
-        format,
-        config,
-        selectorsFormat,
-    } = formData;
+
+const LogForm = ({
+    match: {
+        params: { id },
+    },
+}) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
     const [edit, setEdit] = useState(false);
@@ -36,10 +37,10 @@ const LogForm = (props) => {
         setLoading((l) => {
             return [true, l[1]];
         });
-        if (props.match.params.id && token) {
+        if (id && token) {
             var config = {
                 method: "get",
-                url: `/api/logs/${props.match.params.id}`,
+                url: `/api/logs/${id}`,
                 headers: {
                     "Content-type": "application/json",
                     "x-auth-token": token,
@@ -62,7 +63,7 @@ const LogForm = (props) => {
                     history.goBack();
                 });
         }
-    }, [props.match.params.id, token, history]);
+    }, [id, token, history]);
 
     useEffect(() => {
         const fetchSelectors = async () => {
@@ -109,7 +110,7 @@ const LogForm = (props) => {
         if (token) {
             fetchSelectors();
         }
-    }, [token, selectorsFormat, format, history]);
+    }, [token, history]);
     const changeFormType = (e) => {
         var formType = e.target.value;
         setData((d) => {
@@ -142,20 +143,17 @@ const LogForm = (props) => {
         },
         [changeValue]
     );
-    const addArr = useCallback(
-        (key, ex) => {
-            var insert = {};
-            if (ex === "CV") insert = digBlankCV;
-            else insert = { digitalInfo: digBlank, physicalInfo: physBlank }[key];
-            setData((d) => {
-                return {
-                    ...d,
-                    [key]: [...d[key], insert],
-                };
-            });
-        },
-        [digBlank, digBlankCV, physBlank]
-    );
+    const addArr = useCallback((key, ex) => {
+        var insert = {};
+        if (ex === "CV") insert = digBlankCV;
+        else insert = { digitalInfo: digBlank, physicalInfo: physBlank }[key];
+        setData((d) => {
+            return {
+                ...d,
+                [key]: [...d[key], insert],
+            };
+        });
+    }, []);
     const removeArr = useCallback((key, index) => {
         setData((d) => {
             return {

@@ -4,8 +4,11 @@ import { Container, Alert } from "reactstrap";
 import BackButton from "../BackButton";
 import { classHeading } from "../../config";
 
-const Video = (props) => {
-    const { id, vid } = props.match.params;
+const Video = ({
+    match: {
+        params: { id, vid },
+    },
+}) => {
     const [error, setError] = useState("");
 
     return (

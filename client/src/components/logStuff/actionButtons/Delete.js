@@ -25,8 +25,13 @@ const Delete = ({ id, old, update, className }) => {
         };
         axios(config)
             .then(() => {
-                if (update) update(id);
-                else history.goBack();
+                if (update) {
+                    update((d) => {
+                        return d.filter((v) => {
+                            return v._id !== id;
+                        });
+                    });
+                } else history.goBack();
             })
             .catch((err) => {
                 console.error(err);

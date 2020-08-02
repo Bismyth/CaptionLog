@@ -14,6 +14,7 @@ import Logout from "./auth/Logout";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../MainLogo.svg";
+
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const isLoading = useSelector((state) => state.auth.isLoading);

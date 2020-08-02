@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import backArrow from "../icons/arrow_back-black-24dp.svg";
-const BackButton = (props) => {
+const BackButton = ({ className }) => {
     const history = useHistory();
     return (
         <img
@@ -10,7 +10,7 @@ const BackButton = (props) => {
             onClick={() => {
                 history.goBack();
             }}
-            className={`link-arrow ${props.className}`}
+            className={`link-arrow ${className}`}
         />
     );
 };

@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
 import { FormGroup, Label, Col, Input } from "reactstrap";
 
-const FormSection = (props) => {
-    const { data, format, update, section, selectors, index } = props;
+const FormSection = ({ data, format, update, section, selectors, index }) => {
     return (
         <Fragment>
             {Object.entries(format).map(([key, { name, type }]) => (

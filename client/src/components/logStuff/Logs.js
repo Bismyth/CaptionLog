@@ -1,6 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { Pagination, PaginationItem, PaginationLink, Form, Container, Button } from "reactstrap";
+import {
+    Pagination,
+    PaginationItem,
+    PaginationLink,
+    Form,
+    Container,
+    Button,
+    Spinner,
+} from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import "./scroll.css";
@@ -8,14 +16,19 @@ import { setPage } from "../../redux/actions/pageActions";
 import LogListItem from "./LogListItem";
 import { useSelector } from "react-redux";
 import SearchBar from "./SearchBar";
-const Logs = (props) => {
+
+const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const Logs = ({
+    match: {
+        params: { search: psearch = "a" },
+    },
+}) => {
     const history = useHistory();
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState(props.match.params.search || "a");
-    const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const [search, setSearch] = useState(psearch);
     const [value, setValue] = useState("");
     useEffect(() => {
         dispatch(setPage("Logs"));
@@ -33,9 +46,6 @@ const Logs = (props) => {
             setLoading(false);
         });
     }, [search, history]);
-    useEffect(() => {
-        if (props.match.params.search) setSearch(props.match.params.search);
-    }, [props.match.params.search]);
     return (
         <Container className="content">
             <div>
@@ -84,7 +94,7 @@ const Logs = (props) => {
             >
                 <SearchBar className="mb-3" value={value} update={setValue} />
             </Form>
-            <LogListItem loading={loading} data={data} />
+            {!loading ? <LogListItem data={data} setData={setData} /> : <Spinner color="primary" />}
         </Container>
     );
 };

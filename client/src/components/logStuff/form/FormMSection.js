@@ -3,8 +3,7 @@ import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } fr
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
 import { classHeading, keepLikeValues } from "../../../config";
-const FormMSection = (props) => {
-    const { data, config, update, array, selectFile, selectors } = props;
+const FormMSection = ({ data, config, update, array, selectFile, selectors }) => {
     const [isOpen, setOpen] = useState(false);
     const toggle = () => setOpen(!isOpen);
     return (
