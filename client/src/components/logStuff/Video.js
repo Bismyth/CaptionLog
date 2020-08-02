@@ -16,7 +16,7 @@ const Video = (props) => {
             </div>
             {error ? <Alert color="danger">{error}</Alert> : <Fragment />}
             <ReactPlayer
-                url={`/api/video/${id}/${vid}`}
+                url={`${process.env.PUBLIC_URL}/api/video/${id}/${vid}`}
                 className="w-100 h-100"
                 onError={() => {
                     setError("Video can't be found");
