@@ -6,7 +6,8 @@ const path = require("path");
 const { checkSchema, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const junk = require("junk");
-const { getVideoDurationInSeconds } = require("get-video-duration");
+var ffprobe = require("ffprobe"),
+    ffprobeStatic = require("ffprobe-static");
 //Import Environment Variables
 require("dotenv").config();
 
@@ -91,13 +92,22 @@ router.put("/", checkSchema(require("../validationSchema/newLog")), auth, async 
         if (v.location) {
             const video = path.join(process.env.MEDIA_ROOT, v.location);
             if (fs.existsSync(video)) {
-                const seconds = await getVideoDurationInSeconds(video);
-                var measuredTime = new Date(null);
-                measuredTime.setSeconds(seconds);
-                if (seconds < 3600) {
-                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(14, 5);
-                } else {
-                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(11, 8);
+                var videoInfo;
+                try {
+                    videoInfo = await ffprobe(video, { path: ffprobeStatic.path });
+                } catch (err) {
+                    console.error(err);
+                }
+                if (req.body.digitalInfo[i].length === "") {
+                    const seconds = videoInfo.streams[0].duration;
+                    var measuredTime = new Date(null);
+                    measuredTime.setSeconds(seconds);
+                    if (seconds < 3600) {
+                        req.body.digitalInfo[i].length = measuredTime.toISOString().substr(14, 5);
+                        console.log();
+                    } else {
+                        req.body.digitalInfo[i].length = measuredTime.toISOString().substr(11, 8);
+                    }
                 }
             }
         }

@@ -25,28 +25,25 @@ const Log = (props) => {
     const history = useHistory();
     const { format } = logDisplay;
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            var result;
-            var config = {
-                url: `/api/logs/${props.match.params.id}`,
-                method: "get",
-            };
-            if (token) {
-                config.headers = {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                };
-            }
-            try {
-                result = await axios(config);
-            } catch (e) {
-                history.goBack();
-            }
-            setData(result.data);
-            setLoading(false);
+        setLoading(true);
+        var config = {
+            url: `/api/logs/${props.match.params.id}`,
+            method: "get",
         };
-        fetchData();
+        if (token) {
+            config.headers = {
+                "Content-type": "application/json",
+                "x-auth-token": token,
+            };
+        }
+        axios(config)
+            .then((result) => {
+                setData(result.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                history.goBack();
+            });
     }, [props.match.params.id, token, history]);
     useEffect(() => {
         const fetchData = async () => {};
