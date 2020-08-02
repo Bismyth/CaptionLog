@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player/file";
 import { Container, Alert } from "reactstrap";
 import BackButton from "../BackButton";
 import { classHeading } from "../../config";
