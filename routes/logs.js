@@ -14,9 +14,30 @@ require("dotenv").config();
 //Importing old Model
 const { OldLog } = require("../models/OldLog");
 const Log = require("../models/Log");
-var asyncForEach = async (array, callback) => {
-    for (let index = 0; index < array.length; index++) {
-        await callback(array[index], index, array);
+const processVideoLength = async (digitalInfo) => {
+    for (let index = 0; index < digitalInfo.length; index++) {
+        var v = digitalInfo[index];
+        if (v.location) {
+            const video = path.join(process.env.MEDIA_ROOT, v.location);
+            if (fs.existsSync(video)) {
+                var videoInfo;
+                try {
+                    videoInfo = await ffprobe(video, { path: ffprobeStatic.path });
+                } catch (err) {
+                    console.error(err);
+                }
+                if (v.length === "") {
+                    const seconds = videoInfo.streams[0].duration;
+                    var measuredTime = new Date(null);
+                    measuredTime.setSeconds(seconds);
+                    if (seconds < 3600) {
+                        v.length = measuredTime.toISOString().substr(14, 5);
+                    } else {
+                        v.length = measuredTime.toISOString().substr(11, 8);
+                    }
+                }
+            }
+        }
     }
 };
 
@@ -60,21 +81,12 @@ router.get("/", (req, res) => {
 router.post("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-    await asyncForEach(req.body.digitalInfo, async (v, i) => {
-        if (v.location && v.length === "") {
-            const video = path.join(process.env.MEDIA_ROOT, v.location);
-            if (fs.existsSync(video)) {
-                const seconds = await getVideoDurationInSeconds(video);
-                var measuredTime = new Date(null);
-                measuredTime.setSeconds(seconds);
-                if (seconds < 3600) {
-                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(14, 5);
-                } else {
-                    req.body.digitalInfo[i].length = measuredTime.toISOString().substr(11, 8);
-                }
-            }
-        }
-    });
+    try {
+        await processVideoLength(req.body.digitalInfo);
+    } catch (e) {
+        return res.status(500);
+    }
+
     const newLog = new Log(req.body);
     newLog.save((err, doc) => {
         if (err) {
@@ -88,30 +100,11 @@ router.post("/", checkSchema(require("../validationSchema/newLog")), auth, async
 router.put("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-    await asyncForEach(req.body.digitalInfo, async (v, i) => {
-        if (v.location) {
-            const video = path.join(process.env.MEDIA_ROOT, v.location);
-            if (fs.existsSync(video)) {
-                var videoInfo;
-                try {
-                    videoInfo = await ffprobe(video, { path: ffprobeStatic.path });
-                } catch (err) {
-                    console.error(err);
-                }
-                if (req.body.digitalInfo[i].length === "") {
-                    const seconds = videoInfo.streams[0].duration;
-                    var measuredTime = new Date(null);
-                    measuredTime.setSeconds(seconds);
-                    if (seconds < 3600) {
-                        req.body.digitalInfo[i].length = measuredTime.toISOString().substr(14, 5);
-                        console.log();
-                    } else {
-                        req.body.digitalInfo[i].length = measuredTime.toISOString().substr(11, 8);
-                    }
-                }
-            }
-        }
-    });
+    try {
+        await processVideoLength(req.body.digitalInfo);
+    } catch (e) {
+        return res.status(500);
+    }
     Log.findByIdAndUpdate(req.body._id, req.body, (err, doc) => {
         if (err) {
             console.error(err);
