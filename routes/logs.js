@@ -12,7 +12,7 @@ var ffprobe = require("ffprobe"),
 require("dotenv").config();
 
 //Importing old Model
-const OldLog = require("../models/OldLog");
+const { OldLog } = require("../models/OldLog");
 const Log = require("../models/Log");
 var asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
@@ -61,7 +61,7 @@ router.post("/", checkSchema(require("../validationSchema/newLog")), auth, async
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     await asyncForEach(req.body.digitalInfo, async (v, i) => {
-        if (v.location) {
+        if (v.location && v.length === "") {
             const video = path.join(process.env.MEDIA_ROOT, v.location);
             if (fs.existsSync(video)) {
                 const seconds = await getVideoDurationInSeconds(video);

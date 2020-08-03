@@ -5,13 +5,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
-import Logs from "./components/logStuff/Logs";
-import OldLog from "./components/logStuff/OldLog";
-import Log from "./components/logStuff/Log";
-import Search from "./components/logStuff/Search";
-import LogForm from "./components/logStuff/form/LogForm";
-import EditSelector from "./components/logStuff/form/EditSelector";
-import Video from "./components/logStuff/Video";
+import Logs from "./components/log/AtoZ";
+import OldLog from "./components/log/display/OldLog";
+import Log from "./components/log/display/Log";
+import Search from "./components/log/Search";
+import LogForm from "./components/log/form/LogForm";
+import EditSelector from "./components/log/form/EditSelector";
+import Video from "./components/log/display/Video";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -27,7 +27,7 @@ const App = () => {
             <Toolbar />
             <div id="scroll">
                 <Switch>
-                    <Route path={`/logs/:search?`} component={Logs} />
+                    <Route path={`/atoz/:search?`} component={Logs} />
                     <Route path={`/oldLog/:id`} component={OldLog} />
                     <Route path={`/log/:id`} component={Log} />
                     <Route path={`/video/:id/:vid`} component={Video} />

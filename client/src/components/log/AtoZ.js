@@ -8,6 +8,7 @@ import {
     Container,
     Button,
     Spinner,
+    Alert,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -18,7 +19,7 @@ import { useSelector } from "react-redux";
 import SearchBar from "./SearchBar";
 
 const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const Logs = ({
+const AtoZ = ({
     match: {
         params: { search: psearch = "a" },
     },
@@ -28,23 +29,28 @@ const Logs = ({
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     const [search, setSearch] = useState(psearch);
     const [value, setValue] = useState("");
     useEffect(() => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
     useEffect(() => {
-        var updatedUrl = `/logs/${encodeURIComponent(search)}`;
+        var updatedUrl = `/atoz/${encodeURIComponent(search)}`;
         if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
         setLoading(true);
         var term = decodeURIComponent(search) === "#" ? "[0-9]" : search;
         axios({
             method: "get",
             url: `/api/logs?search=${term}`,
-        }).then((result) => {
-            setData(result.data);
-            setLoading(false);
-        });
+        })
+            .then((result) => {
+                setData(result.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError("Database Error, please reload the page.");
+            });
     }, [search, history]);
     return (
         <Container className="content">
@@ -94,9 +100,10 @@ const Logs = ({
             >
                 <SearchBar className="mb-3" value={value} update={setValue} />
             </Form>
-            {!loading ? <LogListItem data={data} setData={setData} /> : <Spinner color="primary" />}
+            {error ? <Alert color="danger">{error}</Alert> : <Fragment />}
+            {loading ? <Spinner color="primary" /> : <LogListItem data={data} setData={setData} />}
         </Container>
     );
 };
 
-export default Logs;
+export default AtoZ;

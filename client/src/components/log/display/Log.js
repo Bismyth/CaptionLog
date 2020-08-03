@@ -10,14 +10,15 @@ import {
     Button,
 } from "reactstrap";
 import { useSelector } from "react-redux";
-import "./scroll.css";
-import BackButton from "../BackButton";
+import BackButton from "../../BackButton";
 import { format } from "./LogDisplay.json";
-import Edit from "./actionButtons/Edit";
-import Delete from "./actionButtons/Delete";
+import Edit from "../actionButtons/Edit";
+import Delete from "../actionButtons/Delete";
 import { useHistory, Link } from "react-router-dom";
-import LogHeader from "./LogHeader";
-import { classHeading } from "../../config";
+import LogHeader from "../LogHeader";
+import { classHeading } from "../../../config";
+
+import "../scroll.css";
 
 const Log = ({
     match: {
@@ -52,7 +53,9 @@ const Log = ({
     }, [id, token, history]);
     return (
         <Container className="content">
-            {!loading ? (
+            {loading ? (
+                <Spinner color="primary" />
+            ) : (
                 <Fragment>
                     <div className={classHeading}>
                         <BackButton className="mr-1" />
@@ -121,6 +124,7 @@ const Log = ({
                                                                 tag={Link}
                                                                 to={`/video/${data._id}/${value._id}`}
                                                                 className="ml-auto"
+                                                                disabled
                                                             >
                                                                 Go to Video
                                                             </Button>
@@ -175,8 +179,6 @@ const Log = ({
                         }
                     })}
                 </Fragment>
-            ) : (
-                <Spinner color="primary" />
             )}
         </Container>
     );

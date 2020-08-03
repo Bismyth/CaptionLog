@@ -9,11 +9,11 @@ import {
     ListGroupItemText,
 } from "reactstrap";
 import { useSelector } from "react-redux";
-import "./scroll.css";
-import BackButton from "../BackButton";
-import Delete from "./actionButtons/Delete";
+import "../scroll.css";
+import BackButton from "../../BackButton";
+import Delete from "../actionButtons/Delete";
 import { useHistory } from "react-router-dom";
-import { classHeading } from "../../config";
+import { classHeading } from "../../../config";
 
 const display = {
     description: "Description:",
@@ -25,17 +25,21 @@ const display = {
     video_source: "Video Source:",
     other: "Other: ",
 };
-const OldLog = (props) => {
+const OldLog = ({
+    match: {
+        params: { id },
+    },
+}) => {
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
     const history = useHistory();
 
     useEffect(() => {
         setLoading(true);
         var config = {
-            url: `/api/logs/${props.match.params.id}?type=old`,
+            url: `/api/logs/${id}?type=old`,
             method: "get",
         };
         if (token) {
@@ -52,7 +56,7 @@ const OldLog = (props) => {
             .catch((err) => {
                 history.goBack();
             });
-    }, [props.match.params.id, token, history]);
+    }, [id, token, history]);
     return (
         <Container className="content">
             {!loading ? (

@@ -14,7 +14,7 @@ const Delete = ({ id, old, update, className }) => {
     const toggle = () => setPOpen(!pOpen);
     const history = useHistory();
     const deleteLog = () => {
-        var config = {
+        axios({
             method: "delete",
             url: `/api/logs/${id}`,
             headers: {
@@ -22,8 +22,7 @@ const Delete = ({ id, old, update, className }) => {
                 "x-auth-token": token,
             },
             data: { old: old === true },
-        };
-        axios(config)
+        })
             .then(() => {
                 if (update) {
                     update((d) => {

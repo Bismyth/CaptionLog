@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from "react";
 import ReactPlayer from "react-player";
 import { Container, Alert } from "reactstrap";
-import BackButton from "../BackButton";
-import { classHeading } from "../../config";
+import BackButton from "../../BackButton";
+import { classHeading } from "../../../config";
 
 const Video = ({
     match: {

@@ -49,7 +49,7 @@ const Search = ({
                     <option value="description">Description</option>
                 </Input>
             </Form>
-            {!loading ? <LogListItem data={data} setData={setData} /> : <Spinner color="primary" />}
+            {loading ? <Spinner color="primary" /> : <LogListItem data={data} setData={setData} />}
         </Container>
     );
 };
