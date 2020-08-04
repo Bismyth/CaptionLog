@@ -1,6 +1,6 @@
 {
     "name": "captionlog",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "description": "Captioning Browser for SCDEC",
     "main": "server.js",
     "scripts": {
@@ -30,8 +30,7 @@
         "ffprobe-static": "^3.0.0",
         "jsonwebtoken": "^8.5.1",
         "junk": "^3.1.0",
-        "mongoose": "^5.9.13",
-        "mongoose-fuzzy-searching": "^1.1.9"
+        "mongoose": "^5.9.13"
     },
     "devDependencies": {
         "concurrently": "^5.1.0",
