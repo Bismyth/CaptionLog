@@ -8,11 +8,11 @@ import { ReactComponent as NoButton } from "../../../icons/clear-black-24dp.svg"
 
 const OldLogInfo = ({ id, className }) => {
     const token = useSelector((state) => state.auth.token);
-    const [data, setData] = useState({});
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
+    const [display, setDisplay] = useState(<Fragment />);
     useEffect(() => {
-        if (id) {
+        if (id && pOpen) {
             var config = {
                 method: "get",
                 url: `/api/logs/${id}?type=old`,
@@ -25,13 +25,17 @@ const OldLogInfo = ({ id, className }) => {
             }
             axios(config)
                 .then((result) => {
-                    setData(result.data);
+                    setDisplay(
+                        Object.entries(result.data).map((v) => (
+                            <p key={v[0]}>{`${v[0]}: ${v[1]}`}</p>
+                        ))
+                    );
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         }
-    }, [id, token]);
+    }, [id, token, pOpen]);
     return (
         <Fragment>
             <InfoButton id={`d-${id}`} alt="Info" className={`link-arrow ${className}`} />
@@ -39,11 +43,7 @@ const OldLogInfo = ({ id, className }) => {
                 <PopoverHeader>
                     Old Log Data: <NoButton className="link-arrow" alt="No" onClick={toggle} />
                 </PopoverHeader>
-                <PopoverBody>
-                    {Object.entries(data).map((v) => (
-                        <p key={v[0]}>{`${v[0]}: ${v[1]}`}</p>
-                    ))}
-                </PopoverBody>
+                <PopoverBody>{display}</PopoverBody>
             </Popover>
         </Fragment>
     );

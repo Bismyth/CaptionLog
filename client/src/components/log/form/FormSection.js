@@ -1,12 +1,8 @@
 import React, { Fragment } from "react";
 import { FormGroup, Label, Col, Input } from "reactstrap";
+import TextareaAutosize from "react-autosize-textarea";
 
-const updateTextArea = (e) => {
-    e.target.style.height = "1px";
-    e.target.style.height = e.target.scrollHeight + "px";
-};
-
-const FormSection = ({ data, format, update, section, selectors, index }) => {
+const FormSection = ({ data, format, update, section, selectors = {}, index }) => {
     return (
         <Fragment>
             {Object.entries(format).map(([key, { name, type }]) => (
@@ -22,14 +18,10 @@ const FormSection = ({ data, format, update, section, selectors, index }) => {
                             value={data[key]}
                             placeholder={name + "..."}
                             onChange={(e) => {
-                                if (type === "textarea") updateTextArea(e);
                                 update(e, section, index);
                             }}
-                            onFocus={(e) => {
-                                if (type === "textarea") updateTextArea(e);
-                            }}
                             children={
-                                Object.keys(selectors || {}).includes(key)
+                                Object.keys(selectors).includes(key)
                                     ? selectors[key].map(({ _id, name }) => (
                                           <option key={_id} value={_id === "invalid" ? "" : name}>
                                               {name}
@@ -37,7 +29,7 @@ const FormSection = ({ data, format, update, section, selectors, index }) => {
                                       ))
                                     : null
                             }
-                            className={type === "textarea" ? "overflow-hidden" : ""}
+                            tag={type === "textarea" ? TextareaAutosize : undefined}
                         />
                     </Col>
                 </FormGroup>

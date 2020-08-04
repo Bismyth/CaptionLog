@@ -72,6 +72,7 @@ const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldL
     };
     const changeValue = useCallback((e, level, index) => {
         const { name, value } = e.target;
+        console.log(value);
         setData((d) => {
             if (level === "main") return { ...d, [name]: value };
             else if (index === undefined)

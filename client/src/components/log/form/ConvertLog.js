@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
 import axios from "axios";
 import { Spinner, Container } from "reactstrap";
+import { digBlank, digBlankCV, physBlank, blankForm } from "./FormData.json";
 
 const ConvertLog = ({
     match: {
@@ -55,25 +56,36 @@ const ConvertLog = ({
                     console.log(result.data);
 
                     var oData = result.data;
-                    var newData = {
-                        title: "",
-                        description: "",
-                        genre: "",
-                        copyrightInfo: {
-                            teacherName: "",
-                            captionSource: "",
-                            dateOfCompletion: "",
-                            videoSource: "",
-                            originalLocation: "",
-                        },
-                        digitalInfo: [],
-                        physicalInfo: [],
-                    };
-
+                    var newData = blankForm;
+                    if (oData.description.includes("<iframe")) {
+                        newData["description"] = oData["description"].split("\r\n")[0] || "";
+                        newData.digitalInfo.push({
+                            ...digBlankCV,
+                            length: oData.length || "",
+                            clickviewUrl: oData.description
+                                .replace(/(\r\n|\n|\r)/gm, " ")
+                                .split(" ")
+                                .filter((v) => {
+                                    return v.includes("https://click");
+                                })[0],
+                        });
+                    } else {
+                        newData["description"] = oData["description"] || "";
+                    }
+                    if (oData.date_of_completion) {
+                        var date = new Date(oData.date_of_completion);
+                        var d = date.getDate() + "";
+                        var m = date.getMonth() + 1 + "";
+                        var y = date.getFullYear() + "";
+                        if (d.length < 2) d = "0" + d;
+                        if (m.length < 2) m = "0" + m;
+                        newData.copyrightInfo.dateOfCompletion = [y, m, d].join("-");
+                    }
                     newData["title"] = oData["title"] || "";
-                    newData["description"] = oData["description"] || "";
                     newData["genre"] = oData["genre"] || "";
-
+                    newData.copyrightInfo.videoSource = oData.video_source || "";
+                    newData.copyrightInfo.captionSource = oData.caption_source || "";
+                    newData.copyrightInfo.originalLocation = oData.original_copy_location || "";
                     setOData(result.data);
                     setData(newData);
                     setLoading(false);
