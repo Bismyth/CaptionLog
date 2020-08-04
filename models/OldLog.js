@@ -45,11 +45,15 @@ const OldLogSchema = new Schema({
 });
 
 const UpdateSchema = new Schema({
-    newLogID: {
-        type: mongoose.ObjectId,
-        required: true,
-    },
-    oldLog: OldLogSchema,
+    newLog: new Schema({
+        id: {
+            _id: false,
+            type: mongoose.ObjectId,
+            required: true,
+        },
+        title: String,
+    }),
+    oldLog: { _id: false, type: OldLogSchema },
 });
 const OldLog = mongoose.model("oldlog", OldLogSchema);
 const Update = mongoose.model("update", UpdateSchema);

@@ -3,9 +3,9 @@ import { Popover, PopoverBody, PopoverHeader } from "reactstrap";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-import deleteButton from "../../../icons/delete-black-24dp.svg";
-import noButton from "../../../icons/clear-black-24dp.svg";
-import yesButton from "../../../icons/done-black-24dp.svg";
+import { ReactComponent as DeleteButton } from "../../../icons/delete-black-24dp.svg";
+import { ReactComponent as NoButton } from "../../../icons/clear-black-24dp.svg";
+import { ReactComponent as YesButton } from "../../../icons/done-black-24dp.svg";
 import { useHistory } from "react-router-dom";
 
 const Delete = ({ id, old, update, className }) => {
@@ -38,19 +38,14 @@ const Delete = ({ id, old, update, className }) => {
     };
     return (
         <Fragment>
-            <img
-                id={`d-${id}`}
-                src={deleteButton}
-                alt="Delete"
-                className={`link-arrow ${className}`}
-            />
+            <DeleteButton id={`d-${id}`} alt="Delete" className={`link-arrow ${className}`} />
             <Popover target={`d-${id}`} isOpen={pOpen} toggle={toggle} placement={"left"}>
                 <PopoverHeader>Delete</PopoverHeader>
                 <PopoverBody>
                     Are you sure you want to delete?
                     <br />
-                    <img src={yesButton} className="link-arrow" alt="Yes" onClick={deleteLog} />
-                    <img src={noButton} className="link-arrow" alt="No" onClick={toggle} />
+                    <YesButton className="link-arrow" alt="Yes" onClick={deleteLog} />
+                    <NoButton className="link-arrow" alt="No" onClick={toggle} />
                 </PopoverBody>
             </Popover>
         </Fragment>

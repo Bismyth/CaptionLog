@@ -1,8 +1,10 @@
 import React, { useState, useEffect, Fragment, useCallback } from "react";
 import axios from "axios";
-import { Spinner, Form, Input, Container, Alert, Button, FormGroup } from "reactstrap";
+import { Spinner, Form, Input, Alert, Button, FormGroup } from "reactstrap";
 import "../fade.css";
 import {
+    title,
+    submitBtn,
     digBlank,
     digBlankCV,
     physBlank,
@@ -12,78 +14,29 @@ import {
     config,
     selectorsFormat,
 } from "./FormData.json";
-import { useHistory, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
+import OldLogInfo from "../actionButtons/OldLogInfo";
 import { classHeading, asyncForEach } from "../../../config";
 
-const LogForm = ({
-    match: {
-        params: { id },
-    },
-}) => {
-    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const token = useSelector((state) => state.auth.token);
-    const [edit, setEdit] = useState(false);
+const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldLog }) => {
     const [selectors, updateSelectors] = useState({});
-    const [data, setData] = useState(blankForm);
-    const [loading, setLoading] = useState([false, false]);
-    const [sLoading, setSLoading] = useState(false);
-    const [errors, setErrors] = useState([]);
-    const history = useHistory();
-    useEffect(() => {
-        setLoading((l) => {
-            return [true, l[1]];
-        });
-        if (id && token) {
-            var config = {
-                method: "get",
-                url: `/api/logs/${id}`,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
-            };
-            axios(config)
-                .then((result) => {
-                    if (result.data) {
-                        setErrors([]);
-                        setData(result.data);
-                        setEdit(true);
-                    } else {
-                        setErrors([{ msg: "No Log with that ID found" }]);
-                    }
-                    setLoading((l) => {
-                        return [false, l[1]];
-                    });
-                })
-                .catch((error) => {
-                    history.goBack();
-                });
-        }
-    }, [id, token, history]);
-
+    const [data, setData] = useState(idata);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchSelectors = async () => {
-            setLoading((l) => {
-                return [l[0], true];
-            });
+            setLoading(true);
             await asyncForEach(selectorsFormat, async (selector) => {
                 var config = {
                     method: "get",
                     url: `/api/lists/${selector.source}`,
-                    headers: {
-                        "Content-type": "application/json",
-                        "x-auth-token": token,
-                    },
                 };
                 var result;
                 try {
                     result = await axios(config);
                 } catch (e) {
-                    history.goBack();
+                    console.error(e);
                 }
 
                 const [head, key] = selector.loc.split("/");
@@ -103,14 +56,10 @@ const LogForm = ({
                     };
                 });
             });
-            setLoading((l) => {
-                return [l[0], false];
-            });
+            setLoading(false);
         };
-        if (token) {
-            fetchSelectors();
-        }
-    }, [token, history]);
+        fetchSelectors();
+    }, []);
     const changeFormType = (e) => {
         var formType = e.target.value;
         setData((d) => {
@@ -164,40 +113,20 @@ const LogForm = ({
             };
         });
     }, []);
-    const submit = (e) => {
-        setSLoading(true);
-        var config = {
-            method: edit ? "put" : "post",
-            url: `/api/logs`,
-            headers: {
-                "Content-type": "application/json",
-                "x-auth-token": token,
-            },
-            data,
-        };
-        axios(config)
-            .then((result) => {
-                history.push(`/log/${result.data._id}`);
-            })
-            .catch((err) => {
-                setSLoading(false);
-                setErrors(err.response.data["errors"]);
-            });
-    };
     return (
-        <Container className="content">
-            {loading.every((v) => {
-                return !v;
-            }) ? (
+        <Fragment>
+            {!loading ? (
                 <Fragment>
-                    {!loggedIn && loggedIn !== null ? <Redirect to="/logs" /> : <Fragment />}
                     <div className={classHeading}>
                         <BackButton className="mr-1" />
-                        <h1>{edit ? "Edit Log" : "New Log"}</h1>
-                        <Input type="select" onChange={changeFormType} className="ml-auto w-auto">
-                            <option value="media">Media</option>
-                            <option value="movie">Movie</option>
-                        </Input>
+                        <h1>{title[type]}</h1>
+                        <div className="ml-auto d-flex align-items-center">
+                            {oldLog ? <OldLogInfo id={oldLog} className="mr-1" /> : <Fragment />}
+                            <Input type="select" onChange={changeFormType} className="w-auto">
+                                <option value="media">Media</option>
+                                <option value="movie">Movie</option>
+                            </Input>
+                        </div>
                     </div>
                     <Form>
                         {errors.length > 0 ? (
@@ -255,8 +184,14 @@ const LogForm = ({
                             selectors={selectors.physicalInfo}
                         />
                         <FormGroup className="mt-3">
-                            <Button color="primary" onClick={submit} disabled={sLoading}>
-                                {edit ? "Save" : "Submit"}
+                            <Button
+                                color="primary"
+                                onClick={() => {
+                                    upload(data);
+                                }}
+                                disabled={sLoading}
+                            >
+                                {submitBtn[type]}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -264,7 +199,7 @@ const LogForm = ({
             ) : (
                 <Spinner color="primary" />
             )}
-        </Container>
+        </Fragment>
     );
 };
 

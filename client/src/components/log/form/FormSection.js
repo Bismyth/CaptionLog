@@ -1,6 +1,11 @@
 import React, { Fragment } from "react";
 import { FormGroup, Label, Col, Input } from "reactstrap";
 
+const updateTextArea = (e) => {
+    e.target.style.height = "1px";
+    e.target.style.height = e.target.scrollHeight + "px";
+};
+
 const FormSection = ({ data, format, update, section, selectors, index }) => {
     return (
         <Fragment>
@@ -17,7 +22,11 @@ const FormSection = ({ data, format, update, section, selectors, index }) => {
                             value={data[key]}
                             placeholder={name + "..."}
                             onChange={(e) => {
+                                if (type === "textarea") updateTextArea(e);
                                 update(e, section, index);
+                            }}
+                            onFocus={(e) => {
+                                if (type === "textarea") updateTextArea(e);
                             }}
                             children={
                                 Object.keys(selectors || {}).includes(key)
@@ -28,6 +37,7 @@ const FormSection = ({ data, format, update, section, selectors, index }) => {
                                       ))
                                     : null
                             }
+                            className={type === "textarea" ? "overflow-hidden" : ""}
                         />
                     </Col>
                 </FormGroup>

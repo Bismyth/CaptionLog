@@ -3,6 +3,7 @@ import { Card, CardBody, CardText, CardTitle, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Edit from "./actionButtons/Edit";
+import Convert from "./actionButtons/Convert";
 import Delete from "./actionButtons/Delete";
 import LogHeader from "./LogHeader";
 
@@ -29,7 +30,7 @@ const LogListItem = ({ data, setData }) => {
                                     {loggedIn ? (
                                         <Fragment>
                                             {old ? (
-                                                <Fragment />
+                                                <Convert className="mr-1" id={_id} />
                                             ) : (
                                                 <Edit className="mr-1" id={_id} />
                                             )}

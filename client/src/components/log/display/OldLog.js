@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import "../scroll.css";
 import BackButton from "../../BackButton";
+import Convert from "../actionButtons/Convert";
 import Delete from "../actionButtons/Delete";
 import { useHistory } from "react-router-dom";
 import { classHeading } from "../../../config";
@@ -66,6 +67,7 @@ const OldLog = ({
                         <h2>{data.title}</h2>
                         {loggedIn ? (
                             <div className="ml-auto">
+                                <Convert className="mr-1" id={data._id} />
                                 <Delete id={data._id} old={true} />
                             </div>
                         ) : (
@@ -88,7 +90,7 @@ const OldLog = ({
                                 {data.completed ? "Completed" : "Incomplete"}
                             </ListGroupItemHeading>
                             <ListGroupItemText>
-                                Completed on {new Date(data.date_of_completion).toString()}
+                                Completed on {new Date(data.date_of_completion).toDateString()}
                             </ListGroupItemText>
                         </ListGroupItem>
                     </ListGroup>

@@ -1,4 +1,14 @@
 {
+    "title": {
+        "new": "New Log",
+        "edit": "Edit Log",
+        "convert": "Convert Log"
+    },
+    "submitBtn": {
+        "new": "Submit",
+        "edit": "Save",
+        "convert": "Convert"
+    },
     "digBlank": {
         "name": "",
         "length": "",

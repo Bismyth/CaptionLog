@@ -9,7 +9,9 @@ import Logs from "./components/log/AtoZ";
 import OldLog from "./components/log/display/OldLog";
 import Log from "./components/log/display/Log";
 import Search from "./components/log/Search";
-import LogForm from "./components/log/form/LogForm";
+import EditLog from "./components/log/form/EditLog";
+import NewLog from "./components/log/form/NewLog";
+import ConvertLog from "./components/log/form/ConvertLog";
 import EditSelector from "./components/log/form/EditSelector";
 import Video from "./components/log/display/Video";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -31,8 +33,9 @@ const App = () => {
                     <Route path={`/oldLog/:id`} component={OldLog} />
                     <Route path={`/log/:id`} component={Log} />
                     <Route path={`/video/:id/:vid`} component={Video} />
-                    <Route path={`/newLog`} component={LogForm} />
-                    <Route path={`/edit/:id`} component={LogForm} />
+                    <Route path={`/newLog`} component={NewLog} />
+                    <Route path={`/edit/:id`} component={EditLog} />
+                    <Route path={`/convert/:id`} component={ConvertLog} />
                     <Route path={`/modi`} component={EditSelector} />
                     <Route path={`/search/:value?/:field?`} component={Search} />
                     <Route path={`/`} component={Home} />
