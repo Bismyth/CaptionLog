@@ -25,7 +25,7 @@ const OldLogSchema = new Schema({
         required: true,
     },
     date_of_completion: {
-        type: Date,
+        type: String,
         required: true,
     },
     caption_source: {

@@ -25,7 +25,6 @@ const OldLogInfo = ({ id, className }) => {
             }
             axios(config)
                 .then((result) => {
-                    console.log(result);
                     setData(result.data);
                 })
                 .catch((error) => {
@@ -41,7 +40,6 @@ const OldLogInfo = ({ id, className }) => {
                     Old Log Data: <NoButton className="link-arrow" alt="No" onClick={toggle} />
                 </PopoverHeader>
                 <PopoverBody>
-                    {console.log(data)}
                     {Object.entries(data).map((v) => (
                         <p key={v[0]}>{`${v[0]}: ${v[1]}`}</p>
                     ))}
