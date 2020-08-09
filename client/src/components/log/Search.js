@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import { Input, Form, Container, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import "./scroll.css";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";
-const Search = ({
-    match: {
-        params: { value: pvalue = "a", field: pfield = "title" },
-    },
-}) => {
+import { useQuery } from "react-query";
+import { fetchLogs } from "../../queries/log";
+
+const Search = ({ match: { params } }) => {
+    const { value: search, field } = params;
     const history = useHistory();
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState(pvalue);
-    const [field, setField] = useState(pfield);
     const [value, setValue] = useState(decodeURIComponent(search));
-    useEffect(() => {
-        var updatedUrl = `/search/${encodeURIComponent(search)}/${field}`;
-        if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
-        setLoading(true);
-        axios({ method: "get", url: `/api/logs?value=${search}&field=${field}` }).then((result) => {
-            setData(result.data);
-            setLoading(false);
-        });
-    }, [search, field, history]);
+    const { isLoading, data } = useQuery(["getLogs", { params }], fetchLogs, {
+        onError: (err) => {
+            console.error(err);
+        },
+    });
     return (
         <Container className="content">
             <h1>Search</h1>
             <Form
                 onSubmit={(e) => {
-                    setSearch(e.target.search.value);
+                    history.push(`/search/${encodeURIComponent(e.target.search.value)}/${field}`);
                     e.preventDefault();
                 }}
                 className="mb-3"
@@ -40,8 +31,7 @@ const Search = ({
                     type="select"
                     className="ml-auto w-auto"
                     onChange={(e) => {
-                        setField(e.target.value);
-                        setSearch(value);
+                        history.push(`/search/${encodeURIComponent(search)}/${e.target.value}`);
                     }}
                     value={field}
                 >
@@ -49,7 +39,7 @@ const Search = ({
                     <option value="description">Description</option>
                 </Input>
             </Form>
-            {loading ? <Spinner color="primary" /> : <LogListItem data={data} setData={setData} />}
+            {isLoading ? <Spinner color="primary" /> : <LogListItem data={data} />}
         </Container>
     );
 };

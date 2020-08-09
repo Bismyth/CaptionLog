@@ -7,6 +7,7 @@ const EditSelector = (props) => {
     const [loading, setLoading] = useState(false);
     const source = "captionSource";
     const token = useSelector((state) => state.auth.token);
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);

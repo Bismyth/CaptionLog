@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from "react";
-import axios from "axios";
 import {
     Pagination,
     PaginationItem,
@@ -17,41 +16,25 @@ import { setPage } from "../../redux/actions/pageActions";
 import LogListItem from "./LogListItem";
 import { useSelector } from "react-redux";
 import SearchBar from "./SearchBar";
+import { useQuery } from "react-query";
+import { fetchLogs } from "../../queries/log";
 
 const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const AtoZ = ({
-    match: {
-        params: { search: psearch = "a" },
-    },
-}) => {
+const AtoZ = ({ match: { params } }) => {
+    const { search = "a" } = params;
     const history = useHistory();
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [search, setSearch] = useState(psearch);
     const [value, setValue] = useState("");
+    const { data, isLoading } = useQuery(["getLogs", { params }], fetchLogs, {
+        onError: (err) => {
+            setError("Database Error, please reload the page.");
+        },
+    });
     useEffect(() => {
         dispatch(setPage("Logs"));
     }, [dispatch]);
-    useEffect(() => {
-        var updatedUrl = `/atoz/${encodeURIComponent(search)}`;
-        if (history.location.pathname !== updatedUrl) history.push(updatedUrl);
-        setLoading(true);
-        var term = decodeURIComponent(search) === "#" ? "[0-9]" : search;
-        axios({
-            method: "get",
-            url: `/api/logs?search=${term}`,
-        })
-            .then((result) => {
-                setData(result.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                setError("Database Error, please reload the page.");
-            });
-    }, [search, history]);
     return (
         <Container className="content">
             <div>
@@ -82,9 +65,11 @@ const AtoZ = ({
                 }}
             >
                 {alphabet.map((char) => (
-                    <PaginationItem key={char} active={search === char}>
+                    <PaginationItem key={char} active={search === char.toLowerCase()}>
                         <PaginationLink
-                            onClick={() => setSearch(char.toLowerCase())}
+                            onClick={(e) => {
+                                history.push(`/atoz/${encodeURIComponent(char.toLowerCase())}`);
+                            }}
                             className="bg-darkgray"
                         >
                             {char}
@@ -101,7 +86,7 @@ const AtoZ = ({
                 <SearchBar className="mb-3" value={value} update={setValue} />
             </Form>
             {error ? <Alert color="danger">{error}</Alert> : <Fragment />}
-            {loading ? <Spinner color="primary" /> : <LogListItem data={data} setData={setData} />}
+            {isLoading ? <Spinner color="primary" /> : <LogListItem data={data} />}
         </Container>
     );
 };

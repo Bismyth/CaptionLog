@@ -20,7 +20,8 @@ import BackButton from "../../BackButton";
 import OldLogInfo from "../actionButtons/OldLogInfo";
 import { classHeading, asyncForEach } from "../../../config";
 
-const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldLog }) => {
+const LogForm = (props) => {
+    const { upload, data: idata = blankForm, type, sLoading, errors, oldLog } = props;
     const [selectors, updateSelectors] = useState({});
     const [data, setData] = useState(idata);
     const [loading, setLoading] = useState(false);
@@ -32,13 +33,7 @@ const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldL
                     method: "get",
                     url: `/api/lists/${selector.source}`,
                 };
-                var result;
-                try {
-                    result = await axios(config);
-                } catch (e) {
-                    console.error(e);
-                }
-
+                const { data: result } = await axios(config);
                 const [head, key] = selector.loc.split("/");
                 updateSelectors((v) => {
                     return {
@@ -50,7 +45,7 @@ const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldL
                                     _id: "invalid",
                                     name: format[head][key].name + "...",
                                 },
-                                ...result.data,
+                                ...result,
                             ],
                         },
                     };
@@ -58,7 +53,11 @@ const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldL
             });
             setLoading(false);
         };
-        fetchSelectors();
+        try {
+            fetchSelectors();
+        } catch (e) {
+            console.error(e);
+        }
     }, []);
     const changeFormType = (e) => {
         var formType = e.target.value;
@@ -114,92 +113,87 @@ const LogForm = ({ upload, data: idata = blankForm, type, sLoading, errors, oldL
             };
         });
     }, []);
+    if (loading) return <Spinner color="primary" />;
     return (
         <Fragment>
-            {!loading ? (
-                <Fragment>
-                    <div className={classHeading}>
-                        <BackButton className="mr-1" />
-                        <h1>{title[type]}</h1>
-                        <div className="ml-auto d-flex align-items-center">
-                            {oldLog ? <OldLogInfo id={oldLog} className="mr-1" /> : <Fragment />}
-                            <Input type="select" onChange={changeFormType} className="w-auto">
-                                <option value="media">Media</option>
-                                <option value="movie">Movie</option>
-                            </Input>
-                        </div>
-                    </div>
-                    <Form>
-                        {errors.length > 0 ? (
-                            errors.map(({ msg }, i) => (
-                                <Alert key={i} color="danger">
-                                    {msg}
-                                </Alert>
-                            ))
-                        ) : (
-                            <Fragment />
-                        )}
-                        <FormSection
-                            data={data}
-                            format={format.main}
-                            update={changeValue}
-                            selectors={selectors.main}
-                            section="main"
-                        />
+            <div className={classHeading}>
+                <BackButton className="mr-1" />
+                <h1>{title[type]}</h1>
+                <div className="ml-auto d-flex align-items-center">
+                    {oldLog ? <OldLogInfo id={oldLog} className="mr-1" /> : <Fragment />}
+                    <Input type="select" onChange={changeFormType} className="w-auto">
+                        <option value="media">Media</option>
+                        <option value="movie">Movie</option>
+                    </Input>
+                </div>
+            </div>
+            <Form>
+                {errors.length > 0 ? (
+                    errors.map(({ msg }, i) => (
+                        <Alert key={i} color="danger">
+                            {msg}
+                        </Alert>
+                    ))
+                ) : (
+                    <Fragment />
+                )}
+                <FormSection
+                    data={data}
+                    format={format.main}
+                    update={changeValue}
+                    selectors={selectors.main}
+                    section="main"
+                />
 
-                        {data.movieInfo ? (
-                            <Fragment>
-                                <h3 className="mb-3">Movie Info</h3>{" "}
-                                <FormSection
-                                    data={data.movieInfo}
-                                    format={format.movieInfo}
-                                    update={changeValue}
-                                    selectors={selectors.movieInfo}
-                                    section="movieInfo"
-                                />
-                            </Fragment>
-                        ) : (
-                            <Fragment />
-                        )}
-                        <h3 className="mb-3">Copyright Info</h3>
+                {data.movieInfo ? (
+                    <Fragment>
+                        <h3 className="mb-3">Movie Info</h3>{" "}
                         <FormSection
-                            data={data.copyrightInfo}
-                            format={format.copyrightInfo}
+                            data={data.movieInfo}
+                            format={format.movieInfo}
                             update={changeValue}
-                            selectors={selectors.copyrightInfo}
-                            section="copyrightInfo"
+                            selectors={selectors.movieInfo}
+                            section="movieInfo"
                         />
-                        <FormMSection
-                            data={data.digitalInfo}
-                            config={config.digitalInfo}
-                            update={changeValue}
-                            array={{ add: addArr, rm: removeArr }}
-                            selectFile={selectFile}
-                            selectors={selectors.digitalInfo}
-                        />
-                        <FormMSection
-                            data={data.physicalInfo}
-                            config={config.physicalInfo}
-                            update={changeValue}
-                            array={{ add: addArr, rm: removeArr }}
-                            selectors={selectors.physicalInfo}
-                        />
-                        <FormGroup className="mt-3">
-                            <Button
-                                color="primary"
-                                onClick={() => {
-                                    upload(data);
-                                }}
-                                disabled={sLoading}
-                            >
-                                {submitBtn[type]}
-                            </Button>
-                        </FormGroup>
-                    </Form>
-                </Fragment>
-            ) : (
-                <Spinner color="primary" />
-            )}
+                    </Fragment>
+                ) : (
+                    <Fragment />
+                )}
+                <h3 className="mb-3">Copyright Info</h3>
+                <FormSection
+                    data={data.copyrightInfo}
+                    format={format.copyrightInfo}
+                    update={changeValue}
+                    selectors={selectors.copyrightInfo}
+                    section="copyrightInfo"
+                />
+                <FormMSection
+                    data={data.digitalInfo}
+                    config={config.digitalInfo}
+                    update={changeValue}
+                    array={{ add: addArr, rm: removeArr }}
+                    selectFile={selectFile}
+                    selectors={selectors.digitalInfo}
+                />
+                <FormMSection
+                    data={data.physicalInfo}
+                    config={config.physicalInfo}
+                    update={changeValue}
+                    array={{ add: addArr, rm: removeArr }}
+                    selectors={selectors.physicalInfo}
+                />
+                <FormGroup className="mt-3">
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            upload(data);
+                        }}
+                        disabled={sLoading}
+                    >
+                        {submitBtn[type]}
+                    </Button>
+                </FormGroup>
+            </Form>
         </Fragment>
     );
 };

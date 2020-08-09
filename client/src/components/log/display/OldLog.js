@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
-import axios from "axios";
+import React, { Fragment } from "react";
 import {
     Container,
     Spinner,
@@ -15,6 +14,8 @@ import Convert from "../actionButtons/Convert";
 import Delete from "../actionButtons/Delete";
 import { useHistory } from "react-router-dom";
 import { classHeading } from "../../../config";
+import { useQuery } from "react-query";
+import { fetchLog } from "../../../queries/log";
 
 const display = {
     description: "Description:",
@@ -26,6 +27,7 @@ const display = {
     video_source: "Video Source:",
     other: "Other: ",
 };
+
 const OldLog = ({
     match: {
         params: { id },
@@ -33,71 +35,52 @@ const OldLog = ({
 }) => {
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const [data, setData] = useState({});
-    const [loading, setLoading] = useState(true);
     const history = useHistory();
-
-    useEffect(() => {
-        setLoading(true);
-        var config = {
-            url: `/api/logs/${id}?type=old`,
-            method: "get",
-        };
-        if (token) {
-            config.headers = {
-                "Content-type": "application/json",
-                "x-auth-token": token,
-            };
-        }
-        axios(config)
-            .then((result) => {
-                setData(result.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                history.goBack();
-            });
-    }, [id, token, history]);
+    const { isLoading, data, error } = useQuery(
+        [`oldLog-${id}`, { id, token, old: true }],
+        fetchLog
+    );
+    if (error) history.goBack();
+    if (isLoading)
+        return (
+            <Container className="content">
+                <Spinner color="primary" />
+            </Container>
+        );
     return (
         <Container className="content">
-            {!loading ? (
-                <Fragment>
-                    <div className={classHeading}>
-                        <BackButton className="mr-1" />
-                        <h2>{data.title}</h2>
-                        {loggedIn ? (
-                            <div className="ml-auto">
-                                <Convert className="mr-1" id={data._id} />
-                                <Delete id={data._id} old={true} />
-                            </div>
-                        ) : (
-                            <Fragment />
-                        )}
+            <div className={classHeading}>
+                <BackButton className="mr-1" />
+                <h2>{data.title}</h2>
+                {loggedIn ? (
+                    <div className="ml-auto">
+                        <Convert className="mr-1" id={data._id} />
+                        <Delete id={data._id} old={true} back={true} />
                     </div>
-                    <ListGroup>
-                        {Object.entries(data).map(([key, value]) => {
-                            if (Object.keys(display).includes(key))
-                                return (
-                                    <ListGroupItem key={key}>
-                                        <ListGroupItemHeading>{display[key]}</ListGroupItemHeading>
-                                        <ListGroupItemText>{value}</ListGroupItemText>
-                                    </ListGroupItem>
-                                );
-                            else return <Fragment key={key} />;
-                        })}
-                        <ListGroupItem>
-                            <ListGroupItemHeading>
-                                {data.completed ? "Completed" : "Incomplete"}
-                            </ListGroupItemHeading>
-                            <ListGroupItemText>
-                                Completed on {new Date(data.date_of_completion).toDateString()}
-                            </ListGroupItemText>
-                        </ListGroupItem>
-                    </ListGroup>
-                </Fragment>
-            ) : (
-                <Spinner color="primary" />
-            )}
+                ) : (
+                    <Fragment />
+                )}
+            </div>
+            <ListGroup>
+                {Object.entries(data).map(([key, value]) => {
+                    if (Object.keys(display).includes(key))
+                        return (
+                            <ListGroupItem key={key}>
+                                <ListGroupItemHeading>{display[key]}</ListGroupItemHeading>
+                                <ListGroupItemText>{value}</ListGroupItemText>
+                            </ListGroupItem>
+                        );
+                    else return <Fragment key={key} />;
+                })}
+                <ListGroupItem>
+                    <ListGroupItemHeading>
+                        {data.completed ? "Completed" : "Incomplete"}
+                    </ListGroupItemHeading>
+                    <ListGroupItemText>
+                        Completed on {new Date(data.date_of_completion).toDateString()}
+                    </ListGroupItemText>
+                </ListGroupItem>
+            </ListGroup>
         </Container>
     );
 };

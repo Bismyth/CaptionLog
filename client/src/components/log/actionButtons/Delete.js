@@ -7,35 +7,36 @@ import { ReactComponent as DeleteButton } from "../../../icons/delete-black-24dp
 import { ReactComponent as NoButton } from "../../../icons/clear-black-24dp.svg";
 import { ReactComponent as YesButton } from "../../../icons/done-black-24dp.svg";
 import { useHistory } from "react-router-dom";
+import { useMutation, queryCache } from "react-query";
 
-const Delete = ({ id, old, update, className }) => {
+const Delete = ({ id, old = false, back, className }) => {
     const token = useSelector((state) => state.auth.token);
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
     const history = useHistory();
-    const deleteLog = () => {
-        axios({
-            method: "delete",
-            url: `/api/logs/${id}`,
-            headers: {
-                "Content-type": "application/json",
-                "x-auth-token": token,
-            },
-            data: { old: old === true },
-        })
-            .then(() => {
-                if (update) {
-                    update((d) => {
-                        return d.filter((v) => {
-                            return v._id !== id;
-                        });
-                    });
-                } else history.goBack();
-            })
-            .catch((err) => {
-                console.error(err);
+    const [deleteLog] = useMutation(
+        async () => {
+            const { data } = await axios({
+                method: "delete",
+                url: `/api/logs/${id}`,
+                headers: {
+                    "Content-type": "application/json",
+                    "x-auth-token": token,
+                },
+                data: { old },
             });
-    };
+            return data;
+        },
+        {
+            onSuccess: () => {
+                if (back) history.goBack();
+                queryCache.invalidateQueries("getLogs");
+            },
+            onError: (err) => {
+                console.error(err);
+            },
+        }
+    );
     return (
         <Fragment>
             <DeleteButton id={`d-${id}`} alt="Delete" className={`link-arrow ${className}`} />

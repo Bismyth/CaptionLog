@@ -1,20 +1,19 @@
-import React, { useCallback, Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
 import axios from "axios";
 import { Container } from "reactstrap";
+import { useMutation } from "react-query";
 
 const NewLog = () => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const token = useSelector((state) => state.auth.token);
-    const [sLoading, setSLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const history = useHistory();
-    const upload = useCallback(
-        (data) => {
-            setSLoading(true);
-            axios({
+    const [upload, { isLoading: sLoading }] = useMutation(
+        async (data) => {
+            const { data: result } = await axios({
                 method: "post",
                 url: `/api/logs`,
                 headers: {
@@ -22,16 +21,17 @@ const NewLog = () => {
                     "x-auth-token": token,
                 },
                 data,
-            })
-                .then((result) => {
-                    history.push(`/log/${result.data._id}`);
-                })
-                .catch((err) => {
-                    setSLoading(false);
-                    setErrors(err.response.data["errors"]);
-                });
+            });
+            return result;
         },
-        [token, history]
+        {
+            onSuccess: (data) => {
+                history.push(`/log/${data._id}`);
+            },
+            onError: ({ response }) => {
+                if (response.status === 422) setErrors(response.data["errors"]);
+            },
+        }
     );
     return (
         <Container className="content">

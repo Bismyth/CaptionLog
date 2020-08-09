@@ -19,3 +19,8 @@
     opacity: 0.6;
     cursor: pointer;
 }
+.infoGiver {
+    position: fixed;
+    bottom: 0%;
+    right: 2%;
+}
