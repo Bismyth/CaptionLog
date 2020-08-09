@@ -11,7 +11,7 @@ var ffprobe = require("ffprobe"),
 //Import Environment Variables
 require("dotenv").config();
 
-//Importing old Model
+//Importing old Model s
 const { OldLog } = require("../models/OldLog");
 const Log = require("../models/Log");
 const processVideoLength = async (digitalInfo) => {
@@ -19,14 +19,16 @@ const processVideoLength = async (digitalInfo) => {
         var v = digitalInfo[index];
         if (v.location) {
             const video = path.join(process.env.MEDIA_ROOT, v.location);
+            console.log(video);
             if (fs.existsSync(video)) {
-                var videoInfo;
-                try {
-                    videoInfo = await ffprobe(video, { path: ffprobeStatic.path });
-                } catch (err) {
-                    console.error(err);
-                }
                 if (v.length === "") {
+                    var videoInfo;
+                    try {
+                        videoInfo = await ffprobe(video, { path: ffprobeStatic.path });
+                    } catch (err) {
+                        console.error(err);
+                    }
+
                     const seconds = videoInfo.streams[0].duration;
                     var measuredTime = new Date(null);
                     measuredTime.setSeconds(seconds);

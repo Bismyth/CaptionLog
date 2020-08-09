@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, Fragment, useCallback } from "react";
 import {
     Modal,
     ModalHeader,
@@ -16,54 +16,57 @@ import "../scroll.css";
 import folderIcon from "../../../icons/folder-black-24dp.svg";
 import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
 
 const root = { id: "/", name: "Content", isDir: true };
+
+const shortenPath = (path) => {
+    return path
+        .split("/")
+        .map((v) => v.substr(0, 4).replace(/ /g, ""))
+        .join("");
+};
+
 const SelectFile = ({ selectedFile, index, style }) => {
-    const [loading, setLoading] = useState(true);
-    const [files, setFiles] = useState([]);
     const [folderChain, setFolderChain] = useState([root]);
     const [currentDIR, setCurrentDIR] = useState(root.id);
     const [fileSelected, setFileSelected] = useState("");
     const [modal, setModal] = useState(false);
     const token = useSelector((state) => state.auth.token);
-    const toggle = useCallback(
-        (e) => {
-            setModal(!modal);
-        },
-        [modal]
-    );
-    useEffect(() => {
-        if (modal) {
-            setLoading(true);
-            axios({
+    const toggle = (e) => {
+        setModal(!modal);
+    };
+    const { isLoading, data: files } = useQuery(
+        [`file-${shortenPath(currentDIR)}`, { path: currentDIR }],
+        async (key, { path }) => {
+            console.log(path);
+            var { data } = await axios({
                 method: "post",
                 url: `/api/logs/scan`,
-                data: { path: currentDIR },
+                data: { path },
                 headers: {
                     "Content-type": "application/json",
                     "x-auth-token": token,
                 },
-            }).then((result) => {
-                const sorted = result.data.sort((a, b) => {
-                    if (a.isDir) {
-                        if (b.isDir) {
-                            return a.name > b.name ? 1 : -1;
-                        } else {
-                            return -1;
-                        }
-                    } else {
-                        if (b.isDir) {
-                            return 1;
-                        } else {
-                            return a.name > b.name ? 1 : -1;
-                        }
-                    }
-                });
-                setFiles(sorted);
-                setLoading(false);
             });
+            const sorted = data.sort((a, b) => {
+                if (a.isDir) {
+                    if (b.isDir) {
+                        return a.name > b.name ? 1 : -1;
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    if (b.isDir) {
+                        return 1;
+                    } else {
+                        return a.name > b.name ? 1 : -1;
+                    }
+                }
+            });
+            return sorted;
         }
-    }, [currentDIR, modal, token]);
+    );
     const fileDown = (e, file) => {
         e.preventDefault();
 
@@ -127,7 +130,7 @@ const SelectFile = ({ selectedFile, index, style }) => {
                         })}
                     </Breadcrumb>
                     <ListGroup>
-                        {!loading ? (
+                        {!isLoading ? (
                             files.map((file) => {
                                 return (
                                     <ListGroupItem
