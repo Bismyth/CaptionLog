@@ -63,7 +63,10 @@ const AtoZ = ({ match: { params } }) => {
                 }}
             >
                 {alphabet.map((char) => (
-                    <PaginationItem key={char} active={search === char.toLowerCase()}>
+                    <PaginationItem
+                        key={char}
+                        active={decodeURIComponent(search) === char.toLowerCase()}
+                    >
                         <PaginationLink
                             onClick={(e) => {
                                 history.push(`/atoz/${encodeURIComponent(char.toLowerCase())}`);
