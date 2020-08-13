@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import {
     Container,
     Spinner,
@@ -36,10 +36,7 @@ const OldLog = ({
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const history = useHistory();
-    const { isLoading, data, error } = useQuery(
-        [`oldLog-${id}`, { id, token, old: true }],
-        fetchLog
-    );
+    const { isLoading, data, error } = useQuery([`oldLog`, { id, token, old: true }], fetchLog);
     if (error) history.goBack();
     if (isLoading)
         return (
@@ -57,9 +54,7 @@ const OldLog = ({
                         <Convert className="mr-1" id={data._id} />
                         <Delete id={data._id} old={true} back={true} />
                     </div>
-                ) : (
-                    <Fragment />
-                )}
+                ) : null}
             </div>
             <ListGroup>
                 {Object.entries(data).map(([key, value]) => {
@@ -70,7 +65,7 @@ const OldLog = ({
                                 <ListGroupItemText>{value}</ListGroupItemText>
                             </ListGroupItem>
                         );
-                    else return <Fragment key={key} />;
+                    else return null;
                 })}
                 <ListGroupItem>
                     <ListGroupItemHeading>

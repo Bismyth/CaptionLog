@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Pagination,
     PaginationItem,
@@ -51,9 +51,7 @@ const AtoZ = ({ match: { params } }) => {
                     >
                         +New Log
                     </Button>
-                ) : (
-                    <Fragment />
-                )}
+                ) : null}
             </div>
 
             <Pagination
@@ -85,7 +83,7 @@ const AtoZ = ({ match: { params } }) => {
             >
                 <SearchBar className="mb-3" value={value} update={setValue} />
             </Form>
-            {error ? <Alert color="danger">{error}</Alert> : <Fragment />}
+            {error ? <Alert color="danger">{error}</Alert> : null}
             {isLoading ? <Spinner color="primary" /> : <LogListItem data={data} />}
         </Container>
     );

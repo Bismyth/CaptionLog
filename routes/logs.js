@@ -133,7 +133,23 @@ router.post("/scan", auth, (req, res) => {
                     isDir: file.isDirectory(),
                 });
             });
-            res.json(rfiles);
+            res.json(
+                rfiles.filter((a, b) => {
+                    if (a.isDir) {
+                        if (b.isDir) {
+                            return a.name > b.name ? 1 : -1;
+                        } else {
+                            return -1;
+                        }
+                    } else {
+                        if (b.isDir) {
+                            return 1;
+                        } else {
+                            return a.name > b.name ? 1 : -1;
+                        }
+                    }
+                })
+            );
         }
     });
 });

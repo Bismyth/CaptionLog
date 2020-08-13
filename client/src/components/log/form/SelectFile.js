@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useCallback } from "react";
+import React, { useState, Fragment } from "react";
 import {
     Modal,
     ModalHeader,
@@ -38,33 +38,17 @@ const SelectFile = ({ selectedFile, index, style }) => {
     };
     const { isLoading, data: files } = useQuery(
         [`file-${shortenPath(currentDIR)}`, { path: currentDIR }],
-        async (key, { path }) => {
-            console.log(path);
-            var { data } = await axios({
+        async (key, path) => {
+            const { data } = await axios({
                 method: "post",
                 url: `/api/logs/scan`,
-                data: { path },
+                data: path,
                 headers: {
                     "Content-type": "application/json",
                     "x-auth-token": token,
                 },
             });
-            const sorted = data.sort((a, b) => {
-                if (a.isDir) {
-                    if (b.isDir) {
-                        return a.name > b.name ? 1 : -1;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    if (b.isDir) {
-                        return 1;
-                    } else {
-                        return a.name > b.name ? 1 : -1;
-                    }
-                }
-            });
-            return sorted;
+            return data;
         }
     );
     const fileDown = (e, file) => {
@@ -150,9 +134,7 @@ const SelectFile = ({ selectedFile, index, style }) => {
                                                     color: "grey",
                                                 }}
                                             />
-                                        ) : (
-                                            <Fragment />
-                                        )}
+                                        ) : null}
                                         {file.name}
                                     </ListGroupItem>
                                 );

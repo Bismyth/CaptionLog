@@ -12,7 +12,7 @@ const OldLogInfo = ({ id, className }) => {
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
     const { isLoading, data } = useQuery(["oldLog", { token, id, old: true }], fetchLog);
-    if (isLoading) return <Fragment />;
+    if (isLoading) return null;
     return (
         <Fragment>
             <InfoButton id={`d-${id}`} alt="Info" className={`link-arrow ${className}`} />

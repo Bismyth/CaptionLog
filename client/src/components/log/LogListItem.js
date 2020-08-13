@@ -26,20 +26,16 @@ const LogListItem = ({ data, setData }) => {
                                         <LogHeader title={title} movieInfo={movieInfo} />
                                     )}
                                 </Link>
-                                <div className="ml-auto mr-3">
-                                    {loggedIn ? (
-                                        <Fragment>
-                                            {old ? (
-                                                <Convert className="mr-1" id={_id} />
-                                            ) : (
-                                                <Edit className="mr-1" id={_id} />
-                                            )}
-                                            <Delete id={_id} old={old} update={setData} />
-                                        </Fragment>
-                                    ) : (
-                                        <Fragment />
-                                    )}
-                                </div>
+                                {loggedIn ? (
+                                    <div className="ml-auto mr-3">
+                                        {old ? (
+                                            <Convert className="mr-1" id={_id} />
+                                        ) : (
+                                            <Edit className="mr-1" id={_id} />
+                                        )}
+                                        <Delete id={_id} old={old} update={setData} />
+                                    </div>
+                                ) : null}
                             </CardTitle>
                             <CardText>{description}</CardText>
                         </CardBody>

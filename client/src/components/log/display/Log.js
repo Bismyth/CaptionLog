@@ -28,7 +28,7 @@ const Log = ({
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const history = useHistory();
-    const { data, isLoading } = useQuery([`log-${id}`, { token, id }], fetchLog, {
+    const { data, isLoading } = useQuery([`log`, { token, id }], fetchLog, {
         onError: (err) => {
             history.goBack();
         },
@@ -51,9 +51,7 @@ const Log = ({
                         <Edit id={data._id} />
                         <Delete id={data._id} old={false} back={true} />
                     </div>
-                ) : (
-                    <Fragment />
-                )}
+                ) : null}
             </div>
             {Object.entries(format).map(([key, [{ heading, multi }, ...entries]]) => {
                 if (multi) {
@@ -92,11 +90,7 @@ const Log = ({
                                                                 </Fragment>
                                                             );
                                                         } else {
-                                                            return (
-                                                                <Fragment
-                                                                    key={`${key[0]}-${v.value}-${i}`}
-                                                                />
-                                                            );
+                                                            return null;
                                                         }
                                                     })}
                                                 {value.location && key === "digitalInfo" ? (
@@ -110,9 +104,7 @@ const Log = ({
                                                     </Button>
                                                 ) : value.clickviewUrl ? (
                                                     <Fragment></Fragment>
-                                                ) : (
-                                                    <Fragment />
-                                                )}
+                                                ) : null}
                                             </ListGroupItemText>
                                         </ListGroupItem>
                                     ))}

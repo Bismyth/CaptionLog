@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const fetchLog = async (key, { token, id, old }) => {
     var config = {
         url: `/api/logs/${id}`,
@@ -16,7 +17,7 @@ export const fetchLog = async (key, { token, id, old }) => {
 };
 
 export const fetchLogs = async (key, { params }) => {
-    if (decodeURIComponent(params.search) === "#") params.search = "[0-9]";
+    if (decodeURIComponent(params.search) === "#") params.search = "[(0-9]";
     var config = {
         url: `/api/logs`,
         method: "get",

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
@@ -33,9 +33,9 @@ const NewLog = () => {
             },
         }
     );
+    if (!loggedIn && loggedIn !== null) return <Redirect to="/logs" />;
     return (
         <Container className="content">
-            {!loggedIn && loggedIn !== null ? <Redirect to="/logs" /> : <Fragment />}
             <LogForm upload={upload} type="new" sLoading={sLoading} errors={errors} />
         </Container>
     );

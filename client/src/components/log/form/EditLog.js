@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
@@ -38,25 +38,21 @@ const EditLog = ({
             },
         }
     );
-    const { data, isLoading } = useQuery([`elog-${id}`, { token, id }], fetchLog, {
+    const { data, isLoading } = useQuery([`elog`, { token, id }], fetchLog, {
         onError: (err) => {
             console.error(err);
         },
     });
+    if (!loggedIn && loggedIn !== null) return <Redirect to="/logs" />;
+    if (isLoading)
+        return (
+            <Container className="content">
+                <Spinner color="primary" />
+            </Container>
+        );
     return (
         <Container className="content">
-            {!loggedIn && loggedIn !== null ? <Redirect to="/logs" /> : <Fragment />}
-            {!isLoading ? (
-                <LogForm
-                    upload={upload}
-                    data={data}
-                    type="edit"
-                    errors={errors}
-                    sLoading={sLoading}
-                />
-            ) : (
-                <Spinner color="primary" />
-            )}
+            <LogForm upload={upload} data={data} type="edit" errors={errors} sLoading={sLoading} />
         </Container>
     );
 };

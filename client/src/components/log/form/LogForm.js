@@ -119,7 +119,7 @@ const LogForm = (props) => {
                 <BackButton className="mr-1" />
                 <h1>{title[type]}</h1>
                 <div className="ml-auto d-flex align-items-center">
-                    {oldLog ? <OldLogInfo id={oldLog} className="mr-1" /> : <Fragment />}
+                    {oldLog ? <OldLogInfo id={oldLog} className="mr-1" /> : null}
                     <Input type="select" onChange={changeFormType} className="w-auto">
                         <option value="media">Media</option>
                         <option value="movie">Movie</option>
@@ -127,15 +127,13 @@ const LogForm = (props) => {
                 </div>
             </div>
             <Form>
-                {errors.length > 0 ? (
-                    errors.map(({ msg }, i) => (
-                        <Alert key={i} color="danger">
-                            {msg}
-                        </Alert>
-                    ))
-                ) : (
-                    <Fragment />
-                )}
+                {errors.length > 0
+                    ? errors.map(({ msg }, i) => (
+                          <Alert key={i} color="danger">
+                              {msg}
+                          </Alert>
+                      ))
+                    : null}
                 <FormSection
                     data={data}
                     format={format.main}
@@ -155,9 +153,7 @@ const LogForm = (props) => {
                             section="movieInfo"
                         />
                     </Fragment>
-                ) : (
-                    <Fragment />
-                )}
+                ) : null}
                 <h3 className="mb-3">Copyright Info</h3>
                 <FormSection
                     data={data.copyrightInfo}
