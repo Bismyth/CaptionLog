@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setPage } from "../redux/actions/pageActions";
-import { Container } from "reactstrap";
+import { Container, Button } from "reactstrap";
 import captionRoom from "../captionRoom.jpg";
+import { classHeading } from "../config";
 const Home = () => {
     const dispatch = useDispatch();
 
@@ -11,7 +12,16 @@ const Home = () => {
     }, [dispatch]);
     return (
         <Container className="content">
-            <h1 className="mb-4">Copyright Information</h1>
+            <div className={`${classHeading} mb-2`}>
+                <h1>Copyright Information</h1>
+                <Button
+                    className="ml-auto"
+                    color="primary"
+                    href="mailto:lisa.june@education.wa.edu.au"
+                >
+                    Click here to contact the Captioning Office
+                </Button>
+            </div>
             <img src={captionRoom} className="topImage mb-2" alt="Caption Room" />
             <p>
                 <strong className="infoLabel">Rationale</strong>
@@ -122,10 +132,6 @@ const Home = () => {
                 30 minutes. Once completed, the original DVD will be returned and an MP4 version
                 will be made available to the teacher via a USB or placed into the online ClickView
                 Library website.
-            </p>
-            <p>
-                For more information, please contact Senior Captioner Lisa June on{" "}
-                <a href="mailto:lisa.june@education.wa.edu.au">lisa.june@education.wa.edu.au</a>.
             </p>
         </Container>
     );
