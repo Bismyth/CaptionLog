@@ -62,7 +62,7 @@ const Toolbar = (props) => {
                             </NavItem>
                             <NavItem>
                                 <NavLink tag={Link} to={`/atoz/a`} active={page === "Logs"}>
-                                    Logs
+                                    #A-Z
                                 </NavLink>
                             </NavItem>
                         </Nav>
