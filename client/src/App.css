@@ -24,3 +24,12 @@
     bottom: 0%;
     right: 2%;
 }
+.topImage {
+    width: 100%;
+    height: 12rem;
+    overflow: hidden;
+    object-fit: cover;
+}
+.infoLabel {
+    font-size: 1.3rem;
+}
