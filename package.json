@@ -1,6 +1,6 @@
 {
     "name": "captionlog",
-    "version": "0.8.1",
+    "version": "0.9.0",
     "description": "Captioning Browser for SCDEC",
     "main": "server.js",
     "scripts": {
