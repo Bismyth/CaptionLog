@@ -8,18 +8,18 @@ const jwt = require("jsonwebtoken");
 const junk = require("junk");
 var ffprobe = require("ffprobe"),
     ffprobeStatic = require("ffprobe-static");
+const { Types } = require("mongoose");
 //Import Environment Variables
 require("dotenv").config();
 
 //Importing old Model s
-const { OldLog } = require("../models/OldLog");
+const { OldLog, Update } = require("../models/OldLog");
 const Log = require("../models/Log");
 const processVideoLength = async (digitalInfo) => {
     for (let index = 0; index < digitalInfo.length; index++) {
         var v = digitalInfo[index];
         if (v.location) {
             const video = path.join(process.env.MEDIA_ROOT, v.location);
-            console.log(video);
             if (fs.existsSync(video)) {
                 if (v.length === "") {
                     var videoInfo;
@@ -99,6 +99,44 @@ router.post("/", checkSchema(require("../validationSchema/newLog")), auth, async
     });
 });
 
+router.post(
+    "/convert",
+    checkSchema(require("../validationSchema/newLog")),
+    auth,
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+        try {
+            await processVideoLength(req.body.digitalInfo);
+        } catch (e) {
+            return res.status(500);
+        }
+        const { _id: oldID, ...data } = req.body;
+        const newLog = new Log(data);
+        newLog.save((err, doc) => {
+            if (err) {
+                console.error(err);
+                return res.status(500);
+            }
+            OldLog.findById(oldID, (oErr, oDoc) => {
+                if (oErr) {
+                    console.error(err);
+                    return res.status(500);
+                }
+                const newUpdate = new Update({
+                    newLog: { id: doc._id, title: doc.title },
+                    oldLog: oDoc,
+                });
+                newUpdate.save(() => {
+                    OldLog.findByIdAndDelete(oldID, () => {
+                        res.json(doc);
+                    });
+                });
+            });
+        });
+    }
+);
+
 router.put("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
@@ -158,10 +196,9 @@ router.post("/scan", auth, (req, res) => {
 //@desc  Return Specific Log
 //@access Public but more info is private
 router.get("/:id", (req, res) => {
-    var query, Source;
+    var Source;
     if (req.query.type === "old") Source = OldLog;
     else Source = Log;
-
     if (req.header("x-auth-token")) {
         try {
             const decoded = jwt.verify(req.header("x-auth-token"), process.env.JWT_SECRET);
@@ -169,21 +206,30 @@ router.get("/:id", (req, res) => {
             console.error(e);
             return res.status(400).json({ msg: "Token is not valid" });
         }
-        query = Source.findById(req.params.id);
+        Source.findById(req.params.id, (err, doc) => {
+            if (err) {
+                console.error(err);
+                return res.status(400).send("Bad Request");
+            }
+            Update.findOne({ "newLog.id": Types.ObjectId(req.params.id) }, (oErr, oDoc) => {
+                if (Object.keys(oDoc).length > 0) res.json({ ...doc, oData: oDoc.oldLog });
+                else res.json(doc);
+            }).lean();
+        }).lean();
     } else {
-        query = Source.findById(req.params.id).select(
+        Source.findById(req.params.id, (err, data) => {
+            if (err) {
+                console.error(err);
+                return res.status(400).send("Bad Request");
+            }
+
+            res.json(data);
+        }).select(
             req.query.type === "old"
-                ? "title description completed date_of_completion"
-                : "title description copyrightInfo.dateOfCompletion movieInfo digitalInfo physicalInfo"
+                ? "title description genre completed date_of_completion"
+                : "title description genre movieInfo digitalInfo physicalInfo"
         );
     }
-    query.exec((err, data) => {
-        if (err) {
-            console.error(err);
-            return res.status(400).send("Bad Request");
-        }
-        res.json(data);
-    });
 });
 
 router.delete("/:id", auth, (req, res) => {

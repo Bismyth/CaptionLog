@@ -18,6 +18,7 @@ import LogHeader from "../LogHeader";
 import { classHeading } from "../../../config";
 import { useQuery } from "react-query";
 import { fetchLog } from "../../../queries/log";
+import OldLogInfo from "../actionButtons/OldLogInfo";
 
 const Log = ({
     match: {
@@ -47,12 +48,14 @@ const Log = ({
                 </h2>
                 {loggedIn ? (
                     <div className="ml-auto">
+                        {data.oData ? <OldLogInfo data={data.oData} /> : null}
                         <Edit id={data._id} />
                         <Delete id={data._id} old={false} back={true} />
                     </div>
                 ) : null}
             </div>
             {Object.entries(format).map(([key, [{ heading, multi }, ...entries]]) => {
+                if (key !== "main" && data[key] === undefined) return null;
                 if (multi) {
                     if (Object.keys(data).includes(key) && data[key].length > 0) {
                         return (
@@ -121,7 +124,10 @@ const Log = ({
                                 {entries.map((v) => {
                                     if (key === "main") var source = data;
                                     else source = data[key];
-                                    if (Object.keys(source).includes(v.value)) {
+                                    if (
+                                        Object.keys(source).includes(v.value) &&
+                                        source[v.value] !== ""
+                                    ) {
                                         return (
                                             <ListGroupItem key={`${key[0]}-${v.value}`}>
                                                 <ListGroupItemHeading>

@@ -1,22 +1,25 @@
 import React, { Fragment, useState } from "react";
 import { Popover, PopoverBody, PopoverHeader } from "reactstrap";
-import { useSelector } from "react-redux";
 
 import { ReactComponent as InfoButton } from "../../../icons/info-black-24dp.svg";
 import { ReactComponent as NoButton } from "../../../icons/clear-black-24dp.svg";
-import { useQuery } from "react-query";
-import { fetchLog } from "../../../queries/log";
 
-const OldLogInfo = ({ id, className }) => {
-    const token = useSelector((state) => state.auth.token);
+const OldLogInfo = ({ data, className }) => {
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
-    const { isLoading, data } = useQuery(["oldLog", { token, id, old: true }], fetchLog);
-    if (isLoading) return null;
     return (
         <Fragment>
-            <InfoButton id={`d-${id}`} alt="Info" className={`link-arrow ${className}`} />
-            <Popover target={`d-${id}`} isOpen={pOpen} toggle={toggle} placement={"left-start"}>
+            <InfoButton
+                id={`d-${data.title.replace(/\s/g, "").substr(0, 4).toLowerCase()}`}
+                alt="Info"
+                className={`link-arrow ${className}`}
+            />
+            <Popover
+                target={`d-${data.title.replace(/\s/g, "").substr(0, 4).toLowerCase()}`}
+                isOpen={pOpen}
+                toggle={toggle}
+                placement={"left-start"}
+            >
                 <PopoverHeader>
                     Old Log Data: <NoButton className="link-arrow" alt="No" onClick={toggle} />
                 </PopoverHeader>

@@ -3,12 +3,11 @@ import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
 import { Spinner, Container } from "reactstrap";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { digBlankCV, blankForm } from "./FormData.json";
 import { fetchLog } from "../../../queries/log";
+import axios from "axios";
 
-const sLoading = true;
-const errors = [];
 const ConvertLog = ({
     match: {
         params: { id },
@@ -17,10 +16,31 @@ const ConvertLog = ({
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const [data, setData] = useState(undefined);
     const token = useSelector((state) => state.auth.token);
-    //const [errors, setErrors] = useState([]);
-    //const [sLoading, setSLoading] = useState(true);
+    const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
+    const [upload, { isLoading: sLoading }] = useMutation(
+        async (data) => {
+            const { data: result } = await axios({
+                method: "post",
+                url: `/api/logs/convert`,
+                headers: {
+                    "Content-type": "application/json",
+                    "x-auth-token": token,
+                },
+                data,
+            });
+            return result;
+        },
+        {
+            onSuccess: (data) => {
+                history.push(`/log/${data._id}`);
+            },
+            onError: ({ response }) => {
+                if (response.status === 422) setErrors(response.data["errors"]);
+            },
+        }
+    );
     const { data: oData } = useQuery([`cLog`, { token, id, old: true }], fetchLog, {
         onError: (err) => {
             console.error(err);
@@ -29,6 +49,7 @@ const ConvertLog = ({
         onSuccess: (oData) => {
             var newData = {
                 ...blankForm,
+                _id: oData._id,
                 title: oData["title"] || "",
                 genre: oData["genre"] || "",
                 description: oData["description"] || "",
@@ -41,16 +62,18 @@ const ConvertLog = ({
             };
             if (oData.description.includes("<iframe")) {
                 newData["description"] = oData["description"].split("\r\n")[0] || "";
-                newData.digitalInfo.push({
-                    ...digBlankCV,
-                    length: oData.length || "",
-                    clickviewUrl: oData.description
-                        .replace(/(\r\n|\n|\r)/gm, " ")
-                        .split(" ")
-                        .filter((v) => {
-                            return v.includes("https://click");
-                        })[0],
-                });
+                newData.digitalInfo = [
+                    {
+                        ...digBlankCV,
+                        length: oData.length || "",
+                        clickviewUrl: oData.description
+                            .replace(/(\r\n|\n|\r)/gm, " ")
+                            .split(" ")
+                            .filter((v) => {
+                                return v.includes("https://click");
+                            })[0],
+                    },
+                ];
             }
             if (oData.date_of_completion) {
                 var date = new Date(oData.date_of_completion);
@@ -75,12 +98,12 @@ const ConvertLog = ({
     return (
         <Container className="content">
             <LogForm
-                //upload={upload}
+                upload={upload}
                 data={data}
                 type="convert"
                 errors={errors}
                 sLoading={sLoading}
-                oldLog={oData._id}
+                oldLog={oData}
             />
         </Container>
     );

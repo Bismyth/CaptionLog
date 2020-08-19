@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
-import axios from "axios";
 import { Container } from "reactstrap";
 import { useMutation } from "react-query";
+import axios from "axios";
 
 const NewLog = () => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);

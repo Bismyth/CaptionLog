@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
-import axios from "axios";
 import { Spinner, Container } from "reactstrap";
 import { useMutation, useQuery } from "react-query";
 import { fetchLog } from "../../../queries/log";
+import axios from "axios";
 
 const EditLog = ({
     match: {

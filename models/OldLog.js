@@ -46,8 +46,8 @@ const OldLogSchema = new Schema({
 
 const UpdateSchema = new Schema({
     newLog: new Schema({
+        _id: false,
         id: {
-            _id: false,
             type: mongoose.ObjectId,
             required: true,
         },

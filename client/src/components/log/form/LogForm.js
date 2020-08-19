@@ -119,7 +119,9 @@ const LogForm = (props) => {
                 <BackButton className="mr-1" />
                 <h1>{title[type]}</h1>
                 <div className="ml-auto d-flex align-items-center">
-                    {oldLog ? <OldLogInfo id={oldLog} className="mr-1" /> : null}
+                    {oldLog || data.oData ? (
+                        <OldLogInfo data={oldLog || data.oData} className="mr-1" />
+                    ) : null}
                     <Input type="select" onChange={changeFormType} className="w-auto">
                         <option value="media">Media</option>
                         <option value="movie">Movie</option>
