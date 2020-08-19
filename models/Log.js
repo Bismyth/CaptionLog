@@ -12,7 +12,7 @@ const CopyrightInfoSchema = new Schema({
     _id: false,
     teacherName: String,
     captionSource: String,
-    videoSouce: String,
+    videoSource: String,
     dateOfCompletion: {
         type: String,
         required: true,
