@@ -17,7 +17,6 @@ import { useHistory, Link } from "react-router-dom";
 import LogHeader from "../LogHeader";
 import { classHeading } from "../../../config";
 import { useQuery } from "react-query";
-import "../scroll.css";
 import { fetchLog } from "../../../queries/log";
 
 const Log = ({

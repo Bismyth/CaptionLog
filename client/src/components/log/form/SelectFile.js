@@ -12,7 +12,6 @@ import {
     ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-import "../scroll.css";
 import folderIcon from "../../../icons/folder-black-24dp.svg";
 import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useSelector } from "react-redux";

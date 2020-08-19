@@ -8,7 +8,6 @@ import {
     ListGroupItemText,
 } from "reactstrap";
 import { useSelector } from "react-redux";
-import "../scroll.css";
 import BackButton from "../../BackButton";
 import Convert from "../actionButtons/Convert";
 import Delete from "../actionButtons/Delete";

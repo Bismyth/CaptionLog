@@ -38,12 +38,14 @@ const EditLog = ({
             },
         }
     );
-    const { data, isLoading } = useQuery([`elog`, { token, id }], fetchLog, {
+    const { isLoading, data } = useQuery([`log`, { token, id }], fetchLog, {
         onError: (err) => {
             console.error(err);
         },
+        cacheTime: 0,
+        refetchOnWindowFocus: false,
     });
-    if (!loggedIn && loggedIn !== null) return <Redirect to="/logs" />;
+    if (!loggedIn && loggedIn !== null) return <Redirect to="/" />;
     if (isLoading)
         return (
             <Container className="content">

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Input, Form, Container, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import "./scroll.css";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";
 import { useQuery } from "react-query";
