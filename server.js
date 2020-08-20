@@ -30,10 +30,11 @@ app.use("/api/lists", require("./routes/lists"));
 app.use("/api/video", require("./routes/video"));
 
 app.get("/api/ipTest", (req, res) => {
-    if (ip.isPrivate(req.ip)) {
-        res.send(`local, your ip is ${req.ip}`);
+    var cIp = req.header("x-forwarded-for") || req.connection.remoteAddress;
+    if (ip.isPrivate(cIp)) {
+        res.send(`local, your ip is ${cIp}`);
     } else {
-        res.send(`not local, your ip is: ${req.ip}`);
+        res.send(`not local, your ip is: ${cIp}`);
     }
 });
 
