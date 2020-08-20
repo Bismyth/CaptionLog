@@ -13,6 +13,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 app.use(express.json());
 
 //Client Ip Middleware
+app.set("trust proxy", "loopback");
 app.use(requestIp.mw());
 
 //Connect to Server
