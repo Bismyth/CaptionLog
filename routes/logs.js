@@ -212,7 +212,7 @@ router.get("/:id", (req, res) => {
                 return res.status(400).send("Bad Request");
             }
             Update.findOne({ "newLog.id": Types.ObjectId(req.params.id) }, (oErr, oDoc) => {
-                if (Object.keys(oDoc).length > 0) res.json({ ...doc, oData: oDoc.oldLog });
+                if (oDoc !== null) res.json({ ...doc, oData: oDoc.oldLog });
                 else res.json(doc);
             }).lean();
         }).lean();
