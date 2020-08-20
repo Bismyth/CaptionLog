@@ -30,7 +30,7 @@ app.use("/api/lists", require("./routes/lists"));
 app.use("/api/video", require("./routes/video"));
 
 app.get("/api/ipTest", (req, res) => {
-    req.clientIp = req.headers("x-forwarded-for").split(",").pop() || req.ip;
+    req.clientIp = req.header("x-forwarded-for").split(",").pop() || req.ip;
     if (ip.isPrivate(req.clientIp)) {
         res.send(`local, your ip is ${req.clientIp}`);
     } else {
