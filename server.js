@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const ip = require("ip");
 
 const app = express();
 
@@ -27,6 +28,19 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
 app.use("/api/lists", require("./routes/lists"));
 app.use("/api/video", require("./routes/video"));
+
+app.get("/api/ipTest", (req, res) => {
+    var connIp =
+        req.headers["x-forwarded-for"] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        (req.connection.socket ? req.connection.socket.remoteAddress : null);
+    if (ip.isPrivate(connIp)) {
+        res.send(`local, your ip is ${connIp}`);
+    } else {
+        res.send(`not local, your ip is: ${connIp}`);
+    }
+});
 
 //Serve static react in production
 if (process.env.NODE_ENV == "production") {
