@@ -1,2 +1,3 @@
 # CaptionLog
-Building a thing for a thing
+
+Building a Captioning Browser for Shenton College Deaf Eduction Centre

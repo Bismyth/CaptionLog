@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const ip = require("ip");
-const requestIp = require("request-ip");
 
 const app = express();
 
@@ -11,10 +10,6 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 //Body Parser Middleware
 app.use(express.json());
-
-//Client Ip Middleware
-app.set("trust proxy", "loopback");
-app.use(requestIp.mw());
 
 //Connect to Server
 mongoose
@@ -35,6 +30,7 @@ app.use("/api/lists", require("./routes/lists"));
 app.use("/api/video", require("./routes/video"));
 
 app.get("/api/ipTest", (req, res) => {
+    req.clientIp = req.headers("x-forwarded-for").split(",").pop() || req.ip;
     if (ip.isPrivate(req.clientIp)) {
         res.send(`local, your ip is ${req.clientIp}`);
     } else {
