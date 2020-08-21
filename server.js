@@ -35,11 +35,17 @@ app.get("/api/ipTest", (req, res) => {
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
-    if (ip.isPrivate(req.clientIp)) {
-        res.send(`local, your ip is ${req.clientIp}`);
+    var mes = "";
+    if (
+        process.env.SUBNET.split(",").some((v) => {
+            return ip.cidrSubnet(v).contains(req.clientIp);
+        })
+    ) {
+        mes = "local";
     } else {
-        res.send(`not local, your ip is: ${req.clientIp}`);
+        mes = "not local";
     }
+    res.send(`${mes}, your ip is req.clientIp`);
 });
 
 //Serve static react in production
