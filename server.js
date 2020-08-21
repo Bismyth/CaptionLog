@@ -45,7 +45,7 @@ app.get("/api/ipTest", (req, res) => {
     } else {
         mes = "not local";
     }
-    res.send(`${mes}, your ip is req.clientIp`);
+    res.send(`${mes}, your ip is ${req.clientIp}`);
 });
 
 //Serve static react in production
