@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, Provider } from "react-redux";
 import store from "./redux/store";
-import { loadUser } from "./redux/actions/authActions";
+import { loadUser, checkLocal } from "./redux/actions/authActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import Toolbar from "./components/Toolbar";
@@ -45,11 +45,13 @@ const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(loadUser());
+        dispatch(checkLocal());
     }, [dispatch]);
     return (
         <Provider store={store}>
             <Router basename={process.env.PUBLIC_URL}>
                 <Toolbar />
+
                 <div id="scroll" onScroll={checkScrollTop}>
                     <Switch>
                         <Route path={`/atoz/:search?`} component={Logs} />

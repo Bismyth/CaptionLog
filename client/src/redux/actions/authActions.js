@@ -8,6 +8,7 @@ import {
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
     REGISTER_FAIL,
+    LOCAL_CHECK,
 } from "../types";
 import { returnErrors } from "./errorActions";
 
@@ -29,6 +30,17 @@ export const loadUser = () => (dispatch, getState) => {
             dispatch({ type: AUTH_ERROR });
         });
 };
+
+export const checkLocal = () => (dispatch) => {
+    axios({ method: "get", url: "/api/auth/local" })
+        .then((res) => {
+            dispatch({ type: LOCAL_CHECK, payload: res.data });
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+};
+
 //Register User
 export const register = (data) => (dispatch) => {
     const config = jsonHeader();

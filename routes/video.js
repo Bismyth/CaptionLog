@@ -5,6 +5,7 @@ const { Types } = require("mongoose");
 const { checkSchema, validationResult } = require("express-validator");
 const fs = require("fs");
 const path = require("path");
+const local = require("../middleware/local");
 
 //Import Environment Variables
 require("dotenv").config();
@@ -34,7 +35,7 @@ const videoIDs = {
     },
 };
 
-router.get("/:id/:vid", checkSchema(videoIDs), function (req, res) {
+router.get("/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     Log.findById(req.params.id, (err, doc) => {

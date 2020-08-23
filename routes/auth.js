@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
+const ip = require("ip");
 const { checkSchema, validationResult } = require("express-validator");
 //Import Environment Variables
 require("dotenv").config();
@@ -65,6 +66,15 @@ router.get("/user", auth, (req, res) => {
     User.findById(req.user.id)
         .select("-password")
         .then((user) => res.json(user));
+});
+
+router.get("/local", (req, res) => {
+    res.json({
+        local:
+            process.env.SUBNET.split(",").some((v) => {
+                return ip.cidrSubnet(v).contains(req.clientIp);
+            }) || ip.isLoopback(req.clientIp),
+    });
 });
 
 module.exports = router;

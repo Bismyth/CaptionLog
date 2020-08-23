@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
-const ip = require("ip");
 
 const app = express();
 
@@ -10,6 +9,16 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 //Body Parser Middleware
 app.use(express.json());
+
+//Get Ip from request
+app.use((req, res, next) => {
+    req.clientIp =
+        (req.headers["x-forwarded-for"] || "").split(",").pop().trim() ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+    next();
+});
 
 //Connect to Server
 mongoose
@@ -28,25 +37,6 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
 app.use("/api/lists", require("./routes/lists"));
 app.use("/api/video", require("./routes/video"));
-
-app.get("/api/ipTest", (req, res) => {
-    req.clientIp =
-        (req.headers["x-forwarded-for"] || "").split(",").pop().trim() ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
-    var mes = "";
-    if (
-        process.env.SUBNET.split(",").some((v) => {
-            return ip.cidrSubnet(v).contains(req.clientIp);
-        })
-    ) {
-        mes = "local";
-    } else {
-        mes = "not local";
-    }
-    res.send(`${mes}, your ip is ${req.clientIp}`);
-});
 
 //Serve static react in production
 if (process.env.NODE_ENV == "production") {
