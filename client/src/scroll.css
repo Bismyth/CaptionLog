@@ -1,5 +1,4 @@
 #scroll {
-    height: calc(100vh - 116px);
     overflow-y: scroll;
     overflow-x: hidden;
 }
