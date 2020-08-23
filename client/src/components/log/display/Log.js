@@ -27,6 +27,7 @@ const Log = ({
 }) => {
     const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const isLocal = useSelector((state) => state.auth.local);
     const history = useHistory();
     const { data, isLoading } = useQuery([`log`, { token, id }], fetchLog, {
         onError: (err) => {
@@ -68,10 +69,8 @@ const Log = ({
                                                 <ListGroupItemHeading>
                                                     {value.name}
                                                 </ListGroupItemHeading>
-                                            ) : (
-                                                <Fragment />
-                                            )}
-                                            <ListGroupItemText>
+                                            ) : null}
+                                            <ListGroupItemText className="d-flex align-items-center">
                                                 {entries
                                                     .filter((value) => {
                                                         return value.align === "left";
@@ -87,26 +86,33 @@ const Log = ({
                                                                             `{${v.value}}`,
                                                                             value[v.value]
                                                                         )}
-                                                                    </span>{" "}
-                                                                    <br />
+                                                                    </span>
                                                                 </Fragment>
                                                             );
                                                         } else {
                                                             return null;
                                                         }
                                                     })}
-                                                {value.location && key === "digitalInfo" ? (
-                                                    <Button
-                                                        tag={Link}
-                                                        to={`/video/${data._id}/${value._id}`}
-                                                        className="ml-auto"
-                                                        disabled
-                                                    >
-                                                        Go to Video
-                                                    </Button>
-                                                ) : value.clickviewUrl ? (
-                                                    <Fragment></Fragment>
-                                                ) : null}
+                                                <span className="ml-auto">
+                                                    {isLocal &&
+                                                    key === "digitalInfo" &&
+                                                    value.location ? (
+                                                        <Button
+                                                            tag={Link}
+                                                            to={`/video/${data._id}/${value._id}`}
+                                                            disabled
+                                                        >
+                                                            Go to Video
+                                                        </Button>
+                                                    ) : isLocal && value.clickviewUrl ? (
+                                                        <Button
+                                                            href={value.clickviewUrl}
+                                                            target="_blank"
+                                                        >
+                                                            Go to Clickview
+                                                        </Button>
+                                                    ) : null}
+                                                </span>
                                             </ListGroupItemText>
                                         </ListGroupItem>
                                     ))}
@@ -133,7 +139,7 @@ const Log = ({
                                                 <ListGroupItemHeading>
                                                     {v.header}
                                                 </ListGroupItemHeading>
-                                                <ListGroupItemText>
+                                                <ListGroupItemText className="text-wrap text-break">
                                                     {v.special === "date"
                                                         ? new Date(source[v.value]).toDateString()
                                                         : source[v.value]}

@@ -222,11 +222,10 @@ router.get("/:id", (req, res) => {
                 console.error(err);
                 return res.status(400).send("Bad Request");
             }
-
             res.json(data);
         }).select(
             req.query.type === "old"
-                ? "title description genre completed date_of_completion"
+                ? "title description genre"
                 : "title description genre movieInfo digitalInfo physicalInfo"
         );
     }

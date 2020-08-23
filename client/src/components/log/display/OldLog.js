@@ -66,14 +66,16 @@ const OldLog = ({
                         );
                     else return null;
                 })}
-                <ListGroupItem>
-                    <ListGroupItemHeading>
-                        {data.completed ? "Completed" : "Incomplete"}
-                    </ListGroupItemHeading>
-                    <ListGroupItemText>
-                        Completed on {new Date(data.date_of_completion).toDateString()}
-                    </ListGroupItemText>
-                </ListGroupItem>
+                {data.completed && data.date_of_completion ? (
+                    <ListGroupItem>
+                        <ListGroupItemHeading>
+                            {data.completed ? "Completed" : "Incomplete"}
+                        </ListGroupItemHeading>
+                        <ListGroupItemText>
+                            Completed on {new Date(data.date_of_completion).toDateString()}
+                        </ListGroupItemText>
+                    </ListGroupItem>
+                ) : null}
             </ListGroup>
         </Container>
     );
