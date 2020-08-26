@@ -41,7 +41,7 @@ router.post("/", checkSchema(validator), (req, res) => {
                 { id: user.id, access: user.access },
                 process.env.JWT_SECRET,
                 {
-                    expiresIn: 3600,
+                    expiresIn: 28800,
                 },
                 (err, token) => {
                     if (err) throw err;
