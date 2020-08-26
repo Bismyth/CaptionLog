@@ -65,7 +65,15 @@ const Toolbar = (props) => {
             <Navbar className="topbar p-0" dark color="sBlue">
                 <Container>
                     <Nav navbar className="flex-row ml-auto">
-                        {isLoading ? null : isAuthenticated ? authLinks : guestLinks}
+                        <Container>
+                            {isLoading ? (
+                                <p style={{ color: "var(--sBlue)" }}>fill</p>
+                            ) : isAuthenticated ? (
+                                authLinks
+                            ) : (
+                                guestLinks
+                            )}
+                        </Container>
                     </Nav>
                 </Container>
             </Navbar>
