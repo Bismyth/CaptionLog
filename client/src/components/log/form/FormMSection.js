@@ -3,7 +3,7 @@ import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } fr
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
 import { classHeading, keepLikeValues } from "../../../config";
-const FormMSection = ({ data, config, update, array, selectFile, selectors }) => {
+const FormMSection = ({ data, config, update, array, selectors, rootFolder }) => {
     const [isOpen, setOpen] = useState(false);
     const toggle = () => setOpen(!isOpen);
     return (
@@ -23,11 +23,12 @@ const FormMSection = ({ data, config, update, array, selectFile, selectors }) =>
                                 &times;
                             </Button>
                             <h4 className="w-100">{`${config.details.name} ${i + 1}`}</h4>
-                            {selectFile && value.location !== undefined ? (
+                            {value.location !== undefined ? (
                                 <SelectFile
-                                    style={{ width: "10%" }}
-                                    selectedFile={selectFile}
+                                    style={{ minWidth: "fit-content" }}
+                                    update={update}
                                     index={i}
+                                    folder={rootFolder}
                                 />
                             ) : (
                                 <Fragment />

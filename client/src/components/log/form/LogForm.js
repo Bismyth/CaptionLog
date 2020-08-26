@@ -85,12 +85,6 @@ const LogForm = (props) => {
                 };
         });
     }, []);
-    const selectFile = useCallback(
-        (file, i) => {
-            changeValue({ target: { name: "location", value: file } }, "digitalInfo", i);
-        },
-        [changeValue]
-    );
     const addArr = useCallback((key, ex) => {
         var insert = {};
         if (ex === "CV") insert = digBlankCV;
@@ -169,8 +163,8 @@ const LogForm = (props) => {
                     config={config.digitalInfo}
                     update={changeValue}
                     array={{ add: addArr, rm: removeArr }}
-                    selectFile={selectFile}
                     selectors={selectors.digitalInfo}
+                    rootFolder={data.folder || ""}
                 />
                 <FormMSection
                     data={data.physicalInfo}

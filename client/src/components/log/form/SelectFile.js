@@ -10,14 +10,14 @@ import {
     ModalBody,
     Button,
     ModalFooter,
+    Input,
 } from "reactstrap";
 import axios from "axios";
 import folderIcon from "../../../icons/folder-black-24dp.svg";
 import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
-
-const root = { id: "/", name: "Content", isDir: true };
+import SearchBar from "../SearchBar";
 
 const shortenPath = (path) => {
     return path
@@ -26,10 +26,19 @@ const shortenPath = (path) => {
         .join("");
 };
 
-const SelectFile = ({ selectedFile, index, style }) => {
-    const [folderChain, setFolderChain] = useState([root]);
-    const [currentDIR, setCurrentDIR] = useState(root.id);
+const SelectFile = ({ update, index, style, folder }) => {
+    const [folderChain, setFolderChain] = useState(
+        folder.split("/").map((v, i, arr) => {
+            return {
+                id: v === "" ? "/" : arr.slice(0, i + 1).join("/"),
+                name: v === "" ? "Content" : v,
+                isDir: true,
+            };
+        })
+    );
+    const [currentDIR, setCurrentDIR] = useState(folder || "/");
     const [fileSelected, setFileSelected] = useState("");
+    const [search, setSearch] = useState("");
     const [modal, setModal] = useState(false);
     const token = useSelector((state) => state.auth.token);
     const toggle = (e) => {
@@ -77,7 +86,8 @@ const SelectFile = ({ selectedFile, index, style }) => {
         }
     };
     const selectFile = (e) => {
-        selectedFile(fileSelected, index);
+        update({ target: { name: "folder", value: currentDIR } }, "main");
+        update({ target: { name: "location", value: fileSelected } }, "digitalInfo", index);
         setModal(!modal);
     };
     return (
@@ -88,7 +98,7 @@ const SelectFile = ({ selectedFile, index, style }) => {
             <Modal isOpen={modal} toggle={toggle} autoFocus={false} size="lg">
                 <ModalHeader toggle={toggle}>Select File</ModalHeader>
                 <ModalBody>
-                    <Breadcrumb>
+                    <Breadcrumb className="mb-0">
                         <img
                             src={backIcon}
                             alt="goUp"
@@ -96,6 +106,7 @@ const SelectFile = ({ selectedFile, index, style }) => {
                             onClick={goUp}
                             style={{ paddingRight: "5px" }}
                         />
+
                         {folderChain.map((folder, i) => {
                             return (
                                 <BreadcrumbItem
@@ -112,32 +123,38 @@ const SelectFile = ({ selectedFile, index, style }) => {
                             );
                         })}
                     </Breadcrumb>
+                    <SearchBar value={search} update={setSearch} className="mb-2" />
+
                     <ListGroup>
                         {!isLoading ? (
-                            files.map((file) => {
-                                return (
-                                    <ListGroupItem
-                                        tag={file.isDir ? "a" : "button"}
-                                        href="#"
-                                        onClick={(e) => fileDown(e, file)}
-                                        action={!file.isDir}
-                                        active={file.id === fileSelected}
-                                        key={file.id}
-                                    >
-                                        {file.isDir ? (
-                                            <img
-                                                src={folderIcon}
-                                                alt="folder-icon"
-                                                style={{
-                                                    paddingRight: "5px",
-                                                    color: "grey",
-                                                }}
-                                            />
-                                        ) : null}
-                                        {file.name}
-                                    </ListGroupItem>
-                                );
-                            })
+                            files
+                                .filter((v) => {
+                                    return new RegExp(`^${search}`, "i").test(v.name);
+                                })
+                                .map((file) => {
+                                    return (
+                                        <ListGroupItem
+                                            tag={file.isDir ? "a" : "button"}
+                                            href="#"
+                                            onClick={(e) => fileDown(e, file)}
+                                            action={!file.isDir}
+                                            active={file.id === fileSelected}
+                                            key={file.id}
+                                        >
+                                            {file.isDir ? (
+                                                <img
+                                                    src={folderIcon}
+                                                    alt="folder-icon"
+                                                    style={{
+                                                        paddingRight: "5px",
+                                                        color: "grey",
+                                                    }}
+                                                />
+                                            ) : null}
+                                            {file.name}
+                                        </ListGroupItem>
+                                    );
+                                })
                         ) : (
                             <Spinner color="primary" />
                         )}
