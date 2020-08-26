@@ -164,30 +164,18 @@ router.post("/scan", auth, (req, res) => {
         if (err) res.status(500).json({ errors: [{ msg: err }] });
         else if (files === undefined) res.json([]);
         else {
-            files.filter(junk.not).forEach((file) => {
-                rfiles.push({
-                    id: path.join(sanitizedPath, file.name),
-                    name: file.name,
-                    isDir: file.isDirectory(),
-                });
-            });
-            res.json(
-                rfiles.filter((a, b) => {
-                    if (a.isDir) {
-                        if (b.isDir) {
-                            return a.name > b.name ? 1 : -1;
-                        } else {
-                            return -1;
-                        }
-                    } else {
-                        if (b.isDir) {
-                            return 1;
-                        } else {
-                            return a.name > b.name ? 1 : -1;
-                        }
-                    }
+            files
+                .filter((v) => {
+                    return junk.not(v.name);
                 })
-            );
+                .forEach((file) => {
+                    rfiles.push({
+                        id: path.join(sanitizedPath, file.name),
+                        name: file.name,
+                        isDir: file.isDirectory(),
+                    });
+                });
+            res.json(rfiles.sort((a, b) => +b.isDir - +a.isDir || a.name.localeCompare(b.name)));
         }
     });
 });
@@ -201,10 +189,9 @@ router.get("/:id", (req, res) => {
     else Source = Log;
     if (req.header("x-auth-token")) {
         try {
-            const decoded = jwt.verify(req.header("x-auth-token"), process.env.JWT_SECRET);
+            jwt.verify(req.header("x-auth-token"), process.env.JWT_SECRET);
         } catch (e) {
-            console.error(e);
-            return res.status(400).json({ msg: "Token is not valid" });
+            return res.status(401).json({ msg: "Token is not valid" });
         }
         Source.findById(req.params.id, (err, doc) => {
             if (err) {
