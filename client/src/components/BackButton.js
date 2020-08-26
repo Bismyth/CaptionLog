@@ -1,16 +1,13 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../icons/arrow_back-black-24dp.svg";
+import { useSelector } from "react-redux";
 const BackButton = ({ className }) => {
-    const history = useHistory();
+    const { page, scrollPos } = useSelector((state) => state.page);
     return (
-        <BackArrow
-            alt="Back"
-            onClick={() => {
-                history.goBack();
-            }}
-            className={`link-arrow ${className}`}
-        />
+        <Link to={{ pathname: page, scroll: scrollPos }}>
+            <BackArrow alt="Back" className={`link-arrow ${className}`} />
+        </Link>
     );
 };
 

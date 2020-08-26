@@ -1,14 +1,16 @@
 import React, { Fragment } from "react";
 import { Card, CardBody, CardText, CardTitle, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Edit from "./actionButtons/Edit";
 import Convert from "./actionButtons/Convert";
 import Delete from "./actionButtons/Delete";
 import LogHeader from "./LogHeader";
+import { setPage } from "../../redux/actions/pageActions";
 
-const LogListItem = ({ data, setData }) => {
+const LogListItem = ({ data, page }) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
     return (
         <Fragment>
             {data.length > 0 ? (
@@ -17,6 +19,15 @@ const LogListItem = ({ data, setData }) => {
                         <CardBody>
                             <CardTitle className="d-flex">
                                 <Link
+                                    onClick={() => {
+                                        dispatch(
+                                            setPage({
+                                                page,
+                                                scrollPos: document.getElementById("scroll")
+                                                    .scrollTop,
+                                            })
+                                        );
+                                    }}
                                     to={old ? `/oldLog/${_id}` : `/log/${_id}`}
                                     className="text-dark"
                                 >
@@ -29,11 +40,11 @@ const LogListItem = ({ data, setData }) => {
                                 {loggedIn ? (
                                     <div className="ml-auto mr-3">
                                         {old ? (
-                                            <Convert className="mr-1" id={_id} />
+                                            <Convert className="mr-1" id={_id} page={page} />
                                         ) : (
-                                            <Edit className="mr-1" id={_id} />
+                                            <Edit className="mr-1" id={_id} page={page} />
                                         )}
-                                        <Delete id={_id} old={old} update={setData} />
+                                        <Delete id={_id} old={old} />
                                     </div>
                                 ) : null}
                             </CardTitle>

@@ -50,7 +50,7 @@ const Log = ({
                 {loggedIn ? (
                     <div className="ml-auto">
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
-                        <Edit id={data._id} />
+                        <Edit id={data._id} page={`/log/${data._id}`} />
                         <Delete id={data._id} old={false} back={true} />
                     </div>
                 ) : null}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Form, Container, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
@@ -6,7 +6,10 @@ import SearchBar from "./SearchBar";
 import { useQuery } from "react-query";
 import { fetchLogs } from "../../queries/log";
 
-const Search = ({ match: { params } }) => {
+const Search = ({ match: { params }, location: { scroll } }) => {
+    useEffect(() => {
+        if (scroll) document.getElementById("scroll").scroll(0, scroll);
+    }, [scroll]);
     const { value: search, field } = params;
     const history = useHistory();
     const [value, setValue] = useState(decodeURIComponent(search));
@@ -38,7 +41,11 @@ const Search = ({ match: { params } }) => {
                     <option value="description">Description</option>
                 </Input>
             </Form>
-            {isLoading ? <Spinner color="primary" /> : <LogListItem data={data} />}
+            {isLoading ? (
+                <Spinner color="primary" />
+            ) : (
+                <LogListItem data={data} page={`/search/${search}/${field}`} />
+            )}
         </Container>
     );
 };

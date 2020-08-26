@@ -50,7 +50,7 @@ const OldLog = ({
                 <h2>{data.title}</h2>
                 {loggedIn ? (
                     <div className="ml-auto">
-                        <Convert className="mr-1" id={data._id} />
+                        <Convert className="mr-1" id={data._id} page={`/oldLog/${data._id}`} />
                         <Delete id={data._id} old={true} back={true} />
                     </div>
                 ) : null}

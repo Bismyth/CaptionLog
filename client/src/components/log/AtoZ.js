@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Pagination,
     PaginationItem,
@@ -15,7 +15,10 @@ import { useQuery } from "react-query";
 import { fetchLogs } from "../../queries/log";
 
 const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const AtoZ = ({ match: { params } }) => {
+const AtoZ = ({ match: { params }, location: { scroll } }) => {
+    useEffect(() => {
+        if (scroll) document.getElementById("scroll").scroll(0, scroll);
+    }, [scroll]);
     const { search = "a" } = params;
     const history = useHistory();
     const [error, setError] = useState("");
@@ -25,6 +28,7 @@ const AtoZ = ({ match: { params } }) => {
             setError("Database Error, please reload the page.");
         },
     });
+
     return (
         <Container className="content">
             <div>
@@ -66,7 +70,11 @@ const AtoZ = ({ match: { params } }) => {
                 <SearchBar className="mb-3" value={value} update={setValue} />
             </Form>
             {error ? <Alert color="danger">{error}</Alert> : null}
-            {isLoading ? <Spinner color="primary" /> : <LogListItem data={data} />}
+            {isLoading ? (
+                <Spinner color="primary" />
+            ) : (
+                <LogListItem data={data} page={`/atoz/${search}`} />
+            )}
         </Container>
     );
 };
