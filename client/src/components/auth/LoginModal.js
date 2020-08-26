@@ -59,7 +59,11 @@ const LoginModal = (props) => {
                 <ModalHeader toggle={toggle}>Login</ModalHeader>
                 <ModalBody>
                     {errors
-                        ? errors.map((error) => <Alert color="danger">{error.msg}</Alert>)
+                        ? errors.map((error, index) => (
+                              <Alert key={index} color="danger">
+                                  {error.msg}
+                              </Alert>
+                          ))
                         : null}
                     <Form onSubmit={onSubmit}>
                         <FormGroup>

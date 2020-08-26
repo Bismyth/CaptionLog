@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, Provider } from "react-redux";
 import store from "./redux/store";
-import { loadUser, checkLocal } from "./redux/actions/authActions";
+import { loadUser, checkLocal, logout } from "./redux/actions/authActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import Toolbar from "./components/Toolbar";
@@ -21,6 +21,18 @@ import "./scroll.css";
 import { ReactComponent as CircleUp } from "./icons/arrow_circle_up-black-24dp.svg";
 
 axios.defaults.baseURL = process.env.PUBLIC_URL;
+
+axios.interceptors.response.use(
+    function (response) {
+        return response;
+    },
+    function (error) {
+        if (error.response.status === 401 && error.response.data.msg === "Token is not valid") {
+            store.dispatch(logout());
+        }
+        return Promise.reject(error);
+    }
+);
 
 const AppWrapper = () => {
     return (
