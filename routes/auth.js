@@ -63,7 +63,7 @@ router.post("/", checkSchema(validator), (req, res) => {
 //@route GET api/auth/user
 //@desc  Authenticate User and return data
 //@access Private
-router.get("/user", cas.bounce, (req, res) => {
+router.get("/user", cas.block, (req, res) => {
     res.json(req.session.user);
 });
 
