@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const session = require("express-session");
-
+const CASAuthentication = require("node-cas-authentication");
 const app = express();
 
 //Initalise environment variables
@@ -32,6 +32,13 @@ app.use(
     })
 );
 
+const cas = new CASAuthentication({
+    cas_url: "https://sso.shenton.wa.edu.au/cas",
+    service_url: "https://dec.shenton.wa.edu.au/caption-dev",
+    return_to: "https://dec.shenton.wa.edu.au/caption-dev",
+    session_info: "user",
+});
+
 //Connect to Server
 mongoose
     .connect(process.env.MONGO_URI, {
@@ -44,6 +51,11 @@ mongoose
     .catch((err) => console.error(err));
 
 //Initialise Routes
+
+app.get("/login", cas.bounce_redirect);
+router.get("/api/auth/user", cas.bounce, (req, res) => {
+    res.json(req.session.user);
+});
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));

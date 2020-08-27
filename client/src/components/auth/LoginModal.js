@@ -5,9 +5,7 @@ import { NavLink } from "reactstrap";
 const LoginModal = (props) => {
     return (
         <div>
-            <NavLink tag={Link} to="/api/auth/login">
-                Login
-            </NavLink>
+            <NavLink href={`${process.env.PUBLIC_URL}/login`}>Login</NavLink>
         </div>
     );
 };
