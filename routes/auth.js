@@ -60,8 +60,6 @@ router.post("/", checkSchema(validator), (req, res) => {
     });
 });
 
-router.get("/login", cas.bounce_redirect);
-
 //@route GET api/auth/user
 //@desc  Authenticate User and return data
 //@access Private
