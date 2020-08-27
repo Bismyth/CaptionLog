@@ -65,7 +65,7 @@ router.get("/login", cas.bounce_redirect);
 //@route GET api/auth/user
 //@desc  Authenticate User and return data
 //@access Private
-router.get("/user", cas.block, (req, res) => {
+router.get("/user", cas.bounce, (req, res) => {
     res.json(req.session.user);
 });
 
