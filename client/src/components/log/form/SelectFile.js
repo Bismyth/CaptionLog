@@ -61,7 +61,7 @@ const SelectFile = ({ update, index, style, folder }) => {
     );
     const fileDown = (e, file) => {
         e.preventDefault();
-
+        setSearch("");
         if (file.isDir) {
             setFileSelected("");
             setCurrentDIR(file.id);
@@ -72,6 +72,7 @@ const SelectFile = ({ update, index, style, folder }) => {
     };
     const goToFolder = (e, folder) => {
         e.preventDefault();
+        setSearch("");
         setFileSelected("");
         setCurrentDIR(folder.id);
         setFolderChain((value) => {
@@ -79,6 +80,7 @@ const SelectFile = ({ update, index, style, folder }) => {
         });
     };
     const goUp = (e) => {
+        setSearch("");
         if (folderChain.length === 1) {
             e.preventDefault();
         } else {
@@ -86,6 +88,7 @@ const SelectFile = ({ update, index, style, folder }) => {
         }
     };
     const selectFile = (e) => {
+        setSearch("");
         update({ target: { name: "folder", value: currentDIR } }, "main");
         update({ target: { name: "location", value: fileSelected } }, "digitalInfo", index);
         setModal(!modal);

@@ -43,14 +43,14 @@ const Log = ({
     return (
         <Container className="content">
             <div className={classHeading}>
-                <BackButton className="mr-1" />
+                <BackButton className="mr-1" back={false} />
                 <h2>
                     <LogHeader title={data.title} movieInfo={data.movieInfo} />
                 </h2>
                 {loggedIn ? (
                     <div className="ml-auto">
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
-                        <Edit id={data._id} page={`/log/${data._id}`} />
+                        <Edit id={data._id} />
                         <Delete id={data._id} old={false} back={true} />
                     </div>
                 ) : null}
