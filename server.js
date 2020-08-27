@@ -46,6 +46,7 @@ mongoose
 //Initialise Routes
 
 app.get("/login", cas.bounce_redirect);
+app.get("/logout", cas.logout);
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
