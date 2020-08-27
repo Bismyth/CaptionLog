@@ -1,8 +1,19 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { NavLink } from "reactstrap";
+import { logout } from "../../redux/actions/authActions";
 
 const Logout = (props) => {
-    return <NavLink href={`${process.env.PUBLIC_URL}/logout`}>Logout</NavLink>;
+    const dispatch = useDispatch();
+    return (
+        <NavLink
+            onClick={() => {
+                dispatch(logout());
+            }}
+        >
+            Logout
+        </NavLink>
+    );
 };
 
 export default Logout;

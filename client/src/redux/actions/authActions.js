@@ -75,8 +75,10 @@ export const login = (data) => (dispatch) => {
         });
 };
 
-export const logout = () => {
-    return { type: LOGOUT_SUCCESS };
+export const logout = () => (dispatch) => {
+    axios.get("/logout").then((res) => {
+        dispatch({ type: LOGOUT_SUCCESS });
+    });
 };
 
 export const jsonHeader = () => {

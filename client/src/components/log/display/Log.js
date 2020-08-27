@@ -94,7 +94,7 @@ const Log = ({
                                                         }
                                                     })}
                                                 <span className="ml-auto">
-                                                    {isLocal &&
+                                                    {(isLocal || loggedIn) &&
                                                     key === "digitalInfo" &&
                                                     value.location ? (
                                                         <Button
@@ -104,7 +104,8 @@ const Log = ({
                                                         >
                                                             Go to Video
                                                         </Button>
-                                                    ) : isLocal && value.clickviewUrl ? (
+                                                    ) : (isLocal || loggedIn) &&
+                                                      value.clickviewUrl ? (
                                                         <Button
                                                             href={value.clickviewUrl}
                                                             target="_blank"

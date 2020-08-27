@@ -46,7 +46,10 @@ mongoose
 //Initialise Routes
 
 app.get("/login", cas.bounce_redirect);
-app.get("/logout", cas.logout);
+app.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.json({ msg: "Logout OK" });
+});
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
