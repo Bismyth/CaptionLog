@@ -53,7 +53,7 @@ mongoose
 //Initialise Routes
 
 app.get("/login", cas.bounce_redirect);
-router.get("/api/auth/user", cas.bounce, (req, res) => {
+app.get("/api/auth/user", cas.bounce, (req, res) => {
     res.json(req.session.user);
 });
 app.use("/api/users", require("./routes/users"));
