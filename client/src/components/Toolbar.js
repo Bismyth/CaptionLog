@@ -41,7 +41,9 @@ const Toolbar = (props) => {
     const authLinks = (
         <Fragment>
             <NavItem>
-                <span className="navbar-text mr-3">{user ? `Welcome ${user.username}` : ""}</span>
+                <span className="navbar-text mr-3">
+                    {user ? `Welcome ${user.displayname}` : ""}
+                </span>
             </NavItem>
             <NavItem>
                 <NavLink tag={Link} to={"/newLog"} className="mr-3">

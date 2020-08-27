@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 
+const session = require("express-session");
+
 const app = express();
 
 //Initalise environment variables
@@ -19,6 +21,16 @@ app.use((req, res, next) => {
         req.connection.socket.remoteAddress;
     next();
 });
+
+//CAS
+app.use(
+    session({
+        secret: process.env.SESSIONSECRET,
+        resave: false,
+        saveUninitialized: true,
+        user: null,
+    })
+);
 
 //Connect to Server
 mongoose

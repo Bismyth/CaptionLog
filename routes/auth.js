@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 const ip = require("ip");
 const { checkSchema, validationResult } = require("express-validator");
+const cas = require("../middleware/CAS");
 //Import Environment Variables
 require("dotenv").config();
 
@@ -59,13 +60,13 @@ router.post("/", checkSchema(validator), (req, res) => {
     });
 });
 
+router.get("/login", cas.bounce_redirect);
+
 //@route GET api/auth/user
 //@desc  Authenticate User and return data
 //@access Private
-router.get("/user", auth, (req, res) => {
-    User.findById(req.user.id)
-        .select("-password")
-        .then((user) => res.json(user));
+router.get("/user", cas.block, (req, res) => {
+    res.json(req.session.user);
 });
 
 router.get("/local", (req, res) => {
