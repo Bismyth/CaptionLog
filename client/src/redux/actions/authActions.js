@@ -15,21 +15,19 @@ import { returnErrors } from "./errorActions";
 //Check Token and load user
 export const loadUser = () => (dispatch, getState) => {
     //UserLoading
-    if (getState().auth.token) {
-        dispatch({ type: USER_LOADING });
-        axios
-            .get(`/api/auth/user`)
-            .then((res) => {
-                dispatch({
-                    type: USER_LOADED,
-                    payload: res.data,
-                });
-            })
-            .catch((err) => {
-                dispatch(returnErrors(err.response.data, err.response.status));
-                dispatch({ type: AUTH_ERROR });
+    dispatch({ type: USER_LOADING });
+    axios
+        .get(`/api/auth/user`)
+        .then((res) => {
+            dispatch({
+                type: USER_LOADED,
+                payload: res.data,
             });
-    }
+        })
+        .catch((err) => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch({ type: AUTH_ERROR });
+        });
 };
 
 export const checkLocal = () => (dispatch) => {
