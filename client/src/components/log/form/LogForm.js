@@ -25,6 +25,7 @@ const LogForm = (props) => {
     const [selectors, updateSelectors] = useState({});
     const [data, setData] = useState(idata);
     const [loading, setLoading] = useState(false);
+    const { folder = "" } = data;
     useEffect(() => {
         const fetchSelectors = async () => {
             setLoading(true);
@@ -164,7 +165,7 @@ const LogForm = (props) => {
                     update={changeValue}
                     array={{ add: addArr, rm: removeArr }}
                     selectors={selectors.digitalInfo}
-                    rootFolder={"" || data.folder}
+                    rootFolder={folder}
                 />
                 <FormMSection
                     data={data.physicalInfo}
