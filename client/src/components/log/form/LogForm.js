@@ -164,7 +164,7 @@ const LogForm = (props) => {
                     update={changeValue}
                     array={{ add: addArr, rm: removeArr }}
                     selectors={selectors.digitalInfo}
-                    rootFolder={data.folder || ""}
+                    rootFolder={"" || data.folder}
                 />
                 <FormMSection
                     data={data.physicalInfo}
