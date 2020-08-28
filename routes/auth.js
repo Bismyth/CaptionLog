@@ -88,6 +88,7 @@ router.get("/local", (req, res) => {
 
 router.post("/roles", auth.block(auth.roles.admin), (req, res) => {
     const { doeNumber, adGroup, roles } = req.body;
+    console.log(req.body);
     const newRoles = new UserRoles({
         doeNumber,
         adGroup,
