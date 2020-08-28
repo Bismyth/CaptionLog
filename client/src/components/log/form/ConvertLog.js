@@ -45,7 +45,7 @@ const ConvertLog = ({
             },
         }
     );
-    const { data: oData } = useQuery([`cLog`, { id, old: true }], fetchLog, {
+    const { data: oData } = useQuery([`oldLog`, { id, old: true }], fetchLog, {
         onError: (err) => {
             console.error(err);
             history.goBack();
