@@ -5,12 +5,14 @@ const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 const ip = require("ip");
 const { checkSchema, validationResult } = require("express-validator");
-const cas = require("../middleware/CAS");
+const cas = require("../CAS");
 //Import Environment Variables
 require("dotenv").config();
 
 //User Model
 const User = require("../models/User");
+
+const UserRoles = require("../models/UserRoles");
 //@route POST api/auth
 //@desc  Auth User
 //@access Public
@@ -63,8 +65,16 @@ router.post("/", checkSchema(validator), (req, res) => {
 //@route GET api/auth/user
 //@desc  Authenticate User and return data
 //@access Private
-router.get("/user", cas.block, (req, res) => {
-    res.json(req.session.user);
+router.get("/user", auth.block(), (req, res) => {
+    const { cn, displayname, givenname, sn, departmentnumber } = req.session.user;
+    res.json({
+        cn,
+        displayname,
+        givenname,
+        sn,
+        departmentnumber,
+        roles: req.roles,
+    });
 });
 
 router.get("/local", (req, res) => {
@@ -73,6 +83,22 @@ router.get("/local", (req, res) => {
             process.env.SUBNET.split(",").some((v) => {
                 return ip.cidrSubnet(v).contains(req.clientIp);
             }) || ip.isLoopback(req.clientIp),
+    });
+});
+
+router.post("/roles", auth.block(auth.roles.admin), (req, res) => {
+    const { doeNumber, adGroup, roles } = req.body;
+    const newRoles = new UserRoles({
+        doeNumber,
+        adGroup,
+        roles,
+    });
+    newRoles.save((err, doc) => {
+        if (err) {
+            console.error(err);
+            return res.status(500);
+        }
+        res.json(doc);
     });
 });
 

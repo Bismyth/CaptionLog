@@ -32,10 +32,17 @@ const OldLog = ({
         params: { id },
     },
 }) => {
-    const token = useSelector((state) => state.auth.token);
-    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const history = useHistory();
-    const { isLoading, data, error } = useQuery([`oldLog`, { id, token, old: true }], fetchLog);
+    const { isLoading, data, error } = useQuery([`oldLog`, { id, old: true }], fetchLog);
     if (error) history.goBack();
     if (isLoading)
         return (
@@ -48,7 +55,7 @@ const OldLog = ({
             <div className={classHeading}>
                 <BackButton className="mr-1" back={false} />
                 <h2>{data.title}</h2>
-                {loggedIn ? (
+                {userRoles.write ? (
                     <div className="ml-auto">
                         <Convert className="mr-1" id={data._id} />
                         <Delete id={data._id} old={true} back={true} />

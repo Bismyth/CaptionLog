@@ -69,40 +69,46 @@ router.get("/", (req, res) => {
             .select("title description movieInfo")
             .lean();
     }
-    Promise.all([query, queryO]).then((results) => {
-        var joined = [
-            ...results[0],
-            ...results[1].map((value) => {
-                return { ...value, old: true };
-            }),
-        ];
-        res.json(joined.sort((a, b) => (a.title > b.title ? 1 : -1)));
-    });
+    Promise.all([query, queryO])
+        .then((results) => {
+            var joined = [
+                ...results[0],
+                ...results[1].map((value) => {
+                    return { ...value, old: true };
+                }),
+            ];
+            res.json(joined.sort((a, b) => (a.title > b.title ? 1 : -1)));
+        })
+        .catch((err) => {
+            res.sendStatus(500);
+        });
 });
 
-router.post("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-    try {
-        await processVideoLength(req.body.digitalInfo);
-    } catch (e) {
-        return res.status(500);
-    }
-
-    const newLog = new Log(req.body);
-    newLog.save((err, doc) => {
-        if (err) {
-            console.error(err);
+router.post(
+    "/",
+    checkSchema(require("../validationSchema/newLog")),
+    auth.block(auth.roles.write),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+        try {
+            await processVideoLength(req.body.digitalInfo);
+        } catch (e) {
             return res.status(500);
         }
-        res.json(doc);
-    });
-});
+
+        const newLog = new Log(req.body);
+        newLog.save((err, doc) => {
+            if (err) return res.sendStatus(500);
+            res.json(doc);
+        });
+    }
+);
 
 router.post(
     "/convert",
     checkSchema(require("../validationSchema/newLog")),
-    auth,
+    auth.block(auth.roles.write),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
@@ -114,15 +120,9 @@ router.post(
         const { _id: oldID, ...data } = req.body;
         const newLog = new Log(data);
         newLog.save((err, doc) => {
-            if (err) {
-                console.error(err);
-                return res.status(500);
-            }
+            if (err) return res.sendStatus(500);
             OldLog.findById(oldID, (oErr, oDoc) => {
-                if (oErr) {
-                    console.error(err);
-                    return res.status(500);
-                }
+                if (oErr) return res.sendStatus(500);
                 const newUpdate = new Update({
                     newLog: { id: doc._id, title: doc.title },
                     oldLog: oDoc,
@@ -137,24 +137,27 @@ router.post(
     }
 );
 
-router.put("/", checkSchema(require("../validationSchema/newLog")), auth, async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-    try {
-        await processVideoLength(req.body.digitalInfo);
-    } catch (e) {
-        return res.status(500);
-    }
-    Log.findByIdAndUpdate(req.body._id, req.body, (err, doc) => {
-        if (err) {
-            console.error(err);
+router.put(
+    "/",
+    checkSchema(require("../validationSchema/newLog")),
+    auth.block(auth.roles.write),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+        try {
+            await processVideoLength(req.body.digitalInfo);
+        } catch (e) {
             return res.status(500);
         }
-        res.json(doc);
-    });
-});
+        const { _id: id, ...data } = req.body;
+        Log.findByIdAndUpdate(id, data, (err, doc) => {
+            if (err) return res.sendStatus(500);
+            res.json(doc);
+        });
+    }
+);
 
-router.post("/scan", auth, (req, res) => {
+router.post("/scan", auth.block(auth.roles.read), (req, res) => {
     var basePath = process.env.MEDIA_ROOT;
     if (!req.body.path) res.status(400).json({ errors: [{ msg: "Missing Path" }] });
     var sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.(\/|\\|$))+/, "");
@@ -183,21 +186,13 @@ router.post("/scan", auth, (req, res) => {
 //@route GET api/logs/:id
 //@desc  Return Specific Log
 //@access Public but more info is private
-router.get("/:id", (req, res) => {
+router.get("/:id", auth.read, (req, res) => {
     var Source;
     if (req.query.type === "old") Source = OldLog;
     else Source = Log;
-    if (req.header("x-auth-token")) {
-        try {
-            jwt.verify(req.header("x-auth-token"), process.env.JWT_SECRET);
-        } catch (e) {
-            return res.status(401).json({ msg: "Token is not valid" });
-        }
+    if (req.roles && req.roles[auth.roles.read]) {
         Source.findById(req.params.id, (err, doc) => {
-            if (err) {
-                console.error(err);
-                return res.status(400).send("Bad Request");
-            }
+            if (err) return res.sendStatus(500);
             Update.findOne({ "newLog.id": Types.ObjectId(req.params.id) }, (oErr, oDoc) => {
                 if (oDoc !== null) res.json({ ...doc, oData: oDoc.oldLog });
                 else res.json(doc);
@@ -205,10 +200,7 @@ router.get("/:id", (req, res) => {
         }).lean();
     } else {
         Source.findById(req.params.id, (err, data) => {
-            if (err) {
-                console.error(err);
-                return res.status(400).send("Bad Request");
-            }
+            if (err) return res.sendStatus(500);
             res.json(data);
         }).select(
             req.query.type === "old"
@@ -218,21 +210,14 @@ router.get("/:id", (req, res) => {
     }
 });
 
-router.delete("/:id", auth, (req, res) => {
-    if (req.user.access !== "full")
-        return res.status(401).json({ msg: "You don't have privilege to do that" });
-    var id = req.params.id;
-    if (req.body.old) {
-        OldLog.findByIdAndDelete(id, (err, doc) => {
-            if (err) console.error(err);
-            res.json({ msg: "Delete Sucessful" });
-        });
-    } else {
-        Log.findByIdAndDelete(id, (err, doc) => {
-            if (err) console.error(err);
-            res.json({ msg: "Delete Sucessful" });
-        });
-    }
+router.delete("/:id", auth.block(auth.roles.write), (req, res) => {
+    var Source;
+    if (req.body.old) Source = OldLog;
+    else Source = Log;
+    Source.findByIdAndDelete(req.params.id, (err, doc) => {
+        if (err) return res.sendStatus(500);
+        res.json({ msg: "Delete Sucessful" });
+    });
 });
 
 module.exports = router;

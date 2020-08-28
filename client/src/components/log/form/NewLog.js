@@ -8,7 +8,15 @@ import axios from "axios";
 
 const NewLog = () => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const token = useSelector((state) => state.auth.token);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const [errors, setErrors] = useState([]);
     const history = useHistory();
     const [upload, { isLoading: sLoading }] = useMutation(
@@ -16,10 +24,6 @@ const NewLog = () => {
             const { data: result } = await axios({
                 method: "post",
                 url: `/api/logs`,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
                 data,
             });
             return result;
@@ -33,7 +37,7 @@ const NewLog = () => {
             },
         }
     );
-    if (!loggedIn && loggedIn !== null) return <Redirect to="/logs" />;
+    if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
     return (
         <Container className="content">
             <LogForm upload={upload} type="new" sLoading={sLoading} errors={errors} />

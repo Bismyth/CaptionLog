@@ -10,7 +10,7 @@ import {
     NavLink,
     Form,
 } from "reactstrap";
-import LoginModal from "./auth/LoginModal";
+import Login from "./auth/Login";
 import Logout from "./auth/Logout";
 import { useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
@@ -22,6 +22,15 @@ import { useWindowDimensions } from "../config";
 
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const isLoading = useSelector((state) => state.auth.isLoading);
     const user = useSelector((state) => state.auth.user);
     const [isOpen, toggle] = useState(false);
@@ -45,11 +54,13 @@ const Toolbar = (props) => {
                     {user ? `Welcome ${user.displayname}` : ""}
                 </span>
             </NavItem>
-            <NavItem>
-                <NavLink tag={Link} to={"/newLog"} className="mr-3">
-                    +New Log
-                </NavLink>
-            </NavItem>
+            {userRoles.write ? (
+                <NavItem>
+                    <NavLink tag={Link} to={"/newLog"} className="mr-3">
+                        +New Log
+                    </NavLink>
+                </NavItem>
+            ) : null}
             <NavItem>
                 <Logout />
             </NavItem>
@@ -58,7 +69,7 @@ const Toolbar = (props) => {
     const guestLinks = (
         <Fragment>
             <NavItem>
-                <LoginModal />
+                <Login />
             </NavItem>
         </Fragment>
     );

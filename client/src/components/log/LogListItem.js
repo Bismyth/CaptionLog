@@ -9,7 +9,15 @@ import LogHeader from "./LogHeader";
 import { setPage } from "../../redux/actions/pageActions";
 
 const LogListItem = ({ data, page }) => {
-    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const dispatch = useDispatch();
     return (
         <Fragment>
@@ -37,7 +45,7 @@ const LogListItem = ({ data, page }) => {
                                         <LogHeader title={title} movieInfo={movieInfo} />
                                     )}
                                 </Link>
-                                {loggedIn ? (
+                                {userRoles.write ? (
                                     <div className="ml-auto mr-3">
                                         {old ? (
                                             <Convert className="mr-1" id={_id} page={page} />

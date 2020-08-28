@@ -14,8 +14,16 @@ const ConvertLog = ({
     },
 }) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const [data, setData] = useState(undefined);
-    const token = useSelector((state) => state.auth.token);
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
@@ -24,10 +32,6 @@ const ConvertLog = ({
             const { data: result } = await axios({
                 method: "post",
                 url: `/api/logs/convert`,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
                 data,
             });
             return result;
@@ -41,7 +45,7 @@ const ConvertLog = ({
             },
         }
     );
-    const { data: oData } = useQuery([`cLog`, { token, id, old: true }], fetchLog, {
+    const { data: oData } = useQuery([`cLog`, { id, old: true }], fetchLog, {
         onError: (err) => {
             console.error(err);
             history.goBack();
@@ -88,7 +92,7 @@ const ConvertLog = ({
             setLoading(false);
         },
     });
-    if (!loggedIn && loggedIn !== null) return <Redirect to="/logs" />;
+    if (!userRoles.write && loggedIn !== null) return <Redirect to="/logs" />;
     if (loading)
         return (
             <Container className="content">

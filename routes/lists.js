@@ -44,7 +44,7 @@ router.get("/:list", (req, res) => {
         res.json(data);
     });
 });
-router.post("/:list", checkSchema(validatorN), auth, (req, res) => {
+router.post("/:list", checkSchema(validatorN), auth.block(auth.roles.write), (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     var Source;
@@ -63,7 +63,7 @@ router.post("/:list", checkSchema(validatorN), auth, (req, res) => {
             console.error(err);
         });
 });
-router.put("/:list", checkSchema(validatorIDN), auth, (req, res) => {
+router.put("/:list", checkSchema(validatorIDN), auth.block(auth.roles.write), (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     var Source;
@@ -77,7 +77,7 @@ router.put("/:list", checkSchema(validatorIDN), auth, (req, res) => {
         res.json(data);
     });
 });
-router.delete("/:list", checkSchema(validatorID), auth, (req, res) => {
+router.delete("/:list", checkSchema(validatorID), auth.block(auth.roles.write), (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     var Source;

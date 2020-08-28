@@ -1,26 +1,60 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-
+const UserRoles = require("../models/UserRoles");
+const cas = require("../CAS");
+const userRoles = require("../models/UserRoles.json");
 require("dotenv").config({ path: "../" });
 
-const auth = (req, res, next) => {
-    const token = req.header("x-auth-token");
-
-    if (!token) return res.status(401).json({ msg: "No token, authorization denied" });
-
-    try {
-        //Verify Token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        //Add user from payload
-        req.user = decoded;
-        User.findOne({ _id: decoded.id }, (err, user) => {
-            if (err) res.status(500).json({ msg: "Can't Find User" });
-            req.user = user;
-            next();
+const read = (req, res, next) => {
+    if (req.session[cas.session_name]) {
+        const groups = req.session.user.memberof.map((v) => {
+            return v
+                .split(",")
+                .filter((r) => {
+                    return r.includes("CN");
+                })[0]
+                .split("=")[1];
         });
-    } catch (e) {
-        res.status(401).json({ msg: "Token is not valid" });
+        UserRoles.find(
+            { $or: [{ doeNumber: req.session.user.cn }, { adGroup: groups }] },
+            (err, doc) => {
+                if (err) return res.sendStatus(500);
+                if (doc.length === 0) req.roles = {};
+                else {
+                    var rol = {};
+                    doc.forEach((v) => {
+                        rol = { ...rol, ...v.roles };
+                    });
+                    if (rol.admin) {
+                        req.roles = Object.fromEntries(
+                            Object.entries(userRoles).map((v) => {
+                                return [v[0], true];
+                            })
+                        );
+                    } else {
+                        req.roles = rol;
+                    }
+                }
+
+                next();
+            }
+        ).lean();
+    } else {
+        next();
     }
 };
-module.exports = auth;
+
+const block = (roles) => (req, res, next) => {
+    if (!req.session[cas.session_name]) {
+        return res.sendStatus(401);
+    }
+    read(req, res, () => {
+        if (req.session.user.cn === process.env.ADMIN || req.roles.admin) return next();
+        if (roles && !req.roles[roles]) return res.sendStatus(401);
+        next();
+    });
+};
+
+module.exports = {
+    read,
+    block,
+    roles: userRoles,
+};

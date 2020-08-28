@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { Popover, PopoverBody, PopoverHeader } from "reactstrap";
-import { useSelector } from "react-redux";
 import axios from "axios";
 
 import { ReactComponent as DeleteButton } from "../../../icons/delete-black-24dp.svg";
@@ -10,7 +9,6 @@ import { useHistory } from "react-router-dom";
 import { useMutation, queryCache } from "react-query";
 
 const Delete = ({ id, old = false, back, className }) => {
-    const token = useSelector((state) => state.auth.token);
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
     const history = useHistory();
@@ -19,10 +17,6 @@ const Delete = ({ id, old = false, back, className }) => {
             const { data } = await axios({
                 method: "delete",
                 url: `/api/logs/${id}`,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
                 data: { old },
             });
             return data;

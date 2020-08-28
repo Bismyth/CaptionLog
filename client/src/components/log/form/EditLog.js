@@ -13,7 +13,15 @@ const EditLog = ({
     },
 }) => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const token = useSelector((state) => state.auth.token);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const [errors, setErrors] = useState([]);
     const history = useHistory();
     const [upload, { isLoading: sLoading }] = useMutation(
@@ -21,10 +29,6 @@ const EditLog = ({
             const { data: result } = await axios({
                 method: "put",
                 url: `/api/logs`,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
                 data,
             });
             return result;
@@ -38,14 +42,14 @@ const EditLog = ({
             },
         }
     );
-    const { isLoading, data } = useQuery([`log`, { token, id }], fetchLog, {
+    const { isLoading, data } = useQuery([`log`, { id }], fetchLog, {
         onError: (err) => {
             console.error(err);
         },
         cacheTime: 0,
         refetchOnWindowFocus: false,
     });
-    if (!loggedIn && loggedIn !== null) return <Redirect to="/" />;
+    if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
     if (isLoading)
         return (
             <Container className="content">

@@ -25,11 +25,19 @@ const Log = ({
         params: { id },
     },
 }) => {
-    const token = useSelector((state) => state.auth.token);
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const isLocal = useSelector((state) => state.auth.local);
     const history = useHistory();
-    const { data, isLoading } = useQuery([`log`, { token, id }], fetchLog, {
+    const { data, isLoading } = useQuery([`log`, { id }], fetchLog, {
         onError: (err) => {
             history.goBack();
         },
@@ -47,7 +55,7 @@ const Log = ({
                 <h2>
                     <LogHeader title={data.title} movieInfo={data.movieInfo} />
                 </h2>
-                {loggedIn ? (
+                {userRoles.write ? (
                     <div className="ml-auto">
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
                         <Edit id={data._id} />

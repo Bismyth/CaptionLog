@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Container, ListGroup, Spinner, ListGroupItem } from "reactstrap";
 import axios from "axios";
-import { useSelector } from "react-redux";
+
 const EditSelector = (props) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const source = "captionSource";
-    const token = useSelector((state) => state.auth.token);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -14,10 +13,6 @@ const EditSelector = (props) => {
             var config = {
                 method: "get",
                 url: `/api/lists/${source}`,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
             };
             const result = await axios(config);
             console.log(result.data);
@@ -26,7 +21,7 @@ const EditSelector = (props) => {
             setLoading(false);
         };
         fetchData();
-    }, [token]);
+    });
     return (
         <Container className="content">
             {!loading ? (

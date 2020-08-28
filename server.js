@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const session = require("express-session");
-const cas = require("./middleware/CAS");
+const MongoStore = require("connect-mongo")(session);
+
 const app = express();
 
 //Initalise environment variables
@@ -22,16 +23,6 @@ app.use((req, res, next) => {
     next();
 });
 
-//CAS
-app.use(
-    session({
-        secret: process.env.SESSIONSECRET,
-        resave: false,
-        saveUninitialized: true,
-        user: null,
-    })
-);
-
 //Connect to Server
 mongoose
     .connect(process.env.MONGO_URI, {
@@ -43,14 +34,32 @@ mongoose
     .then(() => console.log("MongoDB Connected...."))
     .catch((err) => console.error(err));
 
-//Initialise Routes
+//Setup Express Sessions
+app.use(
+    session({
+        secret: process.env.SESSIONSECRET,
+        resave: false,
+        saveUninitialized: false,
+        user: null,
+        store: new MongoStore({
+            mongooseConnection: mongoose.connection,
+            secret: process.env.SESSIONSECRET,
+        }),
+    })
+);
 
+//CAS SETUP
+const cas = require("./CAS");
 app.get("/login", cas.bounce_redirect);
 app.get("/logout", (req, res) => {
-    req.session.destroy();
-    res.json({ msg: "Logout OK" });
+    req.session.destroy((err) => {
+        if (err) return res.status(500);
+        res.json({ msg: "Logout OK" });
+    });
 });
-app.use("/api/users", require("./routes/users"));
+
+//Initialise Routes
+//app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/logs", require("./routes/logs"));
 app.use("/api/lists", require("./routes/lists"));

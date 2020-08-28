@@ -1,1 +1,0 @@
-module.exports = ["full", "basic"];

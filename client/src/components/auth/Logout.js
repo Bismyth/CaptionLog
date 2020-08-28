@@ -10,6 +10,7 @@ const Logout = (props) => {
             onClick={() => {
                 dispatch(logout());
             }}
+            href="#"
         >
             Logout
         </NavLink>

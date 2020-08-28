@@ -1,17 +1,11 @@
 import axios from "axios";
 
-export const fetchLog = async (key, { token, id, old }) => {
+export const fetchLog = async (key, { id, old }) => {
     var config = {
         url: `/api/logs/${id}`,
         method: "get",
     };
     if (old) config.params = { type: "old" };
-    if (token) {
-        config.headers = {
-            "Content-type": "application/json",
-            "x-auth-token": token,
-        };
-    }
     const { data } = await axios(config);
     return data;
 };

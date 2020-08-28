@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const accessLevels = require("./AccessLevel");
+//const accessLevels = require("./AccessLevel");
 const UserSchema = new Schema({
     username: {
         type: String,
@@ -12,7 +12,7 @@ const UserSchema = new Schema({
     },
     access: {
         type: String,
-        enum: accessLevels,
+        //enum: accessLevels,
         required: true,
     },
 });

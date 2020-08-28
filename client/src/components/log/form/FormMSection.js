@@ -23,16 +23,14 @@ const FormMSection = ({ data, config, update, array, selectors, rootFolder }) =>
                                 &times;
                             </Button>
                             <h4 className="w-100">{`${config.details.name} ${i + 1}`}</h4>
-                            {value.location !== undefined ? (
+                            {value.location !== undefined && rootFolder !== undefined ? (
                                 <SelectFile
                                     style={{ minWidth: "fit-content" }}
                                     update={update}
                                     index={i}
                                     folder={rootFolder}
                                 />
-                            ) : (
-                                <Fragment />
-                            )}
+                            ) : null}
                         </div>
                         <FormSection
                             data={value}

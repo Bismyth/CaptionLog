@@ -10,12 +10,10 @@ import {
     ModalBody,
     Button,
     ModalFooter,
-    Input,
 } from "reactstrap";
 import axios from "axios";
 import folderIcon from "../../../icons/folder-black-24dp.svg";
 import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
-import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import SearchBar from "../SearchBar";
 
@@ -40,7 +38,6 @@ const SelectFile = ({ update, index, style, folder }) => {
     const [fileSelected, setFileSelected] = useState("");
     const [search, setSearch] = useState("");
     const [modal, setModal] = useState(false);
-    const token = useSelector((state) => state.auth.token);
     const toggle = (e) => {
         setModal(!modal);
     };
@@ -51,10 +48,6 @@ const SelectFile = ({ update, index, style, folder }) => {
                 method: "post",
                 url: `/api/logs/scan`,
                 data: path,
-                headers: {
-                    "Content-type": "application/json",
-                    "x-auth-token": token,
-                },
             });
             return data;
         }
