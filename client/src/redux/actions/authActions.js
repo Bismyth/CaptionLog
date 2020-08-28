@@ -11,7 +11,6 @@ import {
     LOCAL_CHECK,
 } from "../types";
 import { returnErrors } from "./errorActions";
-import { queryCache } from "react-query";
 
 //Check Token and load user
 export const loadUser = () => (dispatch, getState) => {
@@ -77,8 +76,6 @@ export const login = (data) => (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
-    queryCache.invalidateQueries("log");
-    queryCache.invalidateQueries("oldLog");
     axios.get("/logout").then((res) => {
         dispatch({ type: LOGOUT_SUCCESS });
     });

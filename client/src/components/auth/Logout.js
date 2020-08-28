@@ -10,7 +10,7 @@ const Logout = (props) => {
             onClick={() => {
                 dispatch(logout());
             }}
-            href="#"
+            href={`${process.env.PUBLIC_URL}`}
         >
             Logout
         </NavLink>
