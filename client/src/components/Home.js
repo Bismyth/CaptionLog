@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Button, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { Button, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 import captionRoom from "../captionRoom.jpg";
 import { classHeading } from "../config";
 import data from "./copyInfo.json";
@@ -10,7 +10,7 @@ const Home = () => {
         if (activeTab !== tab) setActiveTab(tab);
     };
     return (
-        <Container className="content">
+        <div>
             <div className={`${classHeading} mb-2`}>
                 <h1>Captioning Information</h1>
                 <Button
@@ -59,7 +59,7 @@ const Home = () => {
                     </TabPane>
                 ))}
             </TabContent>
-        </Container>
+        </div>
     );
 };
 

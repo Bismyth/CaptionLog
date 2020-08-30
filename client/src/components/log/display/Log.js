@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import {
-    Container,
     Spinner,
     ListGroup,
     ListGroupItem,
@@ -42,16 +41,11 @@ const Log = ({
             history.goBack();
         },
     });
-    if (isLoading)
-        return (
-            <Container className="content">
-                <Spinner color="primary" />
-            </Container>
-        );
+    if (isLoading) return <Spinner color="primary" />;
     return (
-        <Container className="content">
+        <div>
             <div className={classHeading}>
-                <BackButton className="mr-1" back={false} />
+                <BackButton />
                 <h2>
                     <LogHeader title={data.title} movieInfo={data.movieInfo} />
                 </h2>
@@ -59,7 +53,7 @@ const Log = ({
                     <div className="ml-auto">
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
                         <Edit id={data._id} />
-                        <Delete id={data._id} old={false} back={true} />
+                        <Delete id={data._id} back={true} />
                     </div>
                 ) : null}
             </div>
@@ -164,7 +158,7 @@ const Log = ({
                     );
                 }
             })}
-        </Container>
+        </div>
     );
 };
 

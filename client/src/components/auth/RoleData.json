@@ -1,0 +1,16 @@
+{
+    "roleDesc": {
+        "admin": "Has Access to everything.",
+        "read": "Gets the copyright info for all logs.",
+        "write": "Can make changes to the log."
+    },
+    "blankNew": {
+        "doeNumber": "",
+        "adGroup": "",
+        "roles": {}
+    },
+    "selector": {
+        "doeNumber": { "label": "User", "desc": "E number..." },
+        "adGroup": { "label": "Group", "desc": "Group..." }
+    }
+}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
-import { Spinner, Container } from "reactstrap";
+import { Spinner } from "reactstrap";
 import { useMutation, useQuery } from "react-query";
 import { fetchLog } from "../../../queries/log";
 import axios from "axios";
@@ -50,17 +50,8 @@ const EditLog = ({
         refetchOnWindowFocus: false,
     });
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
-    if (isLoading)
-        return (
-            <Container className="content">
-                <Spinner color="primary" />
-            </Container>
-        );
-    return (
-        <Container className="content">
-            <LogForm upload={upload} data={data} type="edit" errors={errors} sLoading={sLoading} />
-        </Container>
-    );
+    if (isLoading) return <Spinner color="primary" />;
+    return <LogForm upload={upload} data={data} type="edit" errors={errors} sLoading={sLoading} />;
 };
 
 export default EditLog;

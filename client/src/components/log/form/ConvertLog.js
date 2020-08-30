@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
-import { Spinner, Container } from "reactstrap";
+import { Spinner } from "reactstrap";
 import { useQuery, useMutation } from "react-query";
 import { digBlankCV, blankForm } from "./FormData.json";
 import { fetchLog } from "../../../queries/log";
@@ -93,23 +93,16 @@ const ConvertLog = ({
         },
     });
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/logs" />;
-    if (loading)
-        return (
-            <Container className="content">
-                <Spinner color="primary" />
-            </Container>
-        );
+    if (loading) return <Spinner color="primary" />;
     return (
-        <Container className="content">
-            <LogForm
-                upload={upload}
-                data={data}
-                type="convert"
-                errors={errors}
-                sLoading={sLoading}
-                oldLog={oData}
-            />
-        </Container>
+        <LogForm
+            upload={upload}
+            data={data}
+            type="convert"
+            errors={errors}
+            sLoading={sLoading}
+            oldLog={oData}
+        />
     );
 };
 

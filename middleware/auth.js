@@ -19,21 +19,10 @@ const read = (req, res, next) => {
                 if (err) return res.sendStatus(500);
                 if (doc.length === 0) req.roles = {};
                 else {
-                    var rol = {};
                     doc.forEach((v) => {
-                        rol = { ...rol, ...v.roles };
+                        req.roles = { ...req.roles, ...v.roles };
                     });
-                    if (rol.admin) {
-                        req.roles = Object.fromEntries(
-                            Object.entries(userRoles).map((v) => {
-                                return [v[0], true];
-                            })
-                        );
-                    } else {
-                        req.roles = rol;
-                    }
                 }
-
                 next();
             }
         ).lean();

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
-import { Container } from "reactstrap";
 import { useMutation } from "react-query";
 import axios from "axios";
 
@@ -38,11 +37,7 @@ const NewLog = () => {
         }
     );
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
-    return (
-        <Container className="content">
-            <LogForm upload={upload} type="new" sLoading={sLoading} errors={errors} />
-        </Container>
-    );
+    return <LogForm upload={upload} type="new" sLoading={sLoading} errors={errors} />;
 };
 
 export default NewLog;

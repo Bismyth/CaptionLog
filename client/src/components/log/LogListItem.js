@@ -46,7 +46,7 @@ const LogListItem = ({ data, page }) => {
                                     )}
                                 </Link>
                                 {userRoles.write ? (
-                                    <div className="ml-auto mr-3">
+                                    <div className="ml-auto mr-3" style={{ minWidth: "52px" }}>
                                         {old ? (
                                             <Convert className="mr-1" id={_id} page={page} />
                                         ) : (

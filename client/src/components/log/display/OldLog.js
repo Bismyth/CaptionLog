@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Container,
     Spinner,
     ListGroup,
     ListGroupItem,
@@ -44,16 +43,11 @@ const OldLog = ({
     const history = useHistory();
     const { isLoading, data, error } = useQuery([`oldLog`, { id, old: true }], fetchLog);
     if (error) history.goBack();
-    if (isLoading)
-        return (
-            <Container className="content">
-                <Spinner color="primary" />
-            </Container>
-        );
+    if (isLoading) return <Spinner color="primary" />;
     return (
-        <Container className="content">
+        <div>
             <div className={classHeading}>
-                <BackButton className="mr-1" back={false} />
+                <BackButton />
                 <h2>{data.title}</h2>
                 {userRoles.write ? (
                     <div className="ml-auto">
@@ -84,7 +78,7 @@ const OldLog = ({
                     </ListGroupItem>
                 ) : null}
             </ListGroup>
-        </Container>
+        </div>
     );
 };
 

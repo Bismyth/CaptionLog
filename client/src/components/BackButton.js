@@ -4,6 +4,7 @@ import { ReactComponent as BackArrow } from "../icons/arrow_back-black-24dp.svg"
 import { useSelector, useDispatch } from "react-redux";
 import { clearPage } from "../redux/actions/pageActions";
 const BackButton = ({ className, back }) => {
+    const style = `link-arrow mr-1 ${className}`;
     const { page, scrollPos } = useSelector((state) => state.page);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -14,7 +15,7 @@ const BackButton = ({ className, back }) => {
                 onClick={() => {
                     history.goBack();
                 }}
-                className={`link-arrow ${className}`}
+                className={style}
             />
         );
     } else {
@@ -25,7 +26,7 @@ const BackButton = ({ className, back }) => {
                     dispatch(clearPage());
                 }}
             >
-                <BackArrow alt="Back" className={`link-arrow ${className}`} />
+                <BackArrow alt="Back" className={style} />
             </Link>
         );
     }

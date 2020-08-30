@@ -9,33 +9,31 @@ import {
     Container,
     NavLink,
     Form,
+    Tooltip,
 } from "reactstrap";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
 import { useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { ReactComponent as Logo } from "../MainLogo.svg";
-import { ReactComponent as SLogo } from "../SLogo.svg";
-import { ReactComponent as SMLogo } from "../SmallLogo.svg";
+import { ReactComponent as Logo } from "../logos/MainLogo.svg";
+import { ReactComponent as SLogo } from "../logos/SLogo.svg";
+import { ReactComponent as SMLogo } from "../logos/SmallLogo.svg";
+import { ReactComponent as NewLog } from "../icons/post_add-black-24dp.svg";
+import { ReactComponent as UserRole } from "../icons/supervisor_account-black-24dp.svg";
 import SearchBar from "./log/SearchBar";
-import { useWindowDimensions } from "../config";
+import { useWindowDimensions, getRoles } from "../config";
+
+import "./Toolbar.css";
 
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const userRoles = {
-        ...useSelector((state) => {
-            if (state.auth.user) {
-                return state.auth.user.roles;
-            } else {
-                return undefined;
-            }
-        }),
-    };
+    const userRoles = { ...useSelector(getRoles) };
     const isLoading = useSelector((state) => state.auth.isLoading);
     const user = useSelector((state) => state.auth.user);
     const [isOpen, toggle] = useState(false);
     const [value, setValue] = useState("");
     const [page, setPage] = useState(true);
+    const [tooltip, setTooltip] = useState({});
     const { width } = useWindowDimensions();
     const history = useHistory();
     const location = useLocation();
@@ -47,6 +45,12 @@ const Toolbar = (props) => {
             toggle(!isOpen);
         }
     };
+    const tToggle = (e) => {
+        const toolName = e.target.closest("a").id;
+        setTooltip((v) => {
+            return { ...v, [toolName]: !v[toolName] };
+        });
+    };
     const authLinks = (
         <Fragment>
             <NavItem>
@@ -56,9 +60,22 @@ const Toolbar = (props) => {
             </NavItem>
             {userRoles.write ? (
                 <NavItem>
-                    <NavLink tag={Link} to={"/newLog"} className="mr-3">
-                        +New Log
+                    <NavLink tag={Link} to={"/newLog"} className="mr-3" id="newLog">
+                        <NewLog className={`topIcon ${page === "newLog" ? "active" : ""}`} />
                     </NavLink>
+                    <Tooltip target="newLog" toggle={tToggle} isOpen={tooltip["newLog"]}>
+                        New Log
+                    </Tooltip>
+                </NavItem>
+            ) : null}
+            {userRoles.admin ? (
+                <NavItem>
+                    <NavLink tag={Link} to={"/permissions"} className="mr-3" id="roles">
+                        <UserRole className={`topIcon ${page === "permissions" ? "active" : ""}`} />
+                    </NavLink>
+                    <Tooltip target="roles" toggle={tToggle} isOpen={tooltip["roles"]}>
+                        User Permissions
+                    </Tooltip>
                 </NavItem>
             ) : null}
             <NavItem>
@@ -91,7 +108,7 @@ const Toolbar = (props) => {
                 </Container>
             </Navbar>
             <Navbar color="light" light expand="md">
-                <Container>
+                <Container style={{ flexWrap: "wrap" }}>
                     <NavbarBrand tag={Link} to={"/"}>
                         {width > 420 ? (
                             <Logo className="logo w-auto" alt="logo" />
@@ -103,7 +120,7 @@ const Toolbar = (props) => {
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
                     <Collapse isOpen={isOpen} navbar>
-                        <Nav className="mr-auto" navbar>
+                        <Nav className="mr-auto" navbar style={{ width: "max-content" }}>
                             <NavLink tag={Link} to={`/`} active={page === ""} onClick={closeNav}>
                                 Home
                             </NavLink>
@@ -117,7 +134,7 @@ const Toolbar = (props) => {
                             </NavLink>
                         </Nav>
                     </Collapse>
-                    {!["search", "atoz"].includes(page) ? (
+                    {!["search"].includes(page) ? (
                         <Form
                             onSubmit={(e) => {
                                 setValue("");
@@ -126,7 +143,6 @@ const Toolbar = (props) => {
                             }}
                             inline
                             className="m-auto"
-                            style={{ maxWidth: "240px" }}
                         >
                             <SearchBar value={value} update={setValue} />
                         </Form>

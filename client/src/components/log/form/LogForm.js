@@ -111,7 +111,7 @@ const LogForm = (props) => {
     return (
         <Fragment>
             <div className={classHeading}>
-                <BackButton className="mr-1" back={true} />
+                <BackButton back />
                 <h1>{title[type]}</h1>
                 <div className="ml-auto d-flex align-items-center">
                     {oldLog || data.oData ? (

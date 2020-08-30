@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, ListGroup, Spinner, ListGroupItem } from "reactstrap";
+import { ListGroup, Spinner, ListGroupItem } from "reactstrap";
 import axios from "axios";
 
 const EditSelector = (props) => {
@@ -22,18 +22,13 @@ const EditSelector = (props) => {
         };
         fetchData();
     });
+    if (loading) return <Spinner color="primary" />;
     return (
-        <Container className="content">
-            {!loading ? (
-                <ListGroup>
-                    {data.map((value) => (
-                        <ListGroupItem key={value._id}>{value.name}</ListGroupItem>
-                    ))}
-                </ListGroup>
-            ) : (
-                <Spinner color="primary" />
-            )}
-        </Container>
+        <ListGroup>
+            {data.map((value) => (
+                <ListGroupItem key={value._id}>{value.name}</ListGroupItem>
+            ))}
+        </ListGroup>
     );
 };
 

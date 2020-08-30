@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input, Form, Container, Spinner } from "reactstrap";
+import { Input, Form, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";
@@ -19,7 +19,7 @@ const Search = ({ match: { params }, location: { scroll } }) => {
         },
     });
     return (
-        <Container className="content">
+        <div>
             <h1>Search</h1>
             <Form
                 onSubmit={(e) => {
@@ -46,7 +46,7 @@ const Search = ({ match: { params }, location: { scroll } }) => {
             ) : (
                 <LogListItem data={data} page={`/search/${search}/${field}`} />
             )}
-        </Container>
+        </div>
     );
 };
 

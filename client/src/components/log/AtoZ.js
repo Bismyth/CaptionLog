@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    Form,
-    Container,
-    Spinner,
-    Alert,
-} from "reactstrap";
+import { Pagination, PaginationItem, PaginationLink, Form, Spinner, Alert } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";
@@ -30,12 +22,10 @@ const AtoZ = ({ match: { params }, location: { scroll } }) => {
     });
 
     return (
-        <Container className="content">
-            <div>
-                <h1 style={{ display: "inline-block" }} className="mr-auto">
-                    Logs
-                </h1>
-            </div>
+        <div>
+            <h1 style={{ display: "inline-block" }} className="mr-auto">
+                Logs
+            </h1>
 
             <Pagination
                 aria-label="Alphabet Navigation"
@@ -75,7 +65,7 @@ const AtoZ = ({ match: { params }, location: { scroll } }) => {
             ) : (
                 <LogListItem data={data} page={`/atoz/${search}`} />
             )}
-        </Container>
+        </div>
     );
 };
 

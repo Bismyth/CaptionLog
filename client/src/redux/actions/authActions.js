@@ -13,7 +13,7 @@ import {
 import { returnErrors } from "./errorActions";
 
 //Check Token and load user
-export const loadUser = () => (dispatch, getState) => {
+export const loadUser = () => (dispatch) => {
     //UserLoading
     dispatch({ type: USER_LOADING });
     axios
@@ -25,6 +25,7 @@ export const loadUser = () => (dispatch, getState) => {
             });
         })
         .catch((err) => {
+            console.error(err.response);
             dispatch(returnErrors(err.response.data, err.response.status));
             dispatch({ type: AUTH_ERROR });
         });

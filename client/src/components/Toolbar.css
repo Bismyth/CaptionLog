@@ -1,0 +1,16 @@
+.navbar-light .nav-link {
+    font-size: 1.15rem;
+}
+
+.topIcon {
+    fill: white;
+    opacity: 0.5;
+}
+
+.topIcon:hover {
+    opacity: 0.75;
+}
+
+.topIcon.active {
+    opacity: 0.9;
+}

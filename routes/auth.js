@@ -86,19 +86,56 @@ router.get("/local", (req, res) => {
     });
 });
 
+router.get("/roles", auth.block(auth.roles.admin), (req, res) => {
+    UserRoles.find((err, doc) => {
+        if (err) return res.sendStatus(500);
+        res.json(doc);
+    });
+});
+
 router.post("/roles", auth.block(auth.roles.admin), (req, res) => {
-    const { doeNumber, adGroup, roles } = req.body;
-    console.log(req.body);
+    var { doeNumber, adGroup, roles } = req.body;
+    if (roles.admin) {
+        roles = Object.fromEntries(
+            Object.entries(auth.roles).map((v) => {
+                return [v[0], true];
+            })
+        );
+    }
     const newRoles = new UserRoles({
         doeNumber,
         adGroup,
         roles,
     });
     newRoles.save((err, doc) => {
-        if (err) {
-            console.error(err);
-            return res.status(500);
-        }
+        if (err) return res.sendStatus(500);
+        res.json(doc);
+    });
+});
+
+router.put("/roles", auth.block(auth.roles.admin), (req, res) => {
+    var { doeNumber, adGroup, roles, _id: id } = req.body;
+    if (roles.admin) {
+        roles = Object.fromEntries(
+            Object.entries(auth.roles).map((v) => {
+                return [v[0], true];
+            })
+        );
+    }
+    var body = {
+        doeNumber,
+        adGroup,
+        roles,
+    };
+    UserRoles.findByIdAndUpdate(id, body, (err, doc) => {
+        if (err) return res.sendStatus(500);
+        res.json(doc);
+    });
+});
+
+router.delete("/roles", auth.block(auth.roles.admin), (req, res) => {
+    UserRoles.findByIdAndDelete(req.body.id, (err, doc) => {
+        if (err) res.sendStatus(500);
         res.json(doc);
     });
 });

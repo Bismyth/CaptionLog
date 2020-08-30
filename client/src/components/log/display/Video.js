@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import ReactPlayer from "react-player";
-import { Container, Alert } from "reactstrap";
+import { Alert } from "reactstrap";
 import BackButton from "../../BackButton";
 import { classHeading } from "../../../config";
 
@@ -12,9 +12,9 @@ const Video = ({
     const [error, setError] = useState("");
 
     return (
-        <Container className="content">
+        <div>
             <div className={classHeading}>
-                <BackButton className="mr-1" />
+                <BackButton back />
                 <h2>Video</h2>
             </div>
             {error ? <Alert color="danger">{error}</Alert> : <Fragment />}
@@ -26,7 +26,7 @@ const Video = ({
                 }}
                 controls
             />
-        </Container>
+        </div>
     );
 };
 

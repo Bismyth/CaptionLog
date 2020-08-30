@@ -14,6 +14,14 @@ export const keepLikeValues = (object1, object2) => {
     );
 };
 
+export const getRoles = (state) => {
+    if (state.auth.user) {
+        return state.auth.user.roles;
+    } else {
+        return undefined;
+    }
+};
+
 const getWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
     return {

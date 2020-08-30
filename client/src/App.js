@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, Provider } from "react-redux";
 import store from "./redux/store";
-import { loadUser, checkLocal, logout } from "./redux/actions/authActions";
+import { loadUser, checkLocal } from "./redux/actions/authActions";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import Toolbar from "./components/Toolbar";
 import Home from "./components/Home";
-import Logs from "./components/log/AtoZ";
+import AtoZ from "./components/log/AtoZ";
 import OldLog from "./components/log/display/OldLog";
 import Log from "./components/log/display/Log";
 import Search from "./components/log/Search";
@@ -19,17 +19,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./scroll.css";
 import { ReactComponent as CircleUp } from "./icons/arrow_circle_up-black-24dp.svg";
+import Roles from "./components/auth/Roles";
+import { Container } from "reactstrap";
 
 axios.defaults.baseURL = process.env.PUBLIC_URL;
 
 axios.interceptors.response.use(
-    function (response) {
-        return response;
-    },
-    function (error) {
-        if (error.response.status === 401 && error.response.data.msg === "Token is not valid") {
-            store.dispatch(logout());
-        }
+    (response) => response,
+    (error) => {
         return Promise.reject(error);
     }
 );
@@ -65,18 +62,21 @@ const App = () => {
                 <Toolbar />
 
                 <div id="scroll" onScroll={checkScrollTop}>
-                    <Switch>
-                        <Route path={`/atoz/:search?`} component={Logs} />
-                        <Route path={`/oldLog/:id`} component={OldLog} />
-                        <Route path={`/log/:id`} component={Log} />
-                        <Route path={`/video/:id/:vid`} component={Video} />
-                        <Route path={`/newLog`} component={NewLog} />
-                        <Route path={`/edit/:id`} component={EditLog} />
-                        <Route path={`/convert/:id`} component={ConvertLog} />
-                        <Route path={`/modi`} component={EditSelector} />
-                        <Route path={`/search/:value?/:field?`} component={Search} />
-                        <Route path={`/`} component={Home} />
-                    </Switch>
+                    <Container className="content">
+                        <Switch>
+                            <Route path={`/permissions`} component={Roles} />
+                            <Route path={`/atoz/:search?`} component={AtoZ} />
+                            <Route path={`/oldLog/:id`} component={OldLog} />
+                            <Route path={`/log/:id`} component={Log} />
+                            <Route path={`/video/:id/:vid`} component={Video} />
+                            <Route path={`/newLog`} component={NewLog} />
+                            <Route path={`/edit/:id`} component={EditLog} />
+                            <Route path={`/convert/:id`} component={ConvertLog} />
+                            <Route path={`/modi`} component={EditSelector} />
+                            <Route path={`/search/:value?/:field?`} component={Search} />
+                            <Route path={`/`} component={Home} />
+                        </Switch>
+                    </Container>
                     <CircleUp
                         className="scrollTop"
                         onClick={scrollTop}
