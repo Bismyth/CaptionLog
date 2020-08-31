@@ -14,7 +14,6 @@ import EditLog from "./components/log/form/EditLog";
 import NewLog from "./components/log/form/NewLog";
 import ConvertLog from "./components/log/form/ConvertLog";
 import EditSelector from "./components/log/form/EditSelector";
-import Video from "./components/log/display/Video";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./scroll.css";
@@ -68,7 +67,6 @@ const App = () => {
                             <Route path={`/atoz/:search?`} component={AtoZ} />
                             <Route path={`/oldLog/:id`} component={OldLog} />
                             <Route path={`/log/:id`} component={Log} />
-                            <Route path={`/video/:id/:vid`} component={Video} />
                             <Route path={`/newLog`} component={NewLog} />
                             <Route path={`/edit/:id`} component={EditLog} />
                             <Route path={`/convert/:id`} component={ConvertLog} />

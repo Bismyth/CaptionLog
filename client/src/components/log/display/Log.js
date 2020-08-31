@@ -18,6 +18,7 @@ import { classHeading } from "../../../config";
 import { useQuery } from "react-query";
 import { fetchLog } from "../../../queries/log";
 import OldLogInfo from "../actionButtons/OldLogInfo";
+import Video from "./Video";
 
 const Log = ({
     match: {
@@ -99,13 +100,11 @@ const Log = ({
                                                     {(isLocal || loggedIn) &&
                                                     key === "digitalInfo" &&
                                                     value.location ? (
-                                                        <Button
-                                                            tag={Link}
-                                                            to={`/video/${data._id}/${value._id}`}
-                                                            disabled
-                                                        >
-                                                            Go to Video
-                                                        </Button>
+                                                        <Video
+                                                            id={data._id}
+                                                            vid={value._id}
+                                                            vname={value.name || data.title}
+                                                        />
                                                     ) : (isLocal || loggedIn) &&
                                                       value.clickviewUrl ? (
                                                         <Button
