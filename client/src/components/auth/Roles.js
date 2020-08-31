@@ -22,7 +22,7 @@ import {
     PopoverHeader,
     PopoverBody,
 } from "reactstrap";
-import { classHeading } from "../../config";
+import { classHeading, getRoles } from "../../config";
 import BackButton from "../BackButton";
 import { ReactComponent as AddRole } from "../../icons/person_add-black-24dp.svg";
 import { ReactComponent as EditRole } from "../../icons/edit-black-24dp.svg";
@@ -30,6 +30,8 @@ import { ReactComponent as DeleteRole } from "../../icons/delete-black-24dp.svg"
 import { ReactComponent as NoButton } from "../../icons/clear-black-24dp.svg";
 import { ReactComponent as YesButton } from "../../icons/done-black-24dp.svg";
 import { blankNew, selector, roleDesc } from "./RoleData.json";
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 const fetchRoles = async () => {
     var config = {
@@ -53,6 +55,8 @@ const postRole = async ([iData, type]) => {
 blankNew.roles = Object.fromEntries(Object.entries(roleDesc).map(([key]) => [key, false]));
 
 const Roles = (props) => {
+    const userRoles = { ...useSelector(getRoles) };
+    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
     const { data, isLoading } = useQuery("roles", fetchRoles);
     const [newRoleModal, setNewRoleModal] = useState(false);
     const [formData, setFormData] = useState(blankNew);
@@ -104,7 +108,10 @@ const Roles = (props) => {
                     );
                     return {
                         ...v,
-                        roles: t,
+                        roles: {
+                            ...t,
+                            admin: checked,
+                        },
                     };
                 });
             } else {
@@ -136,6 +143,7 @@ const Roles = (props) => {
             };
         });
     };
+    if (!userRoles.admin && loggedIn !== null) return <Redirect to={`/`} />;
     return (
         <div>
             <div className={classHeading}>
@@ -177,6 +185,7 @@ const Roles = (props) => {
                         </InputGroup>
                         <Label for="roles">Roles: </Label>
                         <FormGroup id="roles" check>
+                            {console.log(formData.roles)}
                             {Object.entries(roleDesc).map(([key, desc]) => (
                                 <Fragment key={key}>
                                     <Input
@@ -253,6 +262,7 @@ const Roles = (props) => {
                             </ListGroupItemHeading>
                             <ListGroupItemText>
                                 {Object.entries(v.roles)
+                                    .filter((r) => r[1])
                                     .map((r) => r[0])
                                     .join(", ")}
                             </ListGroupItemText>
