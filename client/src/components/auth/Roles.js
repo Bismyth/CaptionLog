@@ -185,7 +185,6 @@ const Roles = (props) => {
                         </InputGroup>
                         <Label for="roles">Roles: </Label>
                         <FormGroup id="roles" check>
-                            {console.log(formData.roles)}
                             {Object.entries(roleDesc).map(([key, desc]) => (
                                 <Fragment key={key}>
                                     <Input
