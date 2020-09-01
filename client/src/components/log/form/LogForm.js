@@ -10,14 +10,13 @@ import {
     physBlank,
     movieBlank,
     blankForm,
-    format,
-    config,
+    display,
     selectorsFormat,
 } from "./FormData.json";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
-import OldLogInfo from "../actionButtons/OldLogInfo";
+import OldLogInfo from "../logActions/OldLogInfo";
 import { classHeading, asyncForEach } from "../../../config";
 
 const LogForm = (props) => {
@@ -44,7 +43,7 @@ const LogForm = (props) => {
                             [key]: [
                                 {
                                     _id: "invalid",
-                                    name: format[head][key].name + "...",
+                                    name: display[head].format[key].name + "...",
                                 },
                                 ...result,
                             ],
@@ -131,49 +130,42 @@ const LogForm = (props) => {
                           </Alert>
                       ))
                     : null}
-                <FormSection
-                    data={data}
-                    format={format.main}
-                    update={changeValue}
-                    selectors={selectors.main}
-                    section="main"
-                />
-
-                {data.movieInfo ? (
-                    <Fragment>
-                        <h3 className="mb-3">Movie Info</h3>{" "}
-                        <FormSection
-                            data={data.movieInfo}
-                            format={format.movieInfo}
-                            update={changeValue}
-                            selectors={selectors.movieInfo}
-                            section="movieInfo"
-                        />
-                    </Fragment>
-                ) : null}
-                <h3 className="mb-3">Copyright Info</h3>
-                <FormSection
-                    data={data.copyrightInfo}
-                    format={format.copyrightInfo}
-                    update={changeValue}
-                    selectors={selectors.copyrightInfo}
-                    section="copyrightInfo"
-                />
-                <FormMSection
-                    data={data.digitalInfo}
-                    config={config.digitalInfo}
-                    update={changeValue}
-                    array={{ add: addArr, rm: removeArr }}
-                    selectors={selectors.digitalInfo}
-                    rootFolder={folder}
-                />
-                <FormMSection
-                    data={data.physicalInfo}
-                    config={config.physicalInfo}
-                    update={changeValue}
-                    array={{ add: addArr, rm: removeArr }}
-                    selectors={selectors.physicalInfo}
-                />
+                {Object.entries(display).map(([key, { type, name, format, button }]) => {
+                    const fData = key === "main" ? data : data[key];
+                    if (type === "single" && fData !== undefined) {
+                        return (
+                            <Fragment key={key}>
+                                {name ? <h3 className="mb-3">{name}</h3> : null}
+                                <FormSection
+                                    {...{
+                                        data: fData,
+                                        format,
+                                        update: changeValue,
+                                        selectors: selectors[key],
+                                        section: key,
+                                    }}
+                                />
+                            </Fragment>
+                        );
+                    } else if (type === "multi" && fData !== undefined) {
+                        return (
+                            <FormMSection
+                                {...{
+                                    data: fData,
+                                    name,
+                                    format,
+                                    button,
+                                    update: changeValue,
+                                    array: { add: addArr, rm: removeArr, name: key },
+                                    selectors: selectors[key],
+                                    rootFolder: key === "digitalInfo" ? folder : undefined,
+                                }}
+                                key={key}
+                            />
+                        );
+                    }
+                    return null;
+                })}
                 <FormGroup className="mt-3">
                     <Button
                         color="primary"

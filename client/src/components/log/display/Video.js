@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from "react";
 import ReactPlayer from "react-player";
 import { Alert, Button, Modal, ModalHeader, ModalBody } from "reactstrap";
-import BackButton from "../../BackButton";
-import { classHeading } from "../../../config";
 
 const Video = ({ id, vid, vname }) => {
     const [error, setError] = useState("");

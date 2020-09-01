@@ -8,8 +8,8 @@ import {
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import BackButton from "../../BackButton";
-import Convert from "../actionButtons/Convert";
-import Delete from "../actionButtons/Delete";
+import Convert from "../logActions/Convert";
+import Delete from "../logActions/Delete";
 import { useHistory } from "react-router-dom";
 import { classHeading } from "../../../config";
 import { useQuery } from "react-query";

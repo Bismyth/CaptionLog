@@ -84,6 +84,22 @@ router.get("/", (req, res) => {
         });
 });
 
+router.get("/search", auth.read, (req, res) => {
+    console.log(req.body);
+    var queryO = OldLog.find({ title: { $regex: req.query.value, $options: "i" } })
+        .select("title description")
+        .lean();
+    Promise.all([queryO])
+        .then((results) => {
+            var joined = [...results[0]];
+            res.json(results);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
 router.post(
     "/",
     checkSchema(require("../validationSchema/newLog")),

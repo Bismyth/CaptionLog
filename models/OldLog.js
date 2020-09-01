@@ -55,6 +55,7 @@ const UpdateSchema = new Schema({
     }),
     oldLog: { _id: false, type: OldLogSchema },
 });
+
 const OldLog = mongoose.model("oldlog", OldLogSchema);
 const Update = mongoose.model("update", UpdateSchema);
 module.exports = {

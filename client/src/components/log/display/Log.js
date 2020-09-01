@@ -6,18 +6,18 @@ import {
     ListGroupItemHeading,
     ListGroupItemText,
     Button,
+    Alert,
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import BackButton from "../../BackButton";
 import { format } from "./LogDisplay.json";
-import Edit from "../actionButtons/Edit";
-import Delete from "../actionButtons/Delete";
-import { useHistory, Link } from "react-router-dom";
+import Edit from "../logActions/Edit";
+import Delete from "../logActions/Delete";
 import LogHeader from "../LogHeader";
 import { classHeading } from "../../../config";
 import { useQuery } from "react-query";
 import { fetchLog } from "../../../queries/log";
-import OldLogInfo from "../actionButtons/OldLogInfo";
+import OldLogInfo from "../logActions/OldLogInfo";
 import Video from "./Video";
 
 const Log = ({
@@ -36,12 +36,8 @@ const Log = ({
         }),
     };
     const isLocal = useSelector((state) => state.auth.local);
-    const history = useHistory();
-    const { data, isLoading } = useQuery([`log`, { id }], fetchLog, {
-        onError: (err) => {
-            history.goBack();
-        },
-    });
+    const { data, isLoading, error } = useQuery([`log`, { id }], fetchLog);
+    if (error) return <Alert color="danger">Error loading entry, please go back.</Alert>;
     if (isLoading) return <Spinner color="primary" />;
     return (
         <div>

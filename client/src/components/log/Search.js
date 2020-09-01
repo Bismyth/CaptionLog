@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Input, Form, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";
 import { useQuery } from "react-query";
 import { fetchLogs } from "../../queries/log";
+
+const fieldValues = (
+    <Fragment>
+        <option value="title">Title</option>
+        <option value="description">Description</option>
+    </Fragment>
+);
 
 const Search = ({ match: { params }, location: { scroll } }) => {
     useEffect(() => {
@@ -36,10 +43,8 @@ const Search = ({ match: { params }, location: { scroll } }) => {
                         history.push(`/search/${encodeURIComponent(search)}/${e.target.value}`);
                     }}
                     value={field}
-                >
-                    <option value="title">Title</option>
-                    <option value="description">Description</option>
-                </Input>
+                    children={fieldValues}
+                />
             </Form>
             {isLoading ? (
                 <Spinner color="primary" />

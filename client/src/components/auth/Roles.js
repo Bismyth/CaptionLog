@@ -18,20 +18,15 @@ import {
     Input,
     ModalFooter,
     Button,
-    Popover,
-    PopoverHeader,
-    PopoverBody,
 } from "reactstrap";
 import { classHeading, getRoles } from "../../config";
 import BackButton from "../BackButton";
 import { ReactComponent as AddRole } from "../../icons/person_add-black-24dp.svg";
-import { ReactComponent as EditRole } from "../../icons/edit-black-24dp.svg";
-import { ReactComponent as DeleteRole } from "../../icons/delete-black-24dp.svg";
-import { ReactComponent as NoButton } from "../../icons/clear-black-24dp.svg";
-import { ReactComponent as YesButton } from "../../icons/done-black-24dp.svg";
 import { blankNew, selector, roleDesc } from "./RoleData.json";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Edit from "../actionButtons/Edit";
+import Delete from "../actionButtons/Delete";
 
 const fetchRoles = async () => {
     var config = {
@@ -42,7 +37,6 @@ const fetchRoles = async () => {
     return data;
 };
 const postRole = async ([iData, type]) => {
-    console.log(type);
     var data = Object.fromEntries(Object.entries(iData).filter(([key, value]) => value !== ""));
     var config = {
         url: `/api/auth/roles`,
@@ -62,7 +56,6 @@ const Roles = (props) => {
     const [formData, setFormData] = useState(blankNew);
     const [formType, setFormType] = useState("");
     const [cSelect, setCSelect] = useState(Object.keys(selector)[0]);
-    const [dPop, setDPop] = useState({});
     const [submit, { isLoading: sLoading }] = useMutation(postRole, {
         onSuccess: () => {
             queryCache.invalidateQueries("roles");
@@ -134,15 +127,6 @@ const Roles = (props) => {
             });
         }
     };
-    const toggle = (e) => {
-        const name = e.target.closest("svg").id || e.target.closest(".popover-inner").id;
-        setDPop((v) => {
-            return {
-                ...v,
-                [name]: !v[name],
-            };
-        });
-    };
     if (!userRoles.admin && loggedIn !== null) return <Redirect to={`/`} />;
     return (
         <div>
@@ -191,7 +175,7 @@ const Roles = (props) => {
                                         type="checkbox"
                                         id={key}
                                         onChange={formChange}
-                                        name={"roles"}
+                                        name="roles"
                                         checked={formData.roles[key]}
                                         disabled={formData.roles.admin && key !== "admin"}
                                     />
@@ -221,42 +205,13 @@ const Roles = (props) => {
                             <ListGroupItemHeading className="d-flex vertical-align-center">
                                 {v.adGroup ? `Group: ${v.adGroup}` : `User: ${v.doeNumber}`}
                                 <div className="ml-auto mr-3" style={{ minWidth: "52px" }}>
-                                    <EditRole
-                                        className="link-arrow"
-                                        onClick={modalToggle}
-                                        id={`edit-${v._id}`}
-                                        alt="Edit"
+                                    <Edit action={modalToggle} id={`edit-${v._id}`} />
+                                    <Delete
+                                        action={() => {
+                                            submit([{ id: v._id }, "delete"]);
+                                        }}
+                                        id={v._id}
                                     />
-                                    <DeleteRole
-                                        id={`d-${v._id}`}
-                                        alt="Delete"
-                                        className={`link-arrow`}
-                                    />
-                                    <Popover
-                                        target={`d-${v._id}`}
-                                        isOpen={dPop[`d-${v._id}`]}
-                                        toggle={toggle}
-                                        placement={"left"}
-                                        id={`d-${v._id}`}
-                                    >
-                                        <PopoverHeader>Delete</PopoverHeader>
-                                        <PopoverBody>
-                                            Are you sure you want to delete?
-                                            <br />
-                                            <YesButton
-                                                className="link-arrow"
-                                                alt="Yes"
-                                                onClick={() => {
-                                                    submit([{ id: v._id }, "delete"]);
-                                                }}
-                                            />
-                                            <NoButton
-                                                className="link-arrow"
-                                                alt="No"
-                                                onClick={toggle}
-                                            />
-                                        </PopoverBody>
-                                    </Popover>
                                 </div>
                             </ListGroupItemHeading>
                             <ListGroupItemText>

@@ -3,7 +3,7 @@ import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } fr
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
 import { classHeading, keepLikeValues } from "../../../config";
-const FormMSection = ({ data, config, update, array, selectors, rootFolder }) => {
+const FormMSection = ({ data, update, array, format, selectors, rootFolder, name, button }) => {
     const [isOpen, setOpen] = useState(false);
     const toggle = () => setOpen(!isOpen);
     return (
@@ -17,12 +17,12 @@ const FormMSection = ({ data, config, update, array, selectors, rootFolder }) =>
                                 color="danger"
                                 size="sm"
                                 onClick={(e) => {
-                                    array.rm(config.details.arrName, i);
+                                    array.rm(array.name, i);
                                 }}
                             >
                                 &times;
                             </Button>
-                            <h4 className="w-100">{`${config.details.name} ${i + 1}`}</h4>
+                            <h4 className="w-100">{`${name} ${i + 1}`}</h4>
                             {value.location !== undefined && rootFolder !== undefined ? (
                                 <SelectFile
                                     style={{ minWidth: "fit-content" }}
@@ -34,32 +34,32 @@ const FormMSection = ({ data, config, update, array, selectors, rootFolder }) =>
                         </div>
                         <FormSection
                             data={value}
-                            format={keepLikeValues(config.format, value)}
+                            format={keepLikeValues(format, value)}
                             update={update}
                             selectors={selectors}
                             index={i}
-                            section={config.details.arrName}
+                            section={array.name}
                         />
                     </Fragment>
                 );
             })}
-            {config.details.button.length > 1 ? (
+            {button.length > 1 ? (
                 <ButtonDropdown isOpen={isOpen} toggle={toggle}>
                     <Button
                         id="caret"
                         color="primary"
                         onClick={() => {
-                            array.add(config.details.arrName);
+                            array.add(array.name);
                         }}
                     >
-                        {config.details.button[0].name}
+                        {button[0].name}
                     </Button>
                     <DropdownToggle caret color="primary" className="mr-3" />
                     <DropdownMenu>
-                        {config.details.button.map(({ name, action }) => {
+                        {button.map(({ name, action }) => {
                             return (
                                 <DropdownItem
-                                    onClick={() => array.add(config.details.arrName, action)}
+                                    onClick={() => array.add(array.name, action)}
                                     key={name}
                                 >
                                     {name}
@@ -73,10 +73,10 @@ const FormMSection = ({ data, config, update, array, selectors, rootFolder }) =>
                     color="primary"
                     className="mr-3"
                     onClick={() => {
-                        array.add(config.details.arrName);
+                        array.add(array.name);
                     }}
                 >
-                    {config.details.button[0].name}
+                    {button[0].name}
                 </Button>
             )}
         </Fragment>
