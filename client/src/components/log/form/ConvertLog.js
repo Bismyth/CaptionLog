@@ -81,7 +81,7 @@ const ConvertLog = ({
             }
             if (oData.date_of_completion) {
                 var date = new Date(oData.date_of_completion);
-                newData.copyrightInfo.dateOfCompletion = date.toIsoString().substr(0, 10);
+                newData.copyrightInfo.dateOfCompletion = date.toISOString().substr(0, 10);
             }
             setData(newData);
             setLoading(false);
