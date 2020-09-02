@@ -7,19 +7,11 @@ import { ReactComponent as NoButton } from "../../../icons/clear-black-24dp.svg"
 const OldLogInfo = ({ data, className }) => {
     const [pOpen, setPOpen] = useState(false);
     const toggle = () => setPOpen(!pOpen);
+    const target = useRef();
     return (
         <Fragment>
-            <InfoButton
-                id={`d-${data.title.replace(/\s/g, "").substr(0, 4).toLowerCase()}`}
-                alt="Info"
-                className={`link-arrow ${className}`}
-            />
-            <Popover
-                target={`d-${data.title.replace(/\s/g, "").substr(0, 4).toLowerCase()}`}
-                isOpen={pOpen}
-                toggle={toggle}
-                placement={"left-start"}
-            >
+            <InfoButton ref={target} alt="Info" className={`link-arrow ${className}`} />
+            <Popover target={target} isOpen={pOpen} toggle={toggle} placement={"left-start"}>
                 <PopoverHeader>
                     Old Log Data: <NoButton className="link-arrow" alt="No" onClick={toggle} />
                 </PopoverHeader>
