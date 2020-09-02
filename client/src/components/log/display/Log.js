@@ -11,7 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import BackButton from "../../BackButton";
 import { format } from "./LogDisplay.json";
-import Edit from "../logActions/Edit";
+import Edit from "../../actionButtons/Edit";
 import Delete from "../logActions/Delete";
 import LogHeader from "../LogHeader";
 import { classHeading } from "../../../config";
