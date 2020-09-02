@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { Popover, PopoverBody, PopoverHeader } from "reactstrap";
 
 import { ReactComponent as InfoButton } from "../../../icons/info-black-24dp.svg";
