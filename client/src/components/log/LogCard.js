@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardBody, CardText, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
-import Edit from "./logActions/Edit";
+import Edit from "../actionButtons/Edit";
 import Convert from "./logActions/Convert";
 import Delete from "./logActions/Delete";
 import LogHeader from "./LogHeader";
@@ -23,7 +23,7 @@ const LogCard = ({ _id, old, title, description, movieInfo, updatePage, userRole
                             {old ? (
                                 <Convert className="mr-1" id={_id} />
                             ) : (
-                                <Edit className="mr-1" id={_id} />
+                                <Edit className="mr-1" action={{ link: `/edit/${_id}` }} />
                             )}
                             <Delete id={_id} old={old} />
                         </div>

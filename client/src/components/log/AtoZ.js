@@ -51,14 +51,14 @@ const AtoZ = ({ match: { params }, location: { scroll } }) => {
                     </PaginationItem>
                 ))}
             </Pagination>
-            <Form
+            {/* <Form
                 onSubmit={(e) => {
                     history.push(`/search/${encodeURIComponent(value)}/title`);
                     e.preventDefault();
                 }}
             >
                 <SearchBar className="mb-3" value={value} update={setValue} />
-            </Form>
+            </Form> */}
             {error ? <Alert color="danger">{error}</Alert> : null}
             {isLoading ? (
                 <Spinner color="primary" />

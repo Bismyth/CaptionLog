@@ -31,6 +31,7 @@ const MovieInfoSchema = new Schema({
     _id: false,
     year: Number,
     rating: String,
+    tag: [String],
 });
 
 const LogSchema = new Schema({

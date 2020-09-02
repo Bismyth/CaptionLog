@@ -81,12 +81,7 @@ const ConvertLog = ({
             }
             if (oData.date_of_completion) {
                 var date = new Date(oData.date_of_completion);
-                var d = date.getDate() + "";
-                var m = date.getMonth() + 1 + "";
-                var y = date.getFullYear() + "";
-                if (d.length < 2) d = "0" + d;
-                if (m.length < 2) m = "0" + m;
-                newData.copyrightInfo.dateOfCompletion = [y, m, d].join("-");
+                newData.copyrightInfo.dateOfCompletion = data.toIsoString().substr(0, 10);
             }
             setData(newData);
             setLoading(false);

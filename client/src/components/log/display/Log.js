@@ -49,7 +49,7 @@ const Log = ({
                 {userRoles.write ? (
                     <div className="ml-auto">
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
-                        <Edit id={data._id} />
+                        <Edit action={{ link: `/edit/${data._id}` }} />
                         <Delete id={data._id} back={true} />
                     </div>
                 ) : null}
