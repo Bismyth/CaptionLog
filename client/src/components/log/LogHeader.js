@@ -9,22 +9,19 @@ const ratingColours = {
     "MA15+": { bg: "#ff0000", c: "#fff" },
 };
 const LogHeader = ({ title, movieInfo, old }) => {
+    var badgeStyle;
     if (!movieInfo) return title;
+    if (ratingColours[movieInfo.rating]) {
+        badgeStyle = {
+            backgroundColor: ratingColours[movieInfo.rating].bg,
+            color: ratingColours[movieInfo.rating].c,
+        };
+    }
     return (
         <Fragment>
             {title}
             {movieInfo.year ? ` (${movieInfo.year}) ` : null}
-            {movieInfo.rating ? (
-                <Badge
-                    style={{
-                        backgroundColor: ratingColours[movieInfo.rating].bg,
-                        color: ratingColours[movieInfo.rating].c,
-                    }}
-                >
-                    {movieInfo.rating}
-                </Badge>
-            ) : null}
-            {old ? <Badge>Old</Badge> : null}
+            {movieInfo.rating ? <Badge style={badgeStyle}>{movieInfo.rating}</Badge> : null}
         </Fragment>
     );
 };
