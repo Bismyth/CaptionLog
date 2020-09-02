@@ -13,7 +13,7 @@ const FormSection = ({ data, format, update, section, selectors = {}, index }) =
                     <Col xs={10}>
                         <Input
                             type={type}
-                            id={`${section[0]}-${key}-${index}`}
+                            id={`${section[0]}-${key}-${index || 0}`}
                             name={key}
                             value={data[key]}
                             placeholder={name + "..."}

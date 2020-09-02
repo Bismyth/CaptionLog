@@ -1,6 +1,6 @@
 {
     "name": "captionlog",
-    "version": "0.9.5",
+    "version": "0.9.6",
     "description": "Captioning Browser for SCDEC",
     "main": "server.js",
     "scripts": {
@@ -8,7 +8,8 @@
         "client": "npm start --prefix client",
         "server": "nodemon server.js",
         "dev": "concurrently \"npm run server\" \"npm run client\"",
-        "updateLogs": "node ./oldData/import"
+        "updateLogs": "node ./oldData/import",
+        "replaceLogs": "node ./oldData/replace"
     },
     "repository": {
         "type": "git",
