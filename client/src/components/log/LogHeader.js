@@ -8,7 +8,7 @@ const ratingColours = {
     M: { bg: "#00a0c6", c: "#fff" },
     "MA15+": { bg: "#ff0000", c: "#fff" },
 };
-const LogHeader = ({ title, movieInfo }) => {
+const LogHeader = ({ title, movieInfo, old }) => {
     if (!movieInfo) return title;
     return (
         <Fragment>
@@ -24,6 +24,7 @@ const LogHeader = ({ title, movieInfo }) => {
                     {movieInfo.rating}
                 </Badge>
             ) : null}
+            {old ? <Badge>Old</Badge> : null}
         </Fragment>
     );
 };

@@ -16,7 +16,7 @@ const LogCard = ({ _id, old, title, description, movieInfo, updatePage, userRole
                         to={old ? `/oldLog/${_id}` : `/log/${_id}`}
                         className="text-dark"
                     >
-                        {old ? title : <LogHeader title={title} movieInfo={movieInfo} />}
+                        <LogHeader title={title} movieInfo={movieInfo} old={old} />
                     </Link>
                     {userRoles.write ? (
                         <div className="ml-auto mr-3" style={{ minWidth: "52px" }}>
