@@ -24,13 +24,15 @@ mongoose
     .then(() => {
         console.log("MongoDB Connected....");
         uploadConfig.forEach(({ db, items, name, filter }) => {
-            asyncForEach(items,(v) => {
-                await db.updateOne({[filter]:v[filter]},v);
-            }).then(()=>{
-                console.log(`${name} is done.`)
-            }).catch((err) => {
-                console.error(err);
+            asyncForEach(items, async (v) => {
+                await db.updateOne({ [filter]: v[filter] }, v);
             })
+                .then(() => {
+                    console.log(`${name} is done.`);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         });
     })
     .catch((err) => console.error(err));
