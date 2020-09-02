@@ -9,20 +9,22 @@
         "edit": "Save",
         "convert": "Convert"
     },
-    "digBlank": {
-        "name": "",
-        "length": "",
-        "location": ""
-    },
-    "digBlankCV": {
-        "name": "",
-        "length": "",
-        "clickviewUrl": ""
-    },
-    "physBlank": {
-        "name": "",
-        "location": "",
-        "copiesHeld": ""
+    "buttonBlanks": {
+        "digBlank": {
+            "name": "",
+            "length": "",
+            "location": ""
+        },
+        "digBlankCV": {
+            "name": "",
+            "length": "",
+            "clickviewUrl": ""
+        },
+        "physBlank": {
+            "name": "",
+            "location": "",
+            "copiesHeld": ""
+        }
     },
     "movieBlank": {
         "rating": "",
@@ -78,8 +80,8 @@
             "type": "multi",
             "name": "Digital Media:",
             "button": [
-                { "name": "Add Digital Info Record" },
-                { "name": "Add Clickview Record", "action": "CV" }
+                { "name": "Add Digital Info Record", "blank": "digBlank" },
+                { "name": "Add Clickview Record", "blank": "digBlankCV" }
             ],
             "format": {
                 "name": { "name": "Name", "type": "text" },
@@ -94,7 +96,7 @@
         "physicalInfo": {
             "type": "multi",
             "name": "Physical Media:",
-            "button": [{ "name": "Add Physical Info Record" }],
+            "button": [{ "name": "Add Physical Info Record", "blank": "physBlank" }],
             "format": {
                 "name": { "name": "Name", "type": "text" },
                 "location": { "name": "Location", "type": "text" },

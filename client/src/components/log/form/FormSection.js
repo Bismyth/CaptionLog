@@ -1,45 +1,48 @@
 import React, { Fragment } from "react";
 import { FormGroup, Label, Col, Input } from "reactstrap";
 import TextareaAutosize from "react-autosize-textarea";
+import { Field, ErrorMessage } from "formik";
 
-const FormSection = ({ data, format, update, section, selectors = {}, index }) => {
+const FormSection = ({ format, section, selectors = {}, index }) => {
+    var sName;
+    if (index === undefined) {
+        sName = section === "main" ? "" : section + ".";
+    } else {
+        sName = `${section}.${index}.`;
+    }
     return (
         <Fragment>
-            {Object.entries(format).map(([key, { name, type }]) => (
-                <FormGroup row key={key}>
-                    <Label for={key} xs={2}>
-                        {name}
-                    </Label>
-                    <Col xs={10}>
-                        <Input
-                            type={type}
-                            id={`${section[0]}-${key}-${index || 0}`}
-                            name={key}
-                            value={data[key]}
-                            placeholder={name + "..."}
-                            onChange={(e) => {
-                                update(e, section, index);
-                            }}
-                            children={
-                                Object.keys(selectors).includes(key)
-                                    ? selectors[key].map(({ _id, name }) => (
-                                          <option key={_id} value={_id === "invalid" ? "" : name}>
-                                              {name}
-                                          </option>
-                                      ))
-                                    : null
-                            }
-                            tag={type === "textarea" ? TextareaAutosize : undefined}
-                        />
-                    </Col>
-                </FormGroup>
-            ))}
+            {Object.entries(format).map(([key, { name, type }]) => {
+                return (
+                    <FormGroup row key={key}>
+                        <Label for={key} xs={2}>
+                            {name}
+                        </Label>
+                        <Col xs={10}>
+                            <Field
+                                type={type}
+                                name={sName + key}
+                                id={sName + key}
+                                placeholder={name + "..."}
+                                as={Input}
+                                children={
+                                    selectors[key]
+                                        ? selectors[key].map((v) => (
+                                              <option key={v} value={v}>
+                                                  {v || name + "..."}
+                                              </option>
+                                          ))
+                                        : null
+                                }
+                                tag={type === "textarea" ? TextareaAutosize : undefined}
+                            />
+                            <ErrorMessage name={sName + key} component="div" />
+                        </Col>
+                    </FormGroup>
+                );
+            })}
         </Fragment>
     );
 };
 
-export default React.memo(FormSection, ({ data: pdata, format: pformat }, { data: ndata }) => {
-    return Object.keys(pformat).every((v) => {
-        return pdata[v] === ndata[v];
-    });
-});
+export default React.memo(FormSection);

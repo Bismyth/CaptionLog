@@ -24,7 +24,7 @@ const EditLog = ({
     };
     const [errors, setErrors] = useState([]);
     const history = useHistory();
-    const [upload, { isLoading: sLoading }] = useMutation(
+    const [upload] = useMutation(
         async (data) => {
             const { data: result } = await axios({
                 method: "put",
@@ -51,7 +51,7 @@ const EditLog = ({
     });
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
     if (isLoading) return <Spinner color="primary" />;
-    return <LogForm upload={upload} data={data} type="edit" errors={errors} sLoading={sLoading} />;
+    return <LogForm upload={upload} data={data} type="edit" errors={errors} />;
 };
 
 export default EditLog;

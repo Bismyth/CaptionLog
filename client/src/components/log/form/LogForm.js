@@ -1,17 +1,15 @@
-import React, { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import { Spinner, Form, Input, Alert, Button, FormGroup } from "reactstrap";
-import "../fade.css";
+import { Formik } from "formik";
 import {
     title,
     submitBtn,
-    digBlank,
-    digBlankCV,
-    physBlank,
     movieBlank,
     blankForm,
     display,
     selectorsFormat,
+    buttonBlanks,
 } from "./FormData.json";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
@@ -20,11 +18,10 @@ import OldLogInfo from "../logActions/OldLogInfo";
 import { classHeading, asyncForEach } from "../../../config";
 
 const LogForm = (props) => {
-    const { upload, data: idata = blankForm, type, sLoading, errors, oldLog } = props;
+    const { upload, data = blankForm, type, errors, oldLog } = props;
     const [selectors, updateSelectors] = useState({});
-    const [data, setData] = useState(idata);
     const [loading, setLoading] = useState(false);
-    const { folder = "" } = data;
+
     useEffect(() => {
         const fetchSelectors = async () => {
             setLoading(true);
@@ -40,13 +37,7 @@ const LogForm = (props) => {
                         ...v,
                         [head]: {
                             ...v[head],
-                            [key]: [
-                                {
-                                    _id: "invalid",
-                                    name: display[head].format[key].name + "...",
-                                },
-                                ...result,
-                            ],
+                            [key]: ["", ...result.map((v) => v.name)],
                         },
                     };
                 });
@@ -59,125 +50,85 @@ const LogForm = (props) => {
             console.error(e);
         }
     }, []);
-    const changeFormType = (e) => {
-        var formType = e.target.value;
-        setData((d) => {
-            if (formType === "movie") return { movieInfo: movieBlank, ...d };
-            else if (formType === "media") {
-                var { movieInfo, ...nData } = d;
-                return nData;
-            }
-        });
-    };
-    const changeValue = useCallback((e, level, index) => {
-        const { name, value } = e.target;
-        setData((d) => {
-            if (level === "main") return { ...d, [name]: value };
-            else if (index === undefined)
-                return {
-                    ...d,
-                    [level]: { ...d[level], [name]: value },
-                };
-            else
-                return {
-                    ...d,
-                    [level]: d[level].map((v, i) => (i === index ? { ...v, [name]: value } : v)),
-                };
-        });
-    }, []);
-    const addArr = useCallback((key, ex) => {
-        var insert = {};
-        if (ex === "CV") insert = digBlankCV;
-        else insert = { digitalInfo: digBlank, physicalInfo: physBlank }[key];
-        setData((d) => {
-            return {
-                ...d,
-                [key]: [...d[key], insert],
-            };
-        });
-    }, []);
-    const removeArr = useCallback((key, index) => {
-        setData((d) => {
-            return {
-                ...d,
-                [key]: d[key].filter((v, i) => {
-                    return index !== i;
-                }),
-            };
-        });
-    }, []);
     if (loading) return <Spinner color="primary" />;
     return (
         <Fragment>
-            <div className={classHeading}>
-                <BackButton back />
-                <h1>{title[type]}</h1>
-                <div className="ml-auto d-flex align-items-center">
-                    {oldLog || data.oData ? (
-                        <OldLogInfo data={oldLog || data.oData} className="mr-1" />
-                    ) : null}
-                    <Input type="select" onChange={changeFormType} className="w-auto">
-                        <option value="media">Media</option>
-                        <option value="movie">Movie</option>
-                    </Input>
-                </div>
-            </div>
-            <Form>
-                {errors.length > 0
-                    ? errors.map(({ msg }, i) => (
-                          <Alert key={i} color="danger">
-                              {msg}
-                          </Alert>
-                      ))
-                    : null}
-                {Object.entries(display).map(([key, { type, name, format, button }]) => {
-                    const fData = key === "main" ? data : data[key];
-                    if (type === "single" && fData !== undefined) {
-                        return (
-                            <Fragment key={key}>
-                                {name ? <h3 className="mb-3">{name}</h3> : null}
-                                <FormSection
-                                    {...{
-                                        data: fData,
-                                        format,
-                                        update: changeValue,
-                                        selectors: selectors[key],
-                                        section: key,
+            <Formik initialValues={data} onSubmit={upload}>
+                {({ handleReset, handleSubmit, isSubmitting, values, setFieldValue }) => (
+                    <Form onReset={handleReset} onSubmit={handleSubmit}>
+                        <div className={classHeading}>
+                            <BackButton back />
+                            <h1>{title[type]}</h1>
+                            <div className="ml-auto d-flex align-items-center">
+                                {oldLog || values.oData ? (
+                                    <OldLogInfo data={oldLog || values.oData} className="mr-1" />
+                                ) : null}
+                                <Input
+                                    type="select"
+                                    onChange={(e) => {
+                                        var formType = e.target.value;
+                                        if (formType === "movie")
+                                            setFieldValue("movieInfo", movieBlank);
+                                        else if (formType === "media")
+                                            setFieldValue("movieInfo", undefined);
                                     }}
-                                />
-                            </Fragment>
-                        );
-                    } else if (type === "multi" && fData !== undefined) {
-                        return (
-                            <FormMSection
-                                {...{
-                                    data: fData,
-                                    name,
-                                    format,
-                                    button,
-                                    update: changeValue,
-                                    array: { add: addArr, rm: removeArr, name: key },
-                                    selectors: selectors[key],
-                                    rootFolder: key === "digitalInfo" ? folder : undefined,
-                                }}
-                                key={key}
-                            />
-                        );
-                    }
-                    return null;
-                })}
-                <FormGroup className="mt-3">
-                    <Button
-                        color="primary"
-                        onClick={() => {
-                            upload(data);
-                        }}
-                        disabled={sLoading}
-                    >
-                        {submitBtn[type]}
-                    </Button>
-                </FormGroup>
-            </Form>
+                                    className="w-auto"
+                                    value={values.movieInfo ? "movie" : "media"}
+                                >
+                                    <option value="media">Media</option>
+                                    <option value="movie">Movie</option>
+                                </Input>
+                            </div>
+                        </div>
+                        {errors.length > 0
+                            ? errors.map(({ msg }, i) => (
+                                  <Alert key={i} color="danger">
+                                      {msg}
+                                  </Alert>
+                              ))
+                            : null}
+                        {Object.entries(display).map(([key, { type, name, format, button }]) => {
+                            var fData = key === "main" ? values : values[key];
+                            if (type === "single" && fData !== undefined) {
+                                return (
+                                    <Fragment key={key}>
+                                        {name ? <h3 className="mb-3">{name}</h3> : null}
+                                        <FormSection
+                                            {...{
+                                                format,
+                                                selectors: selectors[key],
+                                                section: key,
+                                            }}
+                                        />
+                                    </Fragment>
+                                );
+                            } else if (type === "multi" && fData !== undefined) {
+                                return (
+                                    <FormMSection
+                                        {...{
+                                            name,
+                                            format,
+                                            button,
+                                            blanks: buttonBlanks,
+                                            values: values[key],
+                                            folder: values.folder,
+                                            selectors: selectors[key],
+                                            section: key,
+                                        }}
+                                        key={key}
+                                    />
+                                );
+                            }
+                            return null;
+                        })}
+                        <FormGroup className="mt-3">
+                            <Button color="primary" type="submit" disabled={isSubmitting}>
+                                {submitBtn[type]}
+                            </Button>
+                        </FormGroup>
+                    </Form>
+                )}
+            </Formik>
         </Fragment>
     );
 };

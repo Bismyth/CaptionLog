@@ -18,14 +18,14 @@ const NewLog = () => {
     };
     const [errors, setErrors] = useState([]);
     const history = useHistory();
-    const [upload, { isLoading: sLoading }] = useMutation(
-        async (data) => {
-            const { data: result } = await axios({
+    const [upload] = useMutation(
+        async (values) => {
+            const { data } = await axios({
                 method: "post",
                 url: `/api/logs`,
-                data,
+                data: values,
             });
-            return result;
+            return data;
         },
         {
             onSuccess: (data) => {
@@ -37,7 +37,7 @@ const NewLog = () => {
         }
     );
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
-    return <LogForm upload={upload} type="new" sLoading={sLoading} errors={errors} />;
+    return <LogForm upload={upload} type="new" errors={errors} />;
 };
 
 export default NewLog;

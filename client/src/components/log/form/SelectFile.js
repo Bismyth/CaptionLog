@@ -17,6 +17,8 @@ import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useQuery } from "react-query";
 import SearchBar from "../SearchBar";
 
+import { getIn, connect } from "formik";
+
 const shortenPath = (path) => {
     return path
         .split("/")
@@ -24,7 +26,8 @@ const shortenPath = (path) => {
         .join("");
 };
 
-const SelectFile = ({ update, index, style, folder }) => {
+const SelectFile = ({ index, folder = "", formik }) => {
+    const change = getIn(formik.handleChange);
     const [folderChain, setFolderChain] = useState(
         folder.split("/").map((v, i, arr) => {
             return {
@@ -82,13 +85,13 @@ const SelectFile = ({ update, index, style, folder }) => {
     };
     const selectFile = (e) => {
         setSearch("");
-        update({ target: { name: "folder", value: currentDIR } }, "main");
-        update({ target: { name: "location", value: fileSelected } }, "digitalInfo", index);
+        change({ target: { name: "folder", value: currentDIR } }, "main");
+        change({ target: { name: `digitalInfo.${index}.location`, value: fileSelected } });
         setModal(!modal);
     };
     return (
         <Fragment>
-            <Button style={style} onClick={toggle}>
+            <Button style={{ minWidth: "fit-content" }} onClick={toggle}>
                 Select File
             </Button>
             <Modal isOpen={modal} toggle={toggle} autoFocus={false} size="lg">
@@ -166,4 +169,4 @@ const SelectFile = ({ update, index, style, folder }) => {
     );
 };
 
-export default SelectFile;
+export default connect(SelectFile);

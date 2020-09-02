@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
 import { Spinner } from "reactstrap";
 import { useQuery, useMutation } from "react-query";
-import { digBlankCV, blankForm } from "./FormData.json";
+import { buttonBlanks, blankForm } from "./FormData.json";
 import { fetchLog } from "../../../queries/log";
 import axios from "axios";
 
@@ -27,7 +27,7 @@ const ConvertLog = ({
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
-    const [upload, { isLoading: sLoading }] = useMutation(
+    const [upload] = useMutation(
         async (data) => {
             const { data: result } = await axios({
                 method: "post",
@@ -68,7 +68,7 @@ const ConvertLog = ({
                 newData["description"] = oData["description"].split("\r\n")[0] || "";
                 newData.digitalInfo = [
                     {
-                        ...digBlankCV,
+                        ...buttonBlanks.digBlankCV,
                         length: oData.length || "",
                         clickviewUrl: oData.description
                             .replace(/(\r\n|\n|\r)/gm, " ")
@@ -89,16 +89,7 @@ const ConvertLog = ({
     });
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/logs" />;
     if (loading) return <Spinner color="primary" />;
-    return (
-        <LogForm
-            upload={upload}
-            data={data}
-            type="convert"
-            errors={errors}
-            sLoading={sLoading}
-            oldLog={oData}
-        />
-    );
+    return <LogForm upload={upload} data={data} type="convert" errors={errors} oldLog={oData} />;
 };
 
 export default ConvertLog;
