@@ -29,12 +29,12 @@
         "express": "^4.17.1",
         "express-session": "^1.17.1",
         "express-validator": "^6.6.1",
-        "ffprobe": "^1.1.0",
+        "ffprobe": "^1.1.2",
         "ffprobe-static": "^3.0.0",
         "ip": "^1.1.5",
         "jsonwebtoken": "^8.5.1",
         "junk": "^3.1.0",
-        "mongoose": "^5.10.2",
+        "mongoose": "^5.10.3",
         "node-cas-authentication": "0.0.15"
     },
     "devDependencies": {
