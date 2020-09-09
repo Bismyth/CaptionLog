@@ -8,7 +8,7 @@ import { ReactComponent as DownloadVideo } from "../../../icons/save_alt-black-2
 import "./Video.css";
 
 const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewUrl } }) => {
-    const vname = title || iName;
+    const vname = iName || title;
     const [error, setError] = useState("");
     const [mOpen, setMOpen] = useState(false);
     const [tooltip, setTooltip] = useState({});
