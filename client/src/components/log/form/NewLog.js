@@ -28,11 +28,11 @@ const NewLog = () => {
             return data;
         },
         {
+            onError: ({ response }) => {
+                if (response.status === 422) setErrors(response.data.errors);
+            },
             onSuccess: (data) => {
                 history.push(`/log/${data._id}`);
-            },
-            onError: ({ response }) => {
-                if (response.status === 422) setErrors(response.data["errors"]);
             },
         }
     );

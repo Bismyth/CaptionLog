@@ -112,7 +112,6 @@ router.post(
         } catch (e) {
             return res.status(500);
         }
-
         const newLog = new Log(req.body);
         newLog.save((err, doc) => {
             if (err) return res.sendStatus(500);

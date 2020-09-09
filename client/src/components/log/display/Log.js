@@ -5,7 +5,6 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-    Button,
     Alert,
 } from "reactstrap";
 import { useSelector } from "react-redux";
@@ -47,7 +46,7 @@ const Log = ({
                     <LogHeader title={data.title} movieInfo={data.movieInfo} />
                 </h2>
                 {userRoles.write ? (
-                    <div className="ml-auto">
+                    <div className="ml-auto" style={{ minWidth: "72px" }}>
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
                         <Edit action={{ link: `/edit/${data._id}` }} />
                         <Delete id={data._id} back={true} />
@@ -94,21 +93,12 @@ const Log = ({
                                                     })}
                                                 <span className="ml-auto">
                                                     {(isLocal || loggedIn) &&
-                                                    key === "digitalInfo" &&
-                                                    value.location ? (
+                                                    key === "digitalInfo" ? (
                                                         <Video
                                                             id={data._id}
-                                                            vid={value._id}
-                                                            vname={value.name || data.title}
+                                                            title={data.title}
+                                                            index={value}
                                                         />
-                                                    ) : (isLocal || loggedIn) &&
-                                                      value.clickviewUrl ? (
-                                                        <Button
-                                                            href={value.clickviewUrl}
-                                                            target="_blank"
-                                                        >
-                                                            Go to Clickview
-                                                        </Button>
                                                     ) : null}
                                                 </span>
                                             </ListGroupItemText>
@@ -137,7 +127,10 @@ const Log = ({
                                                 <ListGroupItemHeading>
                                                     {v.header}
                                                 </ListGroupItemHeading>
-                                                <ListGroupItemText className="text-wrap text-break">
+                                                <ListGroupItemText
+                                                    className="text-break"
+                                                    style={{ whiteSpace: "pre-line" }}
+                                                >
                                                     {v.special === "date"
                                                         ? new Date(source[v.value]).toDateString()
                                                         : source[v.value]}

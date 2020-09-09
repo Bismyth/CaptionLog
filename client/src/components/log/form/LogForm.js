@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { Spinner, Form, Input, Alert, Button, FormGroup } from "reactstrap";
-import { Formik } from "formik";
+import { Spinner, Input, Alert, Button, FormGroup } from "reactstrap";
+import { Formik, Form } from "formik";
 import {
     title,
     submitBtn,
@@ -16,6 +16,31 @@ import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
 import OldLogInfo from "../logActions/OldLogInfo";
 import { classHeading, asyncForEach } from "../../../config";
+import * as Yup from "yup";
+
+const LogSchema = Yup.object().shape({
+    title: Yup.string().required("Please add a title."),
+    description: Yup.string(),
+    genre: Yup.string(),
+    folder: Yup.string(),
+    movieInfo: Yup.object({
+        year: Yup.number(),
+        rating: Yup.string(),
+    }),
+    copyrightInfo: Yup.object({
+        teacherName: Yup.string(),
+        captionSource: Yup.string().required("Please add a caption source."),
+        dateOfCompletion: Yup.string().required("Please add a date of completion"),
+        videoSource: Yup.string(),
+        originalLocation: Yup.string(),
+    }),
+    digitalInfo: Yup.array(
+        Yup.object({
+            name: Yup.string(),
+            length: Yup.string(),
+        })
+    ),
+});
 
 const LogForm = (props) => {
     const { upload, data = blankForm, type, errors, oldLog } = props;
@@ -53,9 +78,9 @@ const LogForm = (props) => {
     if (loading) return <Spinner color="primary" />;
     return (
         <Fragment>
-            <Formik initialValues={data} onSubmit={upload}>
-                {({ handleReset, handleSubmit, isSubmitting, values, setFieldValue }) => (
-                    <Form onReset={handleReset} onSubmit={handleSubmit}>
+            <Formik initialValues={data} validationSchema={LogSchema} onSubmit={upload}>
+                {({ isSubmitting, values, setFieldValue }) => (
+                    <Form>
                         <div className={classHeading}>
                             <BackButton back />
                             <h1>{title[type]}</h1>
@@ -89,31 +114,28 @@ const LogForm = (props) => {
                             : null}
                         {Object.entries(display).map(([key, { type, name, format, button }]) => {
                             var fData = key === "main" ? values : values[key];
+                            const uni = {
+                                format,
+                                selectors: selectors[key],
+                                section: key,
+                            };
                             if (type === "single" && fData !== undefined) {
                                 return (
                                     <Fragment key={key}>
                                         {name ? <h3 className="mb-3">{name}</h3> : null}
-                                        <FormSection
-                                            {...{
-                                                format,
-                                                selectors: selectors[key],
-                                                section: key,
-                                            }}
-                                        />
+                                        <FormSection {...uni} />
                                     </Fragment>
                                 );
                             } else if (type === "multi" && fData !== undefined) {
                                 return (
                                     <FormMSection
                                         {...{
+                                            ...uni,
                                             name,
-                                            format,
                                             button,
                                             blanks: buttonBlanks,
                                             values: values[key],
                                             folder: values.folder,
-                                            selectors: selectors[key],
-                                            section: key,
                                         }}
                                         key={key}
                                     />

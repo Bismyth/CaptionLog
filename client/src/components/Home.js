@@ -1,25 +1,38 @@
 import React, { useState } from "react";
-import { Button, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { Nav, NavItem, NavLink, TabContent, TabPane, Tooltip } from "reactstrap";
 import captionRoom from "../captionRoom.jpg";
+import { ReactComponent as Contact } from "../icons/contact_mail-black-24dp.svg";
 import { classHeading } from "../config";
 import data from "./copyInfo.json";
 const Home = () => {
     const [activeTab, setActiveTab] = useState("0");
+    const [tooltip, setTooltip] = useState({});
     const toggle = (e) => {
         var tab = data.findIndex((x) => x.name === e.target.text).toString();
         if (activeTab !== tab) setActiveTab(tab);
+    };
+    const tToggle = (e) => {
+        const tar = e.target.closest("a") || e.target.closest("svg");
+        setTooltip((v) => {
+            return {
+                ...v,
+                [tar.id]: !v[tar.id],
+            };
+        });
     };
     return (
         <div>
             <div className={`${classHeading} mb-2`}>
                 <h1>Captioning Information</h1>
-                <Button
-                    className="ml-auto"
-                    color="primary"
-                    href="mailto:lisa.june@education.wa.edu.au"
-                >
+                <a className="ml-auto" id="contact" href="mailto:lisa.june@education.wa.edu.au">
+                    <Contact
+                        className="w-auto link-arrow contactBtn"
+                        style={{ height: "50px", fill: "var(--sBlue)" }}
+                    />
+                </a>
+                <Tooltip target="contact" toggle={tToggle} isOpen={tooltip["contact"]}>
                     Contact the Captioning Office
-                </Button>
+                </Tooltip>
             </div>
             <img src={captionRoom} className="topImage mb-2" alt="Caption Room" />
             <Nav tabs className="mb-2 justify-content-center tabHome">

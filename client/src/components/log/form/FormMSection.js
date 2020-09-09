@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import FormSection from "./FormSection";
 import SelectFile from "./SelectFile";
-import { classHeading, keepLikeValues } from "../../../config";
+import { classHeading } from "../../../config";
 
 import { FieldArray } from "formik";
 const FormMSection = ({ section, selectors, name, format, button, blanks, values, folder }) => {
@@ -15,7 +15,6 @@ const FormMSection = ({ section, selectors, name, format, button, blanks, values
                 render={(arrayHelpers) => (
                     <Fragment>
                         {values.map((value, index) => {
-                            var forma = keepLikeValues(format, value);
                             return (
                                 <Fragment key={index}>
                                     <div className={classHeading}>
@@ -34,7 +33,7 @@ const FormMSection = ({ section, selectors, name, format, button, blanks, values
                                         ) : null}
                                     </div>
                                     <FormSection
-                                        format={forma}
+                                        format={format}
                                         selectors={selectors}
                                         index={index}
                                         section={section}
@@ -87,4 +86,4 @@ const FormMSection = ({ section, selectors, name, format, button, blanks, values
     );
 };
 
-export default React.memo(FormMSection);
+export default FormMSection;
