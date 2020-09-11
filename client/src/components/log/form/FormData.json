@@ -13,12 +13,14 @@
         "digBlank": {
             "name": "",
             "length": "",
-            "location": ""
+            "location": "",
+            "subtitle": ""
         },
         "digBlankCV": {
             "name": "",
             "length": "",
-            "clickviewUrl": ""
+            "clickviewUrl": "",
+            "subtitle": ""
         },
         "physBlank": {
             "name": "",
@@ -86,11 +88,12 @@
             "format": {
                 "name": { "name": "Name", "type": "text" },
                 "length": { "name": "Length", "type": "text" },
-                "location": { "name": "Location", "type": "text" },
+                "location": { "name": "Location", "type": "fileSelect" },
                 "clickviewUrl": {
                     "name": "Clickview URL",
                     "type": "text"
-                }
+                },
+                "subtitle": { "name": "Subtitle", "type": "fileSelect" }
             }
         },
         "physicalInfo": {

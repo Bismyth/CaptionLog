@@ -81,6 +81,7 @@ router.get("/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
 });
 
 router.get("/download/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
+    const key = req.query.type === "sub" ? "subtitle" : "location";
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     Log.findById(req.params.id, (err, doc) => {
@@ -91,9 +92,9 @@ router.get("/download/:id/:vid", local, checkSchema(videoIDs), function (req, re
         const video = doc.digitalInfo.filter((v) => {
             return v._id.equals(Types.ObjectId(req.params.vid));
         })[0];
-        if (!video) return res.status(400).json({ msg: "No Video found" });
-        const vpath = path.join(process.env.MEDIA_ROOT, video.location);
-        if (!fs.existsSync(vpath)) return res.status(400).json({ msg: "No Video found" });
+        if (!video[key]) return res.status(400).json({ msg: "File not found" });
+        const vpath = path.join(process.env.MEDIA_ROOT, video[key]);
+        if (!fs.existsSync(vpath)) return res.status(400).json({ msg: "File not found" });
         res.download(vpath);
     });
 });

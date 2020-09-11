@@ -135,7 +135,6 @@ const LogForm = (props) => {
                                             button,
                                             blanks: buttonBlanks,
                                             values: values[key],
-                                            folder: values.folder,
                                         }}
                                         key={key}
                                     />

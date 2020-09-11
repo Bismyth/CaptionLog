@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { Input, Form, Spinner } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";

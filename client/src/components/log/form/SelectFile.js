@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import {
     Modal,
     ModalHeader,
@@ -18,7 +18,7 @@ import { useQuery } from "react-query";
 import SearchBar from "../SearchBar";
 
 import { getIn, connect } from "formik";
-
+import { ReactComponent as FileAdd } from "../../../icons/note_add-black-24dp.svg";
 const shortenPath = (path) => {
     return path
         .split("/")
@@ -26,7 +26,8 @@ const shortenPath = (path) => {
         .join("");
 };
 
-const SelectFile = ({ index, folder = "", formik }) => {
+const SelectFile = ({ sName, formik }) => {
+    const folder = getIn(formik.values.folder) || "";
     const change = getIn(formik.handleChange);
     const [folderChain, setFolderChain] = useState(
         folder.split("/").map((v, i, arr) => {
@@ -37,6 +38,9 @@ const SelectFile = ({ index, folder = "", formik }) => {
             };
         })
     );
+    useEffect(() => {
+        setCurrentDIR(folder || "/");
+    }, [folder]);
     const [currentDIR, setCurrentDIR] = useState(folder || "/");
     const [fileSelected, setFileSelected] = useState("");
     const [search, setSearch] = useState("");
@@ -86,14 +90,12 @@ const SelectFile = ({ index, folder = "", formik }) => {
     const selectFile = (e) => {
         setSearch("");
         change({ target: { name: "folder", value: currentDIR } }, "main");
-        change({ target: { name: `digitalInfo.${index}.location`, value: fileSelected } });
+        change({ target: { name: sName, value: fileSelected } });
         setModal(!modal);
     };
     return (
         <Fragment>
-            <Button style={{ minWidth: "fit-content" }} onClick={toggle}>
-                Select File
-            </Button>
+            <FileAdd alt="Add" onClick={toggle} className="link-arrow" />
             <Modal isOpen={modal} toggle={toggle} autoFocus={false} size="lg">
                 <ModalHeader toggle={toggle}>Select File</ModalHeader>
                 <ModalBody>

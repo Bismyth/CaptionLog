@@ -4,10 +4,15 @@ import { Alert, Modal, ModalHeader, ModalBody, Tooltip } from "reactstrap";
 
 import { ReactComponent as PlayVideo } from "../../../icons/video_library-black-24dp.svg";
 import { ReactComponent as DownloadVideo } from "../../../icons/save_alt-black-24dp.svg";
+import { ReactComponent as DownloadSub } from "../../../icons/subtitles-black-24dp.svg";
 
 import "./Video.css";
 
-const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewUrl } }) => {
+const Video = ({
+    id,
+    title,
+    index: { _id: vid, name: iName, location, clickviewUrl, subtitle },
+}) => {
     const vname = iName || title;
     const [error, setError] = useState("");
     const [mOpen, setMOpen] = useState(false);
@@ -25,6 +30,21 @@ const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewU
             };
         });
     };
+
+    const subLink = (
+        <Fragment>
+            <a
+                href={`${process.env.PUBLIC_URL}/api/video/download/${id}/${vid}?type=sub`}
+                download={vname}
+                id={`sub-${vid}`}
+            >
+                <DownloadSub alt="Download Subtitles" className="link-arrow videoBtn" />
+            </a>
+            <Tooltip target={`sub-${vid}`} toggle={tToggle} isOpen={tooltip[`sub-${vid}`]}>
+                Download Subtitles
+            </Tooltip>
+        </Fragment>
+    );
     if (clickviewUrl) {
         return (
             <Fragment>
@@ -34,6 +54,7 @@ const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewU
                         Go to Clickview
                     </Tooltip>
                 </a>
+                {subtitle ? subLink : null}
             </Fragment>
         );
     }
@@ -50,15 +71,16 @@ const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewU
                     Play Video
                 </Tooltip>
                 <a
-                    href={`${process.env.PUBLIC_URL}/api/video/download/${id}/${vid}`}
+                    href={`${process.env.PUBLIC_URL}/api/video/download/${id}/${vid}?type=video`}
                     download={vname}
                     id={`dl-${vid}`}
                 >
-                    <DownloadVideo alt="Download" className="link-arrow videoBtn" />
+                    <DownloadVideo alt="Download" className="link-arrow videoBtn mr-2" />
                 </a>
                 <Tooltip target={`dl-${vid}`} toggle={tToggle} isOpen={tooltip[`dl-${vid}`]}>
                     Download Video
                 </Tooltip>
+                {subtitle ? subLink : null}
                 <Modal isOpen={mOpen} toggle={toggle} size="lg">
                     <ModalHeader toggle={toggle}>{vname}</ModalHeader>
                     <ModalBody>

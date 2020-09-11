@@ -6,6 +6,7 @@ const DigitalInfoSchema = new Schema({
     length: String,
     location: String,
     clickviewUrl: String,
+    subtitle: String,
 });
 
 const CopyrightInfoSchema = new Schema({
