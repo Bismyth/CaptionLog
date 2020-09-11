@@ -71,7 +71,7 @@ const App = () => {
                             <Route path={`/edit/:id`} component={EditLog} />
                             <Route path={`/convert/:id`} component={ConvertLog} />
                             <Route path={`/modi`} component={EditSelector} />
-                            <Route path={`/search/:value?/:field?`} component={Search} />
+                            <Route path={`/search/:term?`} component={Search} />
                             <Route path={`/`} component={Home} />
                         </Switch>
                     </Container>

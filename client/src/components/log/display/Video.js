@@ -12,6 +12,7 @@ const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewU
     const [error, setError] = useState("");
     const [mOpen, setMOpen] = useState(false);
     const [tooltip, setTooltip] = useState({});
+
     const toggle = () => {
         setMOpen((v) => !v);
     };
@@ -49,7 +50,7 @@ const Video = ({ id, title, index: { _id: vid, name: iName, location, clickviewU
                     Play Video
                 </Tooltip>
                 <a
-                    href={`${process.env.PUBLIC_URL}/api/video/${id}/${vid}`}
+                    href={`${process.env.PUBLIC_URL}/api/video/download/${id}/${vid}`}
                     download={vname}
                     id={`dl-${vid}`}
                 >

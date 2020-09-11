@@ -54,4 +54,9 @@ const LogSchema = new Schema({
     physicalInfo: [PhysicalMediaSchema],
 });
 
+LogSchema.index(
+    { title: "text", description: "text" },
+    { name: "Search", weights: { title: 20, description: 1 } }
+);
+
 module.exports = Log = mongoose.model("log", LogSchema);

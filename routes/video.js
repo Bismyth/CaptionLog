@@ -80,4 +80,22 @@ router.get("/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
     });
 });
 
+router.get("/download/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+    Log.findById(req.params.id, (err, doc) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).json(err);
+        }
+        const video = doc.digitalInfo.filter((v) => {
+            return v._id.equals(Types.ObjectId(req.params.vid));
+        })[0];
+        if (!video) return res.status(400).json({ msg: "No Video found" });
+        const vpath = path.join(process.env.MEDIA_ROOT, video.location);
+        if (!fs.existsSync(vpath)) return res.status(400).json({ msg: "No Video found" });
+        res.download(vpath);
+    });
+});
+
 module.exports = router;

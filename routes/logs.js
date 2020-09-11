@@ -47,28 +47,12 @@ const processVideoLength = async (digitalInfo) => {
 //@desc  Return Logs
 //@access Public
 router.get("/", (req, res) => {
-    var queryO, query;
-    if (req.query.search) {
-        queryO = OldLog.find({ title: new RegExp(`^${req.query.search}`, "i") })
-            .select("title description")
-            .sort("title")
-            .lean();
-        query = Log.find({ title: new RegExp(`^${req.query.search}`, "i") })
-            .select("title description movieInfo")
-            .sort("title")
-            .lean();
-    } else {
-        queryO = OldLog.find({
-            [req.query.field]: new RegExp(req.query.value, "i"),
-        })
-            .select("title description")
-            .lean();
-        query = Log.find({
-            [req.query.field]: new RegExp(req.query.value, "i"),
-        })
-            .select("title description movieInfo")
-            .lean();
-    }
+    var { search: term } = req.query;
+    var search = req.query.search
+        ? { title: new RegExp(`(?!the)(^${term})|(^the ${term})`, "i") }
+        : {};
+    var queryO = OldLog.find(search).select("title description").sort("title").lean();
+    var query = Log.find(search).select("title description movieInfo").sort("title").lean();
     Promise.all([query, queryO])
         .then((results) => {
             var joined = [
@@ -77,7 +61,18 @@ router.get("/", (req, res) => {
                     return { ...value, old: true };
                 }),
             ];
-            res.json(joined.sort((a, b) => (a.title > b.title ? 1 : -1)));
+            res.json(
+                joined.sort((a, b) => {
+                    var [title1, title2] = [a, b].map(({ title }) => {
+                        var t = title.toLowerCase();
+                        if (t.substr(0, 3) === "the") return t.substr(4);
+                        return t;
+                    });
+
+                    if (title2.substr(0, 3) === "the") title2 = title2.substr(4);
+                    return title1 > title2 ? 1 : -1;
+                })
+            );
         })
         .catch((err) => {
             res.sendStatus(500);
@@ -85,17 +80,26 @@ router.get("/", (req, res) => {
 });
 
 router.get("/search", auth.read, (req, res) => {
-    console.log(req.body);
-    var queryO = OldLog.find({ title: { $regex: req.query.value, $options: "i" } })
+    const { term } = req.query;
+    var queryO = OldLog.find({ $text: { $search: term } }, { score: { $meta: "textScore" } })
+        .sort({ score: { $meta: "textScore" } })
         .select("title description")
         .lean();
-    Promise.all([queryO])
+    var query = Log.find({ $text: { $search: term } }, { score: { $meta: "textScore" } })
+        .sort({ score: { $meta: "textScore" } })
+        .select("title description")
+        .lean();
+    Promise.all([query, queryO])
         .then((results) => {
-            var joined = [...results[0]];
-            res.json(results);
+            var joined = [
+                ...results[0],
+                ...results[1].map((value) => {
+                    return { ...value, old: true };
+                }),
+            ];
+            res.json(joined.sort((a, b) => b.score - a.score));
         })
         .catch((err) => {
-            console.log(err);
             res.sendStatus(500);
         });
 });

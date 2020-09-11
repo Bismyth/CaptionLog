@@ -20,3 +20,14 @@ export const fetchLogs = async (key, { params }) => {
     const { data } = await axios(config);
     return data;
 };
+
+export const searchLogs = async (key, { params }) => {
+    if (decodeURIComponent(params.search) === "#") params.search = "[(0-9]";
+    var config = {
+        url: `/api/logs/search`,
+        method: "get",
+        params,
+    };
+    const { data } = await axios(config);
+    return data;
+};

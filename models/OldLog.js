@@ -55,6 +55,10 @@ const UpdateSchema = new Schema({
     }),
     oldLog: { _id: false, type: OldLogSchema },
 });
+OldLogSchema.index(
+    { title: "text", description: "text" },
+    { name: "Search", weights: { title: 20, description: 1 } }
+);
 
 const OldLog = mongoose.model("oldlog", OldLogSchema);
 const Update = mongoose.model("update", UpdateSchema);

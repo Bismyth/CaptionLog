@@ -4,23 +4,16 @@ import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
 import SearchBar from "./SearchBar";
 import { useQuery } from "react-query";
-import { fetchLogs } from "../../queries/log";
-
-const fieldValues = (
-    <Fragment>
-        <option value="title">Title</option>
-        <option value="description">Description</option>
-    </Fragment>
-);
+import { searchLogs } from "../../queries/log";
 
 const Search = ({ match: { params }, location: { scroll } }) => {
     useEffect(() => {
         if (scroll) document.getElementById("scroll").scroll(0, scroll);
     }, [scroll]);
-    const { value: search, field } = params;
+    const { term } = params;
     const history = useHistory();
-    const [value, setValue] = useState(decodeURIComponent(search));
-    const { isLoading, data } = useQuery(["getLogs", { params }], fetchLogs, {
+    const [value, setValue] = useState(decodeURIComponent(term));
+    const { isLoading, data } = useQuery(["getLogs", { params }], searchLogs, {
         onError: (err) => {
             console.error(err);
         },
@@ -30,26 +23,17 @@ const Search = ({ match: { params }, location: { scroll } }) => {
             <h1>Search</h1>
             <Form
                 onSubmit={(e) => {
-                    history.push(`/search/${encodeURIComponent(e.target.search.value)}/${field}`);
+                    history.push(`/search/${encodeURIComponent(e.target.search.value)}`);
                     e.preventDefault();
                 }}
                 className="mb-3"
             >
                 <SearchBar className="mb-1" value={value} update={setValue} />
-                <Input
-                    type="select"
-                    className="ml-auto w-auto"
-                    onChange={(e) => {
-                        history.push(`/search/${encodeURIComponent(search)}/${e.target.value}`);
-                    }}
-                    value={field}
-                    children={fieldValues}
-                />
             </Form>
             {isLoading ? (
                 <Spinner color="primary" />
             ) : (
-                <LogListItem data={data} page={`/search/${search}/${field}`} />
+                <LogListItem data={data} page={`/search/${term}`} />
             )}
         </div>
     );

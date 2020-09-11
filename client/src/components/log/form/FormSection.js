@@ -12,7 +12,6 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
     return (
         <Fragment>
             {Object.entries(format).map(([key, { name, type }]) => {
-                console.log(key);
                 const fName = sName + key;
                 const tag = type === "textarea" ? TextareaAutosize : null;
                 const children = selectors[key]

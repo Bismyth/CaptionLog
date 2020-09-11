@@ -138,7 +138,7 @@ const Toolbar = (props) => {
                         <Form
                             onSubmit={(e) => {
                                 setValue("");
-                                history.push(`/search/${encodeURIComponent(value)}/title`);
+                                history.push(`/search/${encodeURIComponent(value)}`);
                                 e.preventDefault();
                             }}
                             inline
