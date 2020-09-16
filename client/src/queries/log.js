@@ -24,7 +24,7 @@ export const fetchLogs = async (key, { params }) => {
 export const searchLogs = async (key, { params }) => {
     if (decodeURIComponent(params.search) === "#") params.search = "[(0-9]";
     var config = {
-        url: `/api/logs/search`,
+        url: `/api/logs`,
         method: "get",
         params,
     };
