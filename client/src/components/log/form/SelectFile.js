@@ -61,6 +61,7 @@ const SelectFile = ({ sName, formik }) => {
         {
             onError: (err) => {
                 setCurrentDIR("/");
+                setFolderChain({ id: "/", name: "Content", isDir: true });
             },
         }
     );

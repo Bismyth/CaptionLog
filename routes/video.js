@@ -5,6 +5,7 @@ const { Types } = require("mongoose");
 const { checkSchema, validationResult } = require("express-validator");
 const fs = require("fs");
 const path = require("path");
+const pump = require("pump");
 const local = require("../middleware/local");
 
 //Import Environment Variables
@@ -68,14 +69,14 @@ router.get("/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
             };
 
             res.writeHead(206, head);
-            file.pipe(res);
+            pump(file, res);
         } else {
             const head = {
                 "Content-Length": fileSize,
                 "Content-Type": "video/mp4",
             };
             res.writeHead(200, head);
-            fs.createReadStream(vpath).pipe(res);
+            pump(fs.createReadStream(vpath), res);
         }
     });
 });
