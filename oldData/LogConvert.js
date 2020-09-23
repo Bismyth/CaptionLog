@@ -27,9 +27,6 @@ mongoose
                 }
                 return v;
             });
-            if (digiNew[0].externalLink) {
-                console.log(digiNew);
-            }
 
             await Log.findByIdAndUpdate(v, { digitalInfo: digiNew });
         });

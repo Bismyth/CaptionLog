@@ -82,11 +82,11 @@
                 "name": { "name": "Name", "type": "text" },
                 "length": { "name": "Length", "type": "text" },
                 "location": { "name": "Location", "type": "fileSelect" },
+                "subtitle": { "name": "Subtitle", "type": "fileSelect" },
                 "externalLink": {
                     "name": "External Link",
                     "type": "text"
                 },
-                "subtitle": { "name": "Subtitle", "type": "fileSelect" },
                 "isPrivate": { "name": "Private", "type": "checkbox" }
             }
         },
