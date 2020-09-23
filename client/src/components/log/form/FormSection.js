@@ -80,6 +80,7 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
                                                 invalid={!!(meta.touched && meta.error)}
                                                 tag={tag}
                                                 children={children}
+                                                active={type === "checkbox" && field.value}
                                             />
                                             <FormFeedback>{meta.error}</FormFeedback>
                                         </Col>

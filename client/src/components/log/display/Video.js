@@ -12,7 +12,7 @@ import "./Video.css";
 const Video = ({
     id,
     title,
-    index: { _id: vid, name: iName, location, clickviewUrl, subtitle, isPrivate },
+    index: { _id: vid, name: iName, location, externalLink, subtitle, isPrivate },
 }) => {
     const userRoles = {
         ...useSelector(getRoles),
@@ -49,10 +49,10 @@ const Video = ({
             </Tooltip>
         </Fragment>
     );
-    if (clickviewUrl) {
+    if (externalLink) {
         return (
             <Fragment>
-                <a href={clickviewUrl} target="_blank" id={`cv-${vid}`} rel="noopener noreferrer">
+                <a href={externalLink} target="_blank" id={`cv-${vid}`} rel="noopener noreferrer">
                     <PlayVideo alt="Clickview" className="link-arrow videoBtn clickviewBtn" />
                     <Tooltip target={`cv-${vid}`} toggle={tToggle} isOpen={tooltip[`cv-${vid}`]}>
                         Go to Clickview

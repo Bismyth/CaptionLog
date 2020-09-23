@@ -5,7 +5,7 @@ const DigitalInfoSchema = new Schema({
     name: String,
     length: String,
     location: String,
-    clickviewUrl: String,
+    externalLink: String,
     subtitle: String,
     isPrivate: Boolean,
 });

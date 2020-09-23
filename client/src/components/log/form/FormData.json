@@ -17,10 +17,10 @@
             "subtitle": "",
             "isPrivate": false
         },
-        "digBlankCV": {
+        "digBlankEX": {
             "name": "",
             "length": "",
-            "clickviewUrl": "",
+            "externalLink": "",
             "subtitle": ""
         },
         "physBlank": {
@@ -84,14 +84,14 @@
             "name": "Digital Media:",
             "button": [
                 { "name": "Add Digital Info Record", "blank": "digBlank" },
-                { "name": "Add Clickview Record", "blank": "digBlankCV" }
+                { "name": "Add Clickview Record", "blank": "digBlankEX" }
             ],
             "format": {
                 "name": { "name": "Name", "type": "text" },
                 "length": { "name": "Length", "type": "text" },
                 "location": { "name": "Location", "type": "fileSelect" },
-                "clickviewUrl": {
-                    "name": "Clickview URL",
+                "externalLink": {
+                    "name": "External Link",
                     "type": "text"
                 },
                 "subtitle": { "name": "Subtitle", "type": "fileSelect" },
