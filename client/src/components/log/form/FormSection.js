@@ -35,7 +35,6 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
                     return (
                         <Field name={fName} id={fName} key={key}>
                             {({ field, meta }) => {
-                                if (field.value === undefined) return null;
                                 return (
                                     <FormGroup row>
                                         <Label for={fName} xs={2}>
@@ -66,7 +65,6 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
                     return (
                         <Field name={fName} id={fName} key={key}>
                             {({ field, meta }) => {
-                                if (field.value === undefined) return null;
                                 return (
                                     <FormGroup row>
                                         <Label for={fName} xs={2}>
@@ -80,7 +78,7 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
                                                 invalid={!!(meta.touched && meta.error)}
                                                 tag={tag}
                                                 children={children}
-                                                active={type === "checkbox" && field.value}
+                                                checked={type === "checkbox" && field.value}
                                             />
                                             <FormFeedback>{meta.error}</FormFeedback>
                                         </Col>

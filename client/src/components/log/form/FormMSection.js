@@ -37,44 +37,16 @@ const FormMSection = ({ section, selectors, name, format, button, blanks, values
                                 </Fragment>
                             );
                         })}
-                        {button.length > 1 ? (
-                            <ButtonDropdown isOpen={isOpen} toggle={toggle}>
-                                <Button
-                                    id="caret"
-                                    color="primary"
-                                    onClick={() => {
-                                        arrayHelpers.push(blanks[button[0].blank]);
-                                    }}
-                                >
-                                    {button[0].name}
-                                </Button>
-                                <DropdownToggle caret color="primary" className="mr-3" />
-                                <DropdownMenu>
-                                    {button.map(({ name, blank }) => {
-                                        return (
-                                            <DropdownItem
-                                                onClick={() => {
-                                                    arrayHelpers.push(blanks[blank]);
-                                                }}
-                                                key={name}
-                                            >
-                                                {name}
-                                            </DropdownItem>
-                                        );
-                                    })}
-                                </DropdownMenu>
-                            </ButtonDropdown>
-                        ) : (
-                            <Button
-                                color="primary"
-                                className="mr-3"
-                                onClick={() => {
-                                    arrayHelpers.push(blanks[button[0].blank]);
-                                }}
-                            >
-                                {button[0].name}
-                            </Button>
-                        )}
+
+                        <Button
+                            color="primary"
+                            className="mr-3"
+                            onClick={() => {
+                                arrayHelpers.push(blanks[button[0].blank]);
+                            }}
+                        >
+                            {button[0].name}
+                        </Button>
                     </Fragment>
                 )}
             />
