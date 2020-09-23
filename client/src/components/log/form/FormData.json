@@ -14,7 +14,8 @@
             "name": "",
             "length": "",
             "location": "",
-            "subtitle": ""
+            "subtitle": "",
+            "isPrivate": false
         },
         "digBlankCV": {
             "name": "",
@@ -25,7 +26,7 @@
         "physBlank": {
             "name": "",
             "location": "",
-            "copiesHeld": ""
+            "copiesHeld": 1
         }
     },
     "movieBlank": {

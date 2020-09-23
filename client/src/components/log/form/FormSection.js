@@ -35,6 +35,7 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
                     return (
                         <Field name={fName} id={fName} key={key}>
                             {({ field, meta }) => {
+                                if (field.value === undefined) return null;
                                 return (
                                     <FormGroup row>
                                         <Label for={fName} xs={2}>
