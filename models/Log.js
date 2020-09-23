@@ -7,6 +7,7 @@ const DigitalInfoSchema = new Schema({
     location: String,
     clickviewUrl: String,
     subtitle: String,
+    isPrivate: Boolean,
 });
 
 const CopyrightInfoSchema = new Schema({

@@ -93,7 +93,8 @@
                     "name": "Clickview URL",
                     "type": "text"
                 },
-                "subtitle": { "name": "Subtitle", "type": "fileSelect" }
+                "subtitle": { "name": "Subtitle", "type": "fileSelect" },
+                "isPrivate": { "name": "Private", "type": "checkbox" }
             }
         },
         "physicalInfo": {

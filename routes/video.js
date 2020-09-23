@@ -5,6 +5,7 @@ const { Types } = require("mongoose");
 const { checkSchema, validationResult } = require("express-validator");
 const fs = require("fs");
 const path = require("path");
+const auth = require("../middleware/auth");
 const pump = require("pump");
 const local = require("../middleware/local");
 
@@ -36,7 +37,7 @@ const videoIDs = {
     },
 };
 
-router.get("/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
+router.get("/:id/:vid", local, checkSchema(videoIDs), auth.read, function (req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     Log.findById(req.params.id, (err, doc) => {
@@ -48,6 +49,8 @@ router.get("/:id/:vid", local, checkSchema(videoIDs), function (req, res) {
             return v._id.equals(Types.ObjectId(req.params.vid));
         })[0];
         if (!video) return res.status(400).json({ msg: "No Video found" });
+        if (video.isPrivate && !req.roles.admin)
+            return res.status(400).json({ msg: "Video is Private" });
         const vpath = path.join(process.env.MEDIA_ROOT, video.location);
         if (!fs.existsSync(vpath)) return res.status(400).json({ msg: "No Video found" });
         const stat = fs.statSync(vpath);
