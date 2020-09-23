@@ -3,16 +3,11 @@ import { Alert } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setPage } from "../../redux/actions/pageActions";
 import LogCard from "./LogCard";
+import { getRoles } from "../../config";
 
 const LogListItem = ({ data, page }) => {
     const userRoles = {
-        ...useSelector((state) => {
-            if (state.auth.user) {
-                return state.auth.user.roles;
-            } else {
-                return undefined;
-            }
-        }),
+        ...useSelector(getRoles),
     };
     const dispatch = useDispatch();
     const updatePage = useCallback(() => {

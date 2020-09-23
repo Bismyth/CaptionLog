@@ -1,7 +1,8 @@
-import React, { Fragment, useState, useSelector } from "react";
+import React, { Fragment, useState } from "react";
 import ReactPlayer from "react-player";
 import { Alert, Modal, ModalHeader, ModalBody, Tooltip } from "reactstrap";
 import { getRoles } from "../../../config";
+import { useSelector } from "react-redux";
 import { ReactComponent as PlayVideo } from "../../../icons/video_library-black-24dp.svg";
 import { ReactComponent as DownloadVideo } from "../../../icons/save_alt-black-24dp.svg";
 import { ReactComponent as DownloadSub } from "../../../icons/subtitles-black-24dp.svg";
@@ -14,13 +15,7 @@ const Video = ({
     index: { _id: vid, name: iName, location, clickviewUrl, subtitle, isPrivate },
 }) => {
     const userRoles = {
-        ...useSelector((state) => {
-            if (state.auth.user) {
-                return state.auth.user.roles;
-            } else {
-                return undefined;
-            }
-        }),
+        ...useSelector(getRoles),
     };
     const vname = iName || title;
     const [error, setError] = useState("");
