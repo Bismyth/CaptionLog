@@ -13,7 +13,15 @@ const Video = ({
     title,
     index: { _id: vid, name: iName, location, clickviewUrl, subtitle, isPrivate },
 }) => {
-    const userRoles = { ...useSelector(getRoles) };
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     const vname = iName || title;
     const [error, setError] = useState("");
     const [mOpen, setMOpen] = useState(false);
