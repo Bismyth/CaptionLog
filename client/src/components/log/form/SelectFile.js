@@ -57,6 +57,11 @@ const SelectFile = ({ sName, formik }) => {
                 data: path,
             });
             return data;
+        },
+        {
+            onError: (err) => {
+                setCurrentDIR("/");
+            },
         }
     );
     const fileDown = (e, file) => {
