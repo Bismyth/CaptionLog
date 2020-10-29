@@ -49,19 +49,16 @@ const Video = ({
             </Tooltip>
         </Fragment>
     );
-    if (externalLink) {
-        return (
-            <Fragment>
-                <a href={externalLink} target="_blank" id={`cv-${vid}`} rel="noopener noreferrer">
-                    <PlayVideo alt="Clickview" className="link-arrow videoBtn clickviewBtn" />
-                    <Tooltip target={`cv-${vid}`} toggle={tToggle} isOpen={tooltip[`cv-${vid}`]}>
-                        Go to Clickview
-                    </Tooltip>
-                </a>
-                {subtitle ? subLink : null}
-            </Fragment>
-        );
-    }
+    const eLink = (
+        <Fragment>
+            <a href={externalLink} target="_blank" id={`cv-${vid}`} rel="noopener noreferrer">
+                <PlayVideo alt="Clickview" className="link-arrow videoBtn clickviewBtn" />
+                <Tooltip target={`cv-${vid}`} toggle={tToggle} isOpen={tooltip[`cv-${vid}`]}>
+                    Go to Clickview
+                </Tooltip>
+            </a>
+        </Fragment>
+    );
     if (location) {
         return (
             <Fragment>
@@ -85,6 +82,7 @@ const Video = ({
                     Download Video
                 </Tooltip>
                 {subtitle ? subLink : null}
+                {externalLink ? eLink : null}
                 <Modal isOpen={mOpen} toggle={toggle} size="lg">
                     <ModalHeader toggle={toggle}>{vname}</ModalHeader>
                     <ModalBody>

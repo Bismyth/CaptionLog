@@ -1,13 +1,11 @@
-import React, { Fragment, useState } from "react";
-import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import React, { Fragment } from "react";
+import { Button } from "reactstrap";
 import FormSection from "./FormSection";
 
 import { classHeading } from "../../../config";
 
 import { FieldArray } from "formik";
 const FormMSection = ({ section, selectors, name, format, button, blanks, values }) => {
-    const [isOpen, setOpen] = useState(false);
-    const toggle = () => setOpen(!isOpen);
     return (
         <Fragment>
             <FieldArray
