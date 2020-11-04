@@ -20,8 +20,12 @@ const LogHeader = ({ title, movieInfo, old }) => {
     return (
         <Fragment>
             {title}
-            {movieInfo.year ? ` (${movieInfo.year}) ` : null}
-            {movieInfo.rating ? <Badge style={badgeStyle}>{movieInfo.rating}</Badge> : null}
+            {movieInfo.year ? ` (${movieInfo.year})` : null}
+            {movieInfo.rating ? (
+                <Fragment>
+                    ` `<Badge style={badgeStyle}>{movieInfo.rating}</Badge>
+                </Fragment>
+            ) : null}
         </Fragment>
     );
 };

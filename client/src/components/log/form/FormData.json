@@ -33,6 +33,7 @@
         "description": "",
         "genre": "",
         "folder": "",
+        "movieInfo": { "rating": "", "year": "" },
         "copyrightInfo": {
             "teacherName": "",
             "captionSource": "",
@@ -54,7 +55,7 @@
         },
         "movieInfo": {
             "type": "single",
-            "name": "Movie Info",
+            "name": "Media Info",
             "format": {
                 "year": { "name": "Year", "type": "number" },
                 "rating": { "name": "Rating", "type": "text" }

@@ -24,7 +24,7 @@ const LogSchema = Yup.object().shape({
     genre: Yup.string(),
     folder: Yup.string(),
     movieInfo: Yup.object({
-        year: Yup.number(),
+        year: Yup.number().allow(""),
         rating: Yup.string(),
     }),
     copyrightInfo: Yup.object({
@@ -88,21 +88,6 @@ const LogForm = (props) => {
                                 {oldLog || values.oData ? (
                                     <OldLogInfo data={oldLog || values.oData} className="mr-1" />
                                 ) : null}
-                                <Input
-                                    type="select"
-                                    onChange={(e) => {
-                                        var formType = e.target.value;
-                                        if (formType === "movie")
-                                            setFieldValue("movieInfo", movieBlank);
-                                        else if (formType === "media")
-                                            setFieldValue("movieInfo", undefined);
-                                    }}
-                                    className="w-auto"
-                                    value={values.movieInfo ? "movie" : "media"}
-                                >
-                                    <option value="media">Media</option>
-                                    <option value="movie">Movie</option>
-                                </Input>
                             </div>
                         </div>
                         {errors.length > 0
