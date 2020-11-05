@@ -3,37 +3,18 @@ const Schema = mongoose.Schema;
 
 const DigitalInfoSchema = new Schema({
     name: String,
+    description: String,
     length: String,
     location: String,
     externalLink: String,
     subtitle: String,
-    isPrivate: Boolean,
-});
-
-const CopyrightInfoSchema = new Schema({
-    _id: false,
-    teacherName: String,
-    captionSource: String,
-    videoSource: String,
-    dateOfCompletion: {
-        type: String,
-        required: true,
-    },
-    originalLocation: String,
-});
-
-const PhysicalMediaSchema = new Schema({
-    name: String,
-    location: String,
-    copiesHeld: Number,
-    onLoan: String,
-});
-
-const MovieInfoSchema = new Schema({
-    _id: false,
     year: Number,
     rating: String,
-    tag: [String],
+    captionSource: String,
+    videoSource: String,
+    dateOfCompletion: String,
+    originalLocation: String,
+    isPrivate: Boolean,
 });
 
 const LogSchema = new Schema({
@@ -41,19 +22,18 @@ const LogSchema = new Schema({
         type: String,
         required: true,
     },
-    description: {
-        type: String,
-    },
-    genre: {
-        type: String,
-    },
-    folder: {
-        type: String,
-    },
-    movieInfo: MovieInfoSchema,
-    copyrightInfo: { type: CopyrightInfoSchema, required: true },
+    description: String,
+    genre: String,
+    folder: String,
+    year: Number,
+    rating: String,
+    teacherName: String,
+    captionSource: String,
+    videoSource: String,
+    dateOfCompletion: String,
+    originalLocation: String,
+    isPrivate: Boolean,
     digitalInfo: [DigitalInfoSchema],
-    physicalInfo: [PhysicalMediaSchema],
 });
 
 LogSchema.index(

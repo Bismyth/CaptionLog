@@ -15,9 +15,9 @@ import SelectFile from "./SelectFile";
 import TextareaAutosize from "react-autosize-textarea/lib";
 
 const FormSection = ({ format, section, selectors = {}, index }) => {
-    var sName = section === "main" ? "" : section + ".";
+    var sName = "";
     if (index !== undefined) {
-        sName += `${index}.`;
+        sName = `digitalinfo.${index}.`;
     }
     return (
         <Fragment>

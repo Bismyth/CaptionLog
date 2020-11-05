@@ -23,17 +23,13 @@ const LogSchema = Yup.object().shape({
     description: Yup.string(),
     genre: Yup.string(),
     folder: Yup.string(),
-    movieInfo: Yup.object({
-        year: Yup.number().allow(""),
-        rating: Yup.string(),
-    }),
-    copyrightInfo: Yup.object({
-        teacherName: Yup.string(),
-        captionSource: Yup.string().required("Please add a caption source."),
-        dateOfCompletion: Yup.string().required("Please add a date of completion"),
-        videoSource: Yup.string(),
-        originalLocation: Yup.string(),
-    }),
+    year: Yup.number(),
+    rating: Yup.string(),
+    teacherName: Yup.string(),
+    captionSource: Yup.string().required("Please add a caption source."),
+    dateOfCompletion: Yup.string().required("Please add a date of completion"),
+    videoSource: Yup.string(),
+    originalLocation: Yup.string(),
     digitalInfo: Yup.array(
         Yup.object({
             name: Yup.string(),
@@ -104,7 +100,7 @@ const LogForm = (props) => {
                                 selectors: selectors[key],
                                 section: key,
                             };
-                            if (type === "single" && fData !== undefined) {
+                            if (type === "single") {
                                 return (
                                     <Fragment key={key}>
                                         {name ? <h3 className="mb-3">{name}</h3> : null}

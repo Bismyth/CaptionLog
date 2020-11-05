@@ -33,16 +33,14 @@
         "description": "",
         "genre": "",
         "folder": "",
-        "movieInfo": { "rating": "", "year": "" },
-        "copyrightInfo": {
-            "teacherName": "",
-            "captionSource": "",
-            "dateOfCompletion": "",
-            "videoSource": "",
-            "originalLocation": ""
-        },
-        "digitalInfo": [],
-        "physicalInfo": []
+        "teacherName": "",
+        "captionSource": "",
+        "dateOfCompletion": "",
+        "videoSource": "",
+        "originalLocation": "",
+        "rating": "",
+        "year": "",
+        "digitalInfo": []
     },
     "display": {
         "main": {
@@ -50,13 +48,7 @@
             "format": {
                 "title": { "name": "Title", "type": "text" },
                 "description": { "name": "Description", "type": "textarea" },
-                "genre": { "name": "Genre", "type": "select" }
-            }
-        },
-        "movieInfo": {
-            "type": "single",
-            "name": "Media Info",
-            "format": {
+                "genre": { "name": "Genre", "type": "select" },
                 "year": { "name": "Year", "type": "number" },
                 "rating": { "name": "Rating", "type": "text" }
             }
@@ -89,16 +81,18 @@
                     "type": "text"
                 },
                 "isPrivate": { "name": "Private", "type": "checkbox" }
-            }
-        },
-        "physicalInfo": {
-            "type": "multi",
-            "name": "Physical Media:",
-            "button": [{ "name": "Add Physical Info Record", "blank": "physBlank" }],
-            "format": {
-                "name": { "name": "Name", "type": "text" },
-                "location": { "name": "Location", "type": "text" },
-                "copiesHeld": { "name": "Copies Held", "type": "number" }
+            },
+            "optional": {
+                "year": { "name": "Year", "type": "number" },
+                "rating": { "name": "Rating", "type": "text" },
+                "teacherName": { "name": "Teacher's Name", "type": "text" },
+                "captionSource": { "name": "Caption Source", "type": "select" },
+                "dateOfCompletion": {
+                    "name": "Date of Completion",
+                    "type": "date"
+                },
+                "videoSource": { "name": "Video Source", "type": "select" },
+                "originalLocation": { "name": "Original Location", "type": "text" }
             }
         }
     },
