@@ -39,6 +39,7 @@ const NewLog = () => {
     const upload = (values) => {
         console.log(values);
     };
+    console.log("biggerBoy");
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
     return <LogForm upload={upload} type="new" errors={errors} />;
 };

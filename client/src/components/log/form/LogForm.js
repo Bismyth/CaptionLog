@@ -1,16 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { Spinner, Input, Alert, Button, FormGroup } from "reactstrap";
+import { Spinner, Alert, Button, FormGroup } from "reactstrap";
 import { Formik, Form } from "formik";
-import {
-    title,
-    submitBtn,
-    movieBlank,
-    blankForm,
-    display,
-    selectorsFormat,
-    buttonBlanks,
-} from "./FormData.json";
+import { title, submitBtn, blankForm, display, selectorsFormat, digBlank } from "./FormData.json";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
@@ -26,8 +18,8 @@ const LogSchema = Yup.object().shape({
     year: Yup.number(),
     rating: Yup.string(),
     teacherName: Yup.string(),
-    captionSource: Yup.string().required("Please add a caption source."),
-    dateOfCompletion: Yup.string().required("Please add a date of completion"),
+    captionSource: Yup.string(),
+    dateOfCompletion: Yup.string(),
     videoSource: Yup.string(),
     originalLocation: Yup.string(),
     digitalInfo: Yup.array(
@@ -42,24 +34,21 @@ const LogForm = (props) => {
     const { upload, data = blankForm, type, errors, oldLog } = props;
     const [selectors, updateSelectors] = useState({});
     const [loading, setLoading] = useState(false);
-
+    const [uniqueInfo, setUniqueInfo] = useState(["rating", "captionSource", "videoSource"]);
     useEffect(() => {
         const fetchSelectors = async () => {
             setLoading(true);
             await asyncForEach(selectorsFormat, async (selector) => {
                 var config = {
                     method: "get",
-                    url: `/api/lists/${selector.source}`,
+                    url: `/api/lists/${selector}`,
                 };
                 const { data: result } = await axios(config);
-                const [head, key] = selector.loc.split("/");
+
                 updateSelectors((v) => {
                     return {
                         ...v,
-                        [head]: {
-                            ...v[head],
-                            [key]: ["", ...result.map((v) => v.name)],
-                        },
+                        [selector]: ["", ...result.map((v) => v.name)],
                     };
                 });
             });
@@ -72,6 +61,7 @@ const LogForm = (props) => {
         }
     }, []);
     if (loading) return <Spinner color="primary" />;
+    console.log("bigboy");
     return (
         <Fragment>
             <Formik initialValues={data} validationSchema={LogSchema} onSubmit={upload}>
@@ -93,36 +83,39 @@ const LogForm = (props) => {
                                   </Alert>
                               ))
                             : null}
-                        {Object.entries(display).map(([key, { type, name, format, button }]) => {
-                            var fData = key === "main" ? values : values[key];
-                            const uni = {
-                                format,
-                                selectors: selectors[key],
-                                section: key,
-                            };
-                            if (type === "single") {
-                                return (
-                                    <Fragment key={key}>
-                                        {name ? <h3 className="mb-3">{name}</h3> : null}
-                                        <FormSection {...uni} />
-                                    </Fragment>
-                                );
-                            } else if (type === "multi" && fData !== undefined) {
-                                return (
-                                    <FormMSection
-                                        {...{
-                                            ...uni,
-                                            name,
-                                            button,
-                                            blanks: buttonBlanks,
-                                            values: values[key],
-                                        }}
-                                        key={key}
-                                    />
-                                );
+                        {Object.entries(display).map(
+                            ([key, { type, name, format, tabDefault, optional }]) => {
+                                const uni = {
+                                    format,
+                                    selectors,
+                                    section: key,
+                                    uniqueInfo,
+                                };
+                                if (type === "single") {
+                                    return (
+                                        <Fragment key={key}>
+                                            {name ? <h3 className="mb-3">{name}</h3> : null}
+                                            <FormSection {...uni} />
+                                        </Fragment>
+                                    );
+                                } else if (type === "multi") {
+                                    return (
+                                        <FormMSection
+                                            {...{
+                                                ...uni,
+                                                name,
+                                                tabDefault,
+                                                blank: digBlank,
+                                                valuesLength: values[key].length,
+                                                optional,
+                                            }}
+                                            key={key}
+                                        />
+                                    );
+                                }
+                                return null;
                             }
-                            return null;
-                        })}
+                        )}
                         <FormGroup className="mt-3">
                             <Button color="primary" type="submit" disabled={isSubmitting}>
                                 {submitBtn[type]}

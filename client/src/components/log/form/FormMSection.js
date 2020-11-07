@@ -1,50 +1,98 @@
-import React, { Fragment } from "react";
-import { Button } from "reactstrap";
+import React, { Fragment, useState } from "react";
+import { TabContent, Nav, NavItem, NavLink, TabPane } from "reactstrap";
 import FormSection from "./FormSection";
+import classnames from "classnames";
 
-import { classHeading } from "../../../config";
+import { ReactComponent as AddBtn } from "../../../icons/add-black-24dp.svg";
+import { ReactComponent as RemoveBtn } from "../../../icons/clear-black-24dp.svg";
 
 import { FieldArray } from "formik";
-const FormMSection = ({ section, selectors, name, format, button, blanks, values }) => {
+
+const FormMSection = ({
+    section,
+    selectors,
+    name,
+    format,
+    tabDefault,
+    blank,
+    valuesLength,
+    optional,
+    uniqueInfo,
+}) => {
+    const [activeTab, setActiveTab] = useState(-1);
+    const toggle = (tab) => {
+        if (activeTab !== tab) setActiveTab(tab);
+    };
+    console.log("Other ReRENDER");
     return (
         <Fragment>
             <FieldArray
                 name={section}
                 render={(arrayHelpers) => (
                     <Fragment>
-                        {values.map((value, index) => {
-                            return (
-                                <Fragment key={index}>
-                                    <div className={classHeading}>
-                                        <Button
-                                            className="mr-2"
-                                            color="danger"
-                                            size="sm"
-                                            onClick={() => arrayHelpers.remove(index)}
-                                        >
-                                            &times;
-                                        </Button>
-                                        <h4 className="w-100">{`${name} ${index + 1}`}</h4>
-                                    </div>
+                        <Nav tabs>
+                            {[...Array(valuesLength)].map((v, index) => (
+                                <NavItem key={index}>
+                                    <NavLink
+                                        className={classnames(
+                                            { active: activeTab === index },
+                                            "cursor-pointer"
+                                        )}
+                                        onClick={() => {
+                                            toggle(index);
+                                        }}
+                                        style={{ color: "#212529" }}
+                                    >
+                                        {index + 1}
+                                        <RemoveBtn
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (index <= activeTab) {
+                                                    toggle(activeTab - 1);
+                                                }
+                                                if (activeTab === 0 && valuesLength === 1) {
+                                                    toggle(-1);
+                                                }
+                                                arrayHelpers.remove(index);
+                                            }}
+                                            className="tabBtn"
+                                            style={{ marginLeft: ".5rem" }}
+                                        />
+                                    </NavLink>
+                                </NavItem>
+                            ))}
+                            <NavItem>
+                                <NavLink
+                                    onClick={() => {
+                                        arrayHelpers.push(blank);
+                                        toggle(valuesLength);
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <AddBtn className="tabBtn" />
+                                </NavLink>
+                            </NavItem>
+                        </Nav>
+                        <TabContent activeTab={activeTab}>
+                            <TabPane tabId={-1}>
+                                <h5>{tabDefault}</h5>
+                            </TabPane>
+                            {[...Array(valuesLength)].map((value, index) => (
+                                <TabPane key={index} tabId={index}>
+                                    <h4>{`${name} ${index + 1}`}</h4>
                                     <FormSection
-                                        format={format}
-                                        selectors={selectors}
-                                        index={index}
-                                        section={section}
+                                        {...{
+                                            format,
+                                            optional,
+                                            uniqueInfo,
+                                            selectors,
+                                            index,
+                                            section,
+                                        }}
                                     />
-                                </Fragment>
-                            );
-                        })}
-
-                        <Button
-                            color="primary"
-                            className="mr-3"
-                            onClick={() => {
-                                arrayHelpers.push(blanks[button[0].blank]);
-                            }}
-                        >
-                            {button[0].name}
-                        </Button>
+                                </TabPane>
+                            ))}
+                        </TabContent>
                     </Fragment>
                 )}
             />
@@ -52,4 +100,4 @@ const FormMSection = ({ section, selectors, name, format, button, blanks, values
     );
 };
 
-export default FormMSection;
+export default React.memo(FormMSection);

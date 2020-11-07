@@ -9,24 +9,12 @@
         "edit": "Save",
         "convert": "Convert"
     },
-    "buttonBlanks": {
-        "digBlank": {
-            "name": "",
-            "length": "",
-            "location": "",
-            "subtitle": "",
-            "externalLink": "",
-            "isPrivate": false
-        },
-        "physBlank": {
-            "name": "",
-            "location": "",
-            "copiesHeld": 1
-        }
-    },
-    "movieBlank": {
-        "rating": "",
-        "year": ""
+    "digBlank": {
+        "name": "",
+        "length": "",
+        "location": "",
+        "subtitle": "",
+        "externalLink": ""
     },
     "blankForm": {
         "title": "",
@@ -50,7 +38,8 @@
                 "description": { "name": "Description", "type": "textarea" },
                 "genre": { "name": "Genre", "type": "select" },
                 "year": { "name": "Year", "type": "number" },
-                "rating": { "name": "Rating", "type": "text" }
+                "rating": { "name": "Rating", "type": "text" },
+                "isPrivate": { "name": "Private", "type": "checkbox" }
             }
         },
         "copyrightInfo": {
@@ -70,17 +59,17 @@
         "digitalInfo": {
             "type": "multi",
             "name": "Digital Media:",
-            "button": [{ "name": "Add Digital Info Record", "blank": "digBlank" }],
+            "tabDefault": "Click the + to add Digital Info.",
             "format": {
                 "name": { "name": "Name", "type": "text" },
+                "description": { "name": "Description", "type": "textarea" },
                 "length": { "name": "Length", "type": "text" },
                 "location": { "name": "Location", "type": "fileSelect" },
                 "subtitle": { "name": "Subtitle", "type": "fileSelect" },
                 "externalLink": {
                     "name": "External Link",
                     "type": "text"
-                },
-                "isPrivate": { "name": "Private", "type": "checkbox" }
+                }
             },
             "optional": {
                 "year": { "name": "Year", "type": "number" },
@@ -92,13 +81,10 @@
                     "type": "date"
                 },
                 "videoSource": { "name": "Video Source", "type": "select" },
-                "originalLocation": { "name": "Original Location", "type": "text" }
+                "originalLocation": { "name": "Original Location", "type": "text" },
+                "isPrivate": { "name": "Private", "type": "checkbox" }
             }
         }
     },
-    "selectorsFormat": [
-        { "source": "captionSource", "loc": "copyrightInfo/captionSource" },
-        { "source": "genre", "loc": "main/genre" },
-        { "source": "videoSource", "loc": "copyrightInfo/videoSource" }
-    ]
+    "selectorsFormat": ["captionSource", "genre", "videoSource"]
 }

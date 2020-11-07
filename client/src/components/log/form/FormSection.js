@@ -14,10 +14,29 @@ import {
 import SelectFile from "./SelectFile";
 import TextareaAutosize from "react-autosize-textarea/lib";
 
-const FormSection = ({ format, section, selectors = {}, index }) => {
+const returnNewObjectOnlyValidKeys = (obj, validKeys) => {
+    const newObject = {};
+    Object.keys(obj).forEach((key) => {
+        if (validKeys.includes(key)) newObject[key] = obj[key];
+    });
+    return newObject;
+};
+
+const FileAddon = (fName) => {
+    return (
+        <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+                <SelectFile sName={fName} />
+            </InputGroupText>
+        </InputGroupAddon>
+    );
+};
+
+const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optional }) => {
     var sName = "";
     if (index !== undefined) {
-        sName = `digitalinfo.${index}.`;
+        sName = `${section}.${index}.`;
+        format = { ...format, ...returnNewObjectOnlyValidKeys(optional, uniqueInfo) };
     }
     return (
         <Fragment>
@@ -31,63 +50,37 @@ const FormSection = ({ format, section, selectors = {}, index }) => {
                           </option>
                       ))
                     : null;
-                if (type === "fileSelect") {
-                    return (
-                        <Field name={fName} id={fName} key={key}>
-                            {({ field, meta }) => {
-                                return (
-                                    <FormGroup row>
-                                        <Label for={fName} xs={2}>
-                                            {name}
-                                        </Label>
-                                        <Col xs={10}>
-                                            <InputGroup>
-                                                <InputGroupAddon addonType="prepend">
-                                                    <InputGroupText>
-                                                        <SelectFile sName={fName} />
-                                                    </InputGroupText>
-                                                </InputGroupAddon>
-                                                <Input
-                                                    {...field}
-                                                    placeholder={name + "..."}
-                                                    type={"text"}
-                                                    invalid={!!(meta.touched && meta.error)}
-                                                />
-                                            </InputGroup>
-                                            <FormFeedback>{meta.error}</FormFeedback>
-                                        </Col>
-                                    </FormGroup>
-                                );
-                            }}
-                        </Field>
-                    );
-                } else {
-                    return (
-                        <Field name={fName} id={fName} key={key}>
-                            {({ field, meta }) => {
-                                return (
-                                    <FormGroup row>
-                                        <Label for={fName} xs={2}>
-                                            {name}
-                                        </Label>
-                                        <Col xs={10}>
+                return (
+                    <Field name={fName} id={fName} key={key}>
+                        {({ field, meta }) => {
+                            //if (index === undefined && uniqueInfo.includes(field.name)) return null;
+                            return (
+                                <FormGroup row>
+                                    <Label for={fName} xs={2}>
+                                        {name}
+                                    </Label>
+                                    <Col xs={10}>
+                                        <InputGroup>
+                                            {type === "fileSelect" ? (
+                                                <FileAddon fName={fName} />
+                                            ) : null}
                                             <Input
                                                 {...field}
                                                 placeholder={name + "..."}
-                                                type={type}
+                                                type={type === "fileSelect" ? "text" : type}
                                                 invalid={!!(meta.touched && meta.error)}
                                                 tag={tag}
                                                 children={children}
                                                 checked={type === "checkbox" && field.value}
                                             />
-                                            <FormFeedback>{meta.error}</FormFeedback>
-                                        </Col>
-                                    </FormGroup>
-                                );
-                            }}
-                        </Field>
-                    );
-                }
+                                        </InputGroup>
+                                        <FormFeedback>{meta.error}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                            );
+                        }}
+                    </Field>
+                );
             })}
         </Fragment>
     );
