@@ -9,7 +9,7 @@
         "edit": "Save",
         "convert": "Convert"
     },
-    "digBlank": {
+    "blank": {
         "name": "",
         "length": "",
         "location": "",

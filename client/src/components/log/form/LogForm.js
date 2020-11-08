@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import { Spinner, Alert, Button, FormGroup } from "reactstrap";
 import { Formik, Form } from "formik";
-import { title, submitBtn, blankForm, display, selectorsFormat, digBlank } from "./FormData.json";
+import { title, submitBtn, blankForm, display, selectorsFormat, blank } from "./FormData.json";
 import FormSection from "./FormSection";
 import FormMSection from "./FormMSection";
 import BackButton from "../../BackButton";
@@ -61,7 +61,6 @@ const LogForm = (props) => {
         }
     }, []);
     if (loading) return <Spinner color="primary" />;
-    console.log("bigboy");
     return (
         <Fragment>
             <Formik initialValues={data} validationSchema={LogSchema} onSubmit={upload}>
@@ -99,14 +98,15 @@ const LogForm = (props) => {
                                         </Fragment>
                                     );
                                 } else if (type === "multi") {
+                                    var valuesLength = values[key].length;
                                     return (
                                         <FormMSection
                                             {...{
                                                 ...uni,
                                                 name,
                                                 tabDefault,
-                                                blank: digBlank,
-                                                valuesLength: values[key].length,
+                                                blank,
+                                                valuesLength,
                                                 optional,
                                             }}
                                             key={key}

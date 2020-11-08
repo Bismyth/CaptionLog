@@ -22,7 +22,8 @@ const returnNewObjectOnlyValidKeys = (obj, validKeys) => {
     return newObject;
 };
 
-const FileAddon = (fName) => {
+const FileAddon = (fName, type) => {
+    if (type !== "fileSelect") return null;
     return (
         <InputGroupAddon addonType="prepend">
             <InputGroupText>
@@ -53,7 +54,6 @@ const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optio
                 return (
                     <Field name={fName} id={fName} key={key}>
                         {({ field, meta }) => {
-                            //if (index === undefined && uniqueInfo.includes(field.name)) return null;
                             return (
                                 <FormGroup row>
                                     <Label for={fName} xs={2}>
@@ -61,9 +61,7 @@ const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optio
                                     </Label>
                                     <Col xs={10}>
                                         <InputGroup>
-                                            {type === "fileSelect" ? (
-                                                <FileAddon fName={fName} />
-                                            ) : null}
+                                            <FileAddon type={type} fName={fName} />
                                             <Input
                                                 {...field}
                                                 placeholder={name + "..."}

@@ -5,7 +5,7 @@ const initialState = {
     scrollPos: 0,
 };
 
-export default (state = initialState, action) => {
+const pageReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_PAGE:
             return {
@@ -20,3 +20,4 @@ export default (state = initialState, action) => {
             return state;
     }
 };
+export default pageReducer;

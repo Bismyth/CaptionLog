@@ -23,7 +23,6 @@ const FormMSection = ({
     const toggle = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
     };
-    console.log("Other ReRENDER");
     return (
         <Fragment>
             <FieldArray

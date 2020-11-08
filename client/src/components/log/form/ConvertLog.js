@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import LogForm from "./LogForm";
 import { Spinner } from "reactstrap";
 import { useQuery, useMutation } from "react-query";
-import { digBlank, blankForm } from "./FormData.json";
+import { blank, blankForm } from "./FormData.json";
 import { fetchLog } from "../../../queries/log";
 import axios from "axios";
 
@@ -68,7 +68,7 @@ const ConvertLog = ({
                 newData["description"] = oData["description"].split("\r\n")[0] || "";
                 newData.digitalInfo = [
                     {
-                        ...digBlank,
+                        ...blank,
                         length: oData.length || "",
                         externalLink: oData.description
                             .replace(/(\r\n|\n|\r)/gm, " ")
