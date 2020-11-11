@@ -57,12 +57,9 @@ const ConvertLog = ({
                 title: oData["title"] || "",
                 genre: oData["genre"] || "",
                 description: oData["description"] || "",
-                copyrightInfo: {
-                    ...blankForm.copyrightInfo,
-                    videoSource: oData.video_source || "",
-                    captionSource: oData.caption_source || "",
-                    originalLocation: oData.original_copy_location || "",
-                },
+                videoSource: oData.video_source || "",
+                captionSource: oData.caption_source || "",
+                originalLocation: oData.original_copy_location || "",
             };
             if (oData.description.includes("<iframe")) {
                 newData["description"] = oData["description"].split("\r\n")[0] || "";
@@ -81,7 +78,7 @@ const ConvertLog = ({
             }
             if (oData.date_of_completion) {
                 var date = new Date(oData.date_of_completion);
-                newData.copyrightInfo.dateOfCompletion = date.toISOString().substr(0, 10);
+                newData.dateOfCompletion = date.toISOString().substr(0, 10);
             }
             setData(newData);
             setLoading(false);

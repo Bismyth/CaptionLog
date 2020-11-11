@@ -9,7 +9,8 @@
         "server": "nodemon server.js",
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "updateLogs": "node ./oldData/import",
-        "replaceLogs": "node ./oldData/replace"
+        "replaceLogs": "node ./oldData/replace",
+        "convert": "node ./oldData/LogConvert"
     },
     "repository": {
         "type": "git",

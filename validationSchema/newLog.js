@@ -8,25 +8,21 @@ module.exports = {
         exists: { errorMessage: "Missing Description" },
     },
 
-    "movieInfo.year": {
+    year: {
         isInt: true,
         optional: true,
         errorMessage: "Please Provide Valid Year",
     },
-    "movieInfo.rating": { optional: true },
-    "copyrightInfo.captionSource": {
-        exists: true,
+    rating: { optional: true },
+    captionSource: {
+        optional: true,
         errorMessage: "Missing Caption Source",
         isLength: { options: { min: 1 } },
     },
-    "copyrightInfo.dateOfCompletion": {
-        exists: true,
+    dateOfCompletion: {
+        optional: true,
         errorMessage: "Missing Date of Completion",
         escape: true,
         isLength: { options: { min: 1 } },
-    },
-    "physicalInfo.*.copiesHeld": {
-        isInt: true,
-        errorMessage: "Copies Held should be a number",
     },
 };

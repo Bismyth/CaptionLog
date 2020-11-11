@@ -1,12 +1,12 @@
 {
     "format": {
         "main": [
-            { "heading": "Main" },
+            { "heading": "Main", "type": "main" },
             { "value": "description", "header": "Description:" },
             { "value": "genre", "header": "Genre:", "special": "select" }
         ],
         "copyrightInfo": [
-            { "heading": "Copyright Info" },
+            { "heading": "Copyright Info", "type": "sub" },
             { "value": "teacherName", "header": "Teacher's Name:" },
             { "value": "captionSource", "header": "Caption Source:", "special": "select" },
             { "value": "dateOfCompletion", "header": "Date of Completion:", "special": "date" },
@@ -14,13 +14,9 @@
             { "value": "originalLocation", "header": "Original Location:" }
         ],
         "digitalInfo": [
-            { "heading": "Digital Media", "multi": "true" },
+            { "heading": "Digital Media", "type": "multi" },
             { "renderPart": "Length: {length}", "value": "length", "align": "left" },
             { "type": "videoButton", "value": "location" }
-        ],
-        "physicalInfo": [
-            { "heading": "Physical Media", "multi": "true" },
-            { "renderPart": "Location: {location}", "value": "location", "align": "left" }
         ]
     }
 }

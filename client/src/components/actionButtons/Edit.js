@@ -1,17 +1,29 @@
 import React from "react";
 import { ReactComponent as EditButton } from "../../icons/edit-black-24dp.svg";
 import { Link } from "react-router-dom";
+import IconTooltip from "../IconTooltip";
 
 const Edit = ({ className, action, id }) => {
     if (typeof action === "function") {
         return (
-            <EditButton alt="Edit" className={`link-arrow ${className}`} onClick={action} id={id} />
+            <IconTooltip
+                onClick={action}
+                className={{ icon: `link-arrow ${className}` }}
+                id={id}
+                tooltip="Edit"
+                Icon={EditButton}
+            />
         );
     } else if (action.link) {
         return (
-            <Link to={action.link}>
-                <EditButton alt="Edit" className={`link-arrow ${className}`} />
-            </Link>
+            <IconTooltip
+                tag={Link}
+                to={action.link}
+                id={`edit-${action.link.split("/").pop().substr(0, 8)}`}
+                className={{ link: "p-0 d-inline-block", icon: `link-arrow ${className}` }}
+                tooltip="Edit"
+                Icon={EditButton}
+            />
         );
     }
     return null;

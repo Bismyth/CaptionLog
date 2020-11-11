@@ -52,7 +52,7 @@ router.get("/", (req, res) => {
         ? { title: new RegExp(`(?!the)(^${term})|(^the ${term})`, "i") }
         : {};
     var queryO = OldLog.find(search).select("title description").sort("title").lean();
-    var query = Log.find(search).select("title description movieInfo").sort("title").lean();
+    var query = Log.find(search).select("title description year rating").sort("title").lean();
     Promise.all([query, queryO])
         .then((results) => {
             var joined = [
@@ -169,7 +169,7 @@ router.put(
             return res.status(500);
         }
         const { _id: id, ...data } = req.body;
-        Log.findByIdAndUpdate(id, data, (err, doc) => {
+        Log.findByIdAndUpdate(id, data, { overwrite: true }, (err, doc) => {
             if (err) return res.sendStatus(500);
             res.json(doc);
         });
@@ -224,7 +224,7 @@ router.get("/:id", auth.read, (req, res) => {
         }).select(
             req.query.type === "old"
                 ? "title description genre"
-                : "title description genre movieInfo digitalInfo physicalInfo"
+                : "title description genre rating year digitalInfo"
         );
     }
 });

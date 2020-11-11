@@ -8,25 +8,26 @@ const ratingColours = {
     M: { bg: "#00a0c6", c: "#fff" },
     "MA15+": { bg: "#ff0000", c: "#fff" },
 };
-const LogHeader = ({ title, movieInfo, old }) => {
+const LogHeader = ({ title, year, rating, old }) => {
     var badgeStyle;
-    if (!movieInfo) return title;
-    if (ratingColours[movieInfo.rating]) {
+    var ratingDisplay = null;
+    if (rating && ratingColours[rating]) {
         badgeStyle = {
-            backgroundColor: ratingColours[movieInfo.rating].bg,
-            color: ratingColours[movieInfo.rating].c,
+            backgroundColor: ratingColours[rating].bg,
+            color: ratingColours[rating].c,
         };
+        ratingDisplay = (
+            <Fragment>
+                {" "}
+                <Badge style={badgeStyle}>{rating}</Badge>
+            </Fragment>
+        );
     }
     return (
         <Fragment>
             {title}
-            {movieInfo.year ? ` (${movieInfo.year})` : null}
-            {movieInfo.rating ? (
-                <Fragment>
-                    {" "}
-                    <Badge style={badgeStyle}>{movieInfo.rating}</Badge>
-                </Fragment>
-            ) : null}
+            {year ? ` (${year})` : null}
+            {ratingDisplay}
         </Fragment>
     );
 };

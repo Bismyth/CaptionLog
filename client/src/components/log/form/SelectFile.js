@@ -17,7 +17,7 @@ import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
 import { useQuery } from "react-query";
 import SearchBar from "../SearchBar";
 
-import { getIn, connect } from "formik";
+import { useFormikContext } from "formik";
 import { ReactComponent as FileAdd } from "../../../icons/note_add-black-24dp.svg";
 const shortenPath = (path) => {
     return path
@@ -26,9 +26,11 @@ const shortenPath = (path) => {
         .join("");
 };
 
-const SelectFile = ({ sName, formik }) => {
-    const folder = getIn(formik.values.folder) || "";
-    const change = getIn(formik.handleChange);
+const SelectFile = ({ sName }) => {
+    const {
+        values: { folder = "" },
+        handleChange: change,
+    } = useFormikContext();
     const [folderChain, setFolderChain] = useState(
         folder.split("/").map((v, i, arr) => {
             return {
@@ -176,4 +178,4 @@ const SelectFile = ({ sName, formik }) => {
     );
 };
 
-export default connect(SelectFile);
+export default SelectFile;

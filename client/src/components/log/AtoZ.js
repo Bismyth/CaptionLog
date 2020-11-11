@@ -21,10 +21,6 @@ const AtoZ = ({ match: { params }, location: { scroll } }) => {
 
     return (
         <div>
-            <h1 style={{ display: "inline-block" }} className="mr-auto">
-                Logs
-            </h1>
-
             <Pagination
                 aria-label="Alphabet Navigation"
                 size="sm"

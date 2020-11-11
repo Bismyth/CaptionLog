@@ -9,7 +9,6 @@ import {
     Container,
     NavLink,
     Form,
-    Tooltip,
 } from "reactstrap";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
@@ -24,6 +23,7 @@ import SearchBar from "./log/SearchBar";
 import { useWindowDimensions, getRoles } from "../config";
 
 import "./Toolbar.css";
+import IconTooltip from "./IconTooltip";
 
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -33,7 +33,6 @@ const Toolbar = (props) => {
     const [isOpen, toggle] = useState(false);
     const [value, setValue] = useState("");
     const [page, setPage] = useState(true);
-    const [tooltip, setTooltip] = useState({});
     const { width } = useWindowDimensions();
     const history = useHistory();
     const location = useLocation();
@@ -45,12 +44,6 @@ const Toolbar = (props) => {
             toggle(!isOpen);
         }
     };
-    const tToggle = (e) => {
-        const toolName = e.target.closest("a").id;
-        setTooltip((v) => {
-            return { ...v, [toolName]: !v[toolName] };
-        });
-    };
     const authLinks = (
         <Fragment>
             <NavItem>
@@ -60,22 +53,32 @@ const Toolbar = (props) => {
             </NavItem>
             {userRoles.write ? (
                 <NavItem>
-                    <NavLink tag={Link} to={"/newLog"} className="mr-3" id="newLog">
-                        <NewLog className={`topIcon ${page === "newLog" ? "active" : ""}`} />
-                    </NavLink>
-                    <Tooltip target="newLog" toggle={tToggle} isOpen={tooltip["newLog"]}>
-                        New Log
-                    </Tooltip>
+                    <IconTooltip
+                        tag={Link}
+                        to={"/newLog"}
+                        id="newLog"
+                        className={{
+                            link: "mr-3",
+                            icon: `topIcon ${page === "newLog" ? "active" : ""}`,
+                        }}
+                        Icon={NewLog}
+                        tooltip="New Log"
+                    />
                 </NavItem>
             ) : null}
             {userRoles.admin ? (
                 <NavItem>
-                    <NavLink tag={Link} to={"/permissions"} className="mr-3" id="roles">
-                        <UserRole className={`topIcon ${page === "permissions" ? "active" : ""}`} />
-                    </NavLink>
-                    <Tooltip target="roles" toggle={tToggle} isOpen={tooltip["roles"]}>
-                        User Permissions
-                    </Tooltip>
+                    <IconTooltip
+                        tag={Link}
+                        to={"/permissions"}
+                        id="roles"
+                        className={{
+                            link: "mr-3",
+                            icon: `topIcon ${page === "permissions" ? "active" : ""}`,
+                        }}
+                        Icon={UserRole}
+                        tooltip="User Permissions"
+                    />
                 </NavItem>
             ) : null}
             <NavItem>

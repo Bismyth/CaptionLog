@@ -22,7 +22,7 @@ const returnNewObjectOnlyValidKeys = (obj, validKeys) => {
     return newObject;
 };
 
-const FileAddon = (fName, type) => {
+const FileAddon = React.memo(({ fName, type }) => {
     if (type !== "fileSelect") return null;
     return (
         <InputGroupAddon addonType="prepend">
@@ -31,7 +31,7 @@ const FileAddon = (fName, type) => {
             </InputGroupText>
         </InputGroupAddon>
     );
-};
+});
 
 const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optional }) => {
     var sName = "";
@@ -54,6 +54,7 @@ const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optio
                 return (
                     <Field name={fName} id={fName} key={key}>
                         {({ field, meta }) => {
+                            if (index === undefined && uniqueInfo.includes(key)) return null;
                             return (
                                 <FormGroup row>
                                     <Label for={fName} xs={2}>
@@ -70,6 +71,11 @@ const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optio
                                                 tag={tag}
                                                 children={children}
                                                 checked={type === "checkbox" && field.value}
+                                                style={
+                                                    type === "checkbox"
+                                                        ? { marginLeft: ".1rem" }
+                                                        : null
+                                                }
                                             />
                                         </InputGroup>
                                         <FormFeedback>{meta.error}</FormFeedback>

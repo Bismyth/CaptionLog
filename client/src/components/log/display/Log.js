@@ -43,7 +43,7 @@ const Log = ({
             <div className={classHeading}>
                 <BackButton />
                 <h2>
-                    <LogHeader title={data.title} movieInfo={data.movieInfo} />
+                    <LogHeader title={data.title} rating={data.rating} year={data.year} />
                 </h2>
                 {userRoles.write ? (
                     <div className="ml-auto" style={{ minWidth: "72px" }}>
@@ -53,9 +53,8 @@ const Log = ({
                     </div>
                 ) : null}
             </div>
-            {Object.entries(format).map(([key, [{ heading, multi }, ...entries]]) => {
-                if (key !== "main" && data[key] === undefined) return null;
-                if (multi) {
+            {Object.entries(format).map(([key, [{ heading, type }, ...entries]]) => {
+                if (type === "multi") {
                     if (Object.keys(data).includes(key) && data[key].length > 0) {
                         return (
                             <Fragment key={key}>
@@ -111,16 +110,19 @@ const Log = ({
                         return <Fragment key={key} />;
                     }
                 } else {
+                    if (
+                        type === "sub" &&
+                        !entries.map((v) => v.value).some((v) => Object.keys(data).includes(v))
+                    )
+                        return null;
                     return (
                         <Fragment key={key}>
-                            {key !== "main" ? <h3 className="mt-2">{heading}</h3> : <Fragment />}
+                            {type === "sub" ? <h3 className="mt-2">{heading}</h3> : <Fragment />}
                             <ListGroup>
                                 {entries.map((v) => {
-                                    if (key === "main") var source = data;
-                                    else source = data[key];
                                     if (
-                                        Object.keys(source).includes(v.value) &&
-                                        source[v.value] !== ""
+                                        Object.keys(data).includes(v.value) &&
+                                        data[v.value] !== ""
                                     ) {
                                         return (
                                             <ListGroupItem key={`${key[0]}-${v.value}`}>
@@ -132,8 +134,8 @@ const Log = ({
                                                     style={{ whiteSpace: "pre-line" }}
                                                 >
                                                     {v.special === "date"
-                                                        ? new Date(source[v.value]).toDateString()
-                                                        : source[v.value]}
+                                                        ? new Date(data[v.value]).toDateString()
+                                                        : data[v.value]}
                                                 </ListGroupItemText>
                                             </ListGroupItem>
                                         );

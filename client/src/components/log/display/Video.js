@@ -59,6 +59,7 @@ const Video = ({
             </a>
         </Fragment>
     );
+
     if (location) {
         return (
             <Fragment>
@@ -102,6 +103,8 @@ const Video = ({
                 </Modal>
             </Fragment>
         );
+    } else if (externalLink) {
+        return eLink;
     }
     return null;
 };

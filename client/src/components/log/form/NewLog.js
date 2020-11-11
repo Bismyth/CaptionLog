@@ -18,27 +18,24 @@ const NewLog = () => {
     };
     const [errors, setErrors] = useState([]);
     const history = useHistory();
-    // const [upload] = useMutation(
-    //     async (values) => {
-    //         const { data } = await axios({
-    //             method: "post",
-    //             url: `/api/logs`,
-    //             data: values,
-    //         });
-    //         return data;
-    //     },
-    //     {
-    //         onError: ({ response }) => {
-    //             if (response.status === 422) setErrors(response.data.errors);
-    //         },
-    //         onSuccess: (data) => {
-    //             history.push(`/log/${data._id}`);
-    //         },
-    //     }
-    // );
-    const upload = (values) => {
-        console.log(values);
-    };
+    const [upload] = useMutation(
+        async (values) => {
+            const { data } = await axios({
+                method: "post",
+                url: `/api/logs`,
+                data: values,
+            });
+            return data;
+        },
+        {
+            onError: ({ response }) => {
+                if (response.status === 422) setErrors(response.data.errors);
+            },
+            onSuccess: (data) => {
+                history.push(`/log/${data._id}`);
+            },
+        }
+    );
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
     return <LogForm upload={upload} type="new" errors={errors} />;
 };

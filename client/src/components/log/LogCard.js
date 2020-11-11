@@ -6,7 +6,7 @@ import Convert from "./logActions/Convert";
 import Delete from "./logActions/Delete";
 import LogHeader from "./LogHeader";
 
-const LogCard = ({ _id, old, title, description, movieInfo, updatePage, userRoles }) => {
+const LogCard = ({ _id, old, title, description, year, rating, updatePage, userRoles }) => {
     return (
         <Card>
             <CardBody>
@@ -16,7 +16,7 @@ const LogCard = ({ _id, old, title, description, movieInfo, updatePage, userRole
                         to={old ? `/oldLog/${_id}` : `/log/${_id}`}
                         className="text-dark"
                     >
-                        <LogHeader title={title} movieInfo={movieInfo} old={old} />
+                        <LogHeader title={title} year={year} rating={rating} old={old} />
                     </Link>
                     {userRoles.write ? (
                         <div className="ml-auto mr-3" style={{ minWidth: "52px" }}>

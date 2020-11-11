@@ -19,7 +19,7 @@ const FormMSection = ({
     optional,
     uniqueInfo,
 }) => {
-    const [activeTab, setActiveTab] = useState(-1);
+    const [activeTab, setActiveTab] = useState(valuesLength - 1);
     const toggle = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
     };
@@ -63,7 +63,14 @@ const FormMSection = ({
                             <NavItem>
                                 <NavLink
                                     onClick={() => {
-                                        arrayHelpers.push(blank);
+                                        var tBlank = blank;
+                                        uniqueInfo.forEach((v) => {
+                                            var tmp = document.getElementsByName(
+                                                `digitalInfo.0.${v}`
+                                            )[0];
+                                            tBlank[v] = tmp ? tmp.value : "";
+                                        });
+                                        arrayHelpers.push(tBlank);
                                         toggle(valuesLength);
                                     }}
                                     className="cursor-pointer"
