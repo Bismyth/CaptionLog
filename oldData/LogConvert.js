@@ -18,7 +18,7 @@ mongoose
         console.log("MongoDB Connected....");
         const ids = (await Log.find({}).select("_id").lean()).map((v) => v._id);
         await asyncForEach(ids, async (v, i) => {
-            var data = await Log.findById(v);
+            var data = await Log.findById(v).lean();
             var isPrivate = false;
             var change = false;
             if (data.digitalInfo.length > 0) {
