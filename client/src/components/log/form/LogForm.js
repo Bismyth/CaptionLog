@@ -46,10 +46,10 @@ const diffArray = (arr1, arr2) =>
     arr1.concat(arr2).filter((val) => !(arr1.includes(val) && arr2.includes(val)));
 
 const LogForm = (props) => {
-    const { upload, data = blankForm, type, errors, oldLog } = props;
+    const { upload, data = blankForm, type, errors, oldLog, uniqueInfo: iUniqueInfo } = props;
     const [selectors, updateSelectors] = useState({});
     const [loading, setLoading] = useState(false);
-    const [uniqueInfo, setUniqueInfo] = useState([]);
+    const [uniqueInfo, setUniqueInfo] = useState(iUniqueInfo || []);
     const [eInfoTrack, setEInfoTrack] = useState([]);
     const [modal, setModal] = useState(false);
     const toggle = (e) => {

@@ -25,7 +25,7 @@ const DeleteLog = ({ id, old = false, back, className }) => {
             },
         }
     );
-    return <Delete id={id} className={className} action={deleteLog} />;
+    return <Delete id={old ? "o" + id : id} className={className} action={deleteLog} />;
 };
 
 export default DeleteLog;
