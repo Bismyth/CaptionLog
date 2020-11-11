@@ -61,7 +61,7 @@ mongoose
                 data.copyrightInfo = undefined;
             }
             data.physicalInfo = undefined;
-            await Log.findByIdAndUpdate(v, data, { overwrite: true });
+            await Log.findByIdAndUpdate(v, data, { strict: false, overwrite: true });
         });
         console.log("Done.");
         mongoose.connection.close();
