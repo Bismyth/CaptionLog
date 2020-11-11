@@ -13,16 +13,11 @@ const Delete = ({ className, id, action }) => {
         <Fragment>
             <IconTooltip
                 tooltip="Delete"
-                id={`delete-${id.substr(0, 8)}`}
+                id={`delete-${id}`}
                 Icon={DeleteButton}
                 className={{ link: "p-0 d-inline-block", icon: `link-arrow ${className}` }}
             />
-            <Popover
-                target={`delete-${id.substr(0, 8)}`}
-                isOpen={pOpen}
-                toggle={toggle}
-                placement={"left"}
-            >
+            <Popover target={`delete-${id}`} isOpen={pOpen} toggle={toggle} placement={"left"}>
                 <PopoverHeader>Delete</PopoverHeader>
                 <PopoverBody>
                     Are you sure you want to delete?

@@ -19,7 +19,7 @@ const Edit = ({ className, action, id }) => {
             <IconTooltip
                 tag={Link}
                 to={action.link}
-                id={`edit-${action.link.split("/").pop().substr(0, 8)}`}
+                id={`edit-${action.link.split("/").pop()}`}
                 className={{ link: "p-0 d-inline-block", icon: `link-arrow ${className}` }}
                 tooltip="Edit"
                 Icon={EditButton}

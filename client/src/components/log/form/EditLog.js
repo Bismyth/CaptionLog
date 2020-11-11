@@ -29,6 +29,7 @@ const EditLog = ({
     };
     const [errors, setErrors] = useState([]);
     const [uniqueInfo, setUniqueInfo] = useState([]);
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
     const [upload] = useMutation(
         async (data) => {
@@ -48,15 +49,16 @@ const EditLog = ({
             },
         }
     );
-    const { isLoading, data } = useQuery([`log`, { id }], fetchLog, {
+    const { data } = useQuery([`log`, { id }], fetchLog, {
         onSuccess: (data) => {
             var tmp = [];
             if (data.digitalInfo.length > 0) {
                 Object.keys(data.digitalInfo[0]).forEach((v) => {
-                    if (optional.includes(v)) tmp.push(v);
+                    if (Object.keys(optional).includes(v)) tmp.push(v);
                 });
             }
             setUniqueInfo(tmp);
+            setLoading(false);
         },
         onError: (err) => {
             console.error(err);
@@ -65,7 +67,7 @@ const EditLog = ({
         refetchOnWindowFocus: false,
     });
     if (!userRoles.write && loggedIn !== null) return <Redirect to="/" />;
-    if (isLoading) return <Spinner color="primary" />;
+    if (loading) return <Spinner color="primary" />;
     return (
         <LogForm upload={upload} data={data} type="edit" errors={errors} uniqueInfo={uniqueInfo} />
     );
