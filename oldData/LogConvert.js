@@ -64,7 +64,6 @@ mongoose
             await Log.findByIdAndUpdate(v, data, { strict: false, overwrite: true });
         });
         console.log("Done.");
-        mongoose.connection.close();
     })
     .catch((err) => console.error(err));
 
