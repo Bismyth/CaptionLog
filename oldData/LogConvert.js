@@ -7,7 +7,6 @@ const asyncForEach = async (array, callback) => {
     }
 };
 
-var testPriv = "5f3dc248e7ae965926ceb8f9";
 mongoose
     .connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
@@ -62,9 +61,10 @@ mongoose
                 data.copyrightInfo = undefined;
             }
             data.physicalInfo = undefined;
-            await Log.findByIdAndUpdate(v, data, { strict: false, overwrite: true });
+            await Log.findByIdAndUpdate(v, data, { overwrite: true });
         });
         console.log("Done.");
+        mongoose.connection.close();
     })
     .catch((err) => console.error(err));
 
