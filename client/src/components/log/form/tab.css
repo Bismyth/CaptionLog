@@ -1,0 +1,17 @@
+.removeBtn {
+    margin-left: 0.5rem;
+    display: none;
+}
+
+.removeBtn.active {
+    display: inline;
+}
+
+.tabBtn {
+    height: 1rem;
+    width: auto;
+}
+.tabBtn:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}

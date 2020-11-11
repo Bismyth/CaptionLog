@@ -7,7 +7,7 @@ import { ReactComponent as AddBtn } from "../../../icons/add-black-24dp.svg";
 import { ReactComponent as RemoveBtn } from "../../../icons/clear-black-24dp.svg";
 
 import { FieldArray } from "formik";
-
+import "./tab.css";
 const FormMSection = ({
     section,
     selectors,
@@ -46,15 +46,25 @@ const FormMSection = ({
                                         <RemoveBtn
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                if (index <= activeTab) {
-                                                    toggle(activeTab - 1);
+                                                if (
+                                                    window.confirm(
+                                                        "Are you sure you want to delete"
+                                                    )
+                                                ) {
+                                                    if (index <= activeTab) {
+                                                        toggle(activeTab - 1);
+                                                    }
+                                                    if (activeTab === 0 && valuesLength === 1) {
+                                                        toggle(-1);
+                                                    }
+                                                    arrayHelpers.remove(index);
                                                 }
-                                                if (activeTab === 0 && valuesLength === 1) {
-                                                    toggle(-1);
-                                                }
-                                                arrayHelpers.remove(index);
                                             }}
-                                            className="tabBtn"
+                                            className={classnames(
+                                                { active: activeTab === index },
+                                                "tabBtn",
+                                                "removeBtn"
+                                            )}
                                             style={{ marginLeft: ".5rem" }}
                                         />
                                     </NavLink>
