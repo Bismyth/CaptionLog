@@ -10,7 +10,8 @@
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "updateLogs": "node ./oldData/import",
         "replaceLogs": "node ./oldData/replace",
-        "convert": "node ./oldData/LogConvert"
+        "convert": "node ./conversion/LogConvert",
+        "thumbnails": "node ./conversion/Thumbnails"
     },
     "repository": {
         "type": "git",
@@ -30,14 +31,16 @@
         "express": "^4.17.1",
         "express-session": "^1.17.1",
         "express-validator": "^6.6.1",
+        "ffmpeg-static": "^4.2.7",
         "ffprobe": "^1.1.2",
         "ffprobe-static": "^3.0.0",
         "ip": "^1.1.5",
         "jsonwebtoken": "^8.5.1",
         "junk": "^3.1.0",
-        "mongoose": "^5.10.13",
+        "mongoose": "^5.10.14",
         "node-cas-authentication": "0.0.15",
-        "pump": "^3.0.0"
+        "pump": "^3.0.0",
+        "simple-thumbnail": "^1.6.5"
     },
     "devDependencies": {
         "concurrently": "^5.3.0",

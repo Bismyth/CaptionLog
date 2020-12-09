@@ -4,9 +4,20 @@ import { useHistory } from "react-router-dom";
 import LogListItem from "./LogListItem";
 import { useQuery } from "react-query";
 import { fetchLogs } from "../../queries/log";
+import { useSelector } from "react-redux";
 
 const alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const AtoZ = ({ match: { params }, location: { scroll } }) => {
+    const loggedIn = useSelector((state) => state.auth.isAuthenticated);
+    const userRoles = {
+        ...useSelector((state) => {
+            if (state.auth.user) {
+                return state.auth.user.roles;
+            } else {
+                return undefined;
+            }
+        }),
+    };
     useEffect(() => {
         if (scroll) document.getElementById("scroll").scroll(0, scroll);
     }, [scroll]);
@@ -46,10 +57,18 @@ const AtoZ = ({ match: { params }, location: { scroll } }) => {
                 ))}
             </Pagination>
             {error ? <Alert color="danger">{error}</Alert> : null}
+
             {isLoading ? (
                 <Spinner color="primary" />
             ) : (
-                <LogListItem data={data} page={`/atoz/${search}`} />
+                <>
+                    {loggedIn && userRoles.write ? (
+                        <Alert color="info">{`Old Logs: ${
+                            data.filter((x) => x.old).length
+                        }, New Logs: ${data.filter((x) => !x.old).length}`}</Alert>
+                    ) : null}
+                    <LogListItem data={data} page={`/atoz/${search}`} />
+                </>
             )}
         </div>
     );
