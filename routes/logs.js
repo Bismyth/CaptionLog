@@ -1,27 +1,27 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const auth = require("../middleware/auth");
-const fs = require("fs");
-const path = require("path");
-const { checkSchema, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
-const junk = require("junk");
-var ffprobe = require("ffprobe"),
-    ffprobeStatic = require("ffprobe-static");
-const { Types } = require("mongoose");
+const auth = require('../middleware/auth');
+const fs = require('fs');
+const path = require('path');
+const { checkSchema, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
+const junk = require('junk');
+var ffprobe = require('ffprobe'),
+    ffprobeStatic = require('ffprobe-static');
+const { Types } = require('mongoose');
 //Import Environment Variables
-require("dotenv").config();
+require('dotenv').config();
 
 //Importing old Model s
-const { OldLog, Update } = require("../models/OldLog");
-const Log = require("../models/Log");
+const { OldLog, Update } = require('../models/OldLog');
+const Log = require('../models/Log');
 const processVideoLength = async (digitalInfo) => {
     for (let index = 0; index < digitalInfo.length; index++) {
         var v = digitalInfo[index];
         if (v.location) {
             const video = path.join(process.env.MEDIA_ROOT, v.location);
             if (fs.existsSync(video)) {
-                if (v.length === "") {
+                if (v.length === '') {
                     var videoInfo;
                     try {
                         videoInfo = await ffprobe(video, { path: ffprobeStatic.path });
@@ -46,13 +46,13 @@ const processVideoLength = async (digitalInfo) => {
 //@route GET api/logs
 //@desc  Return Logs
 //@access Public
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
     var { search: term } = req.query;
     var search = req.query.search
-        ? { title: new RegExp(`(?!the)(^${term})|(^the ${term})`, "i") }
+        ? { title: new RegExp(`(?!the)(^${term})|(^the ${term})`, 'i') }
         : {};
-    var queryO = OldLog.find(search).select("title description").sort("title").lean();
-    var query = Log.find(search).select("title description year rating").sort("title").lean();
+    var queryO = OldLog.find(search).select('title description').sort('title').lean();
+    var query = Log.find(search).select('title description year rating').sort('title').lean();
     Promise.all([query, queryO])
         .then((results) => {
             var joined = [
@@ -65,11 +65,11 @@ router.get("/", (req, res) => {
                 joined.sort((a, b) => {
                     var [title1, title2] = [a, b].map(({ title }) => {
                         var t = title.toLowerCase();
-                        if (t.substr(0, 3) === "the") return t.substr(4);
+                        if (t.substr(0, 3) === 'the') return t.substr(4);
                         return t;
                     });
 
-                    if (title2.substr(0, 3) === "the") title2 = title2.substr(4);
+                    if (title2.substr(0, 3) === 'the') title2 = title2.substr(4);
                     return title1 > title2 ? 1 : -1;
                 })
             );
@@ -79,15 +79,15 @@ router.get("/", (req, res) => {
         });
 });
 
-router.get("/search", auth.read, (req, res) => {
+router.get('/search', auth.read, (req, res) => {
     const { term } = req.query;
-    var queryO = OldLog.find({ $text: { $search: term } }, { score: { $meta: "textScore" } })
-        .sort({ score: { $meta: "textScore" } })
-        .select("title description")
+    var queryO = OldLog.find({ $text: { $search: term } }, { score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .select('title description')
         .lean();
-    var query = Log.find({ $text: { $search: term } }, { score: { $meta: "textScore" } })
-        .sort({ score: { $meta: "textScore" } })
-        .select("title description")
+    var query = Log.find({ $text: { $search: term } }, { score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .select('title description year rating')
         .lean();
     Promise.all([query, queryO])
         .then((results) => {
@@ -105,8 +105,8 @@ router.get("/search", auth.read, (req, res) => {
 });
 
 router.post(
-    "/",
-    checkSchema(require("../validationSchema/newLog")),
+    '/',
+    checkSchema(require('../validationSchema/newLog')),
     auth.block(auth.roles.write),
     async (req, res) => {
         const errors = validationResult(req);
@@ -125,8 +125,8 @@ router.post(
 );
 
 router.post(
-    "/convert",
-    checkSchema(require("../validationSchema/newLog")),
+    '/convert',
+    checkSchema(require('../validationSchema/newLog')),
     auth.block(auth.roles.write),
     async (req, res) => {
         const errors = validationResult(req);
@@ -157,8 +157,8 @@ router.post(
 );
 
 router.put(
-    "/",
-    checkSchema(require("../validationSchema/newLog")),
+    '/',
+    checkSchema(require('../validationSchema/newLog')),
     auth.block(auth.roles.write),
     async (req, res) => {
         const errors = validationResult(req);
@@ -176,10 +176,10 @@ router.put(
     }
 );
 
-router.post("/scan", auth.block(auth.roles.read), (req, res) => {
+router.post('/scan', auth.block(auth.roles.read), (req, res) => {
     var basePath = process.env.MEDIA_ROOT;
-    if (!req.body.path) res.status(400).json({ errors: [{ msg: "Missing Path" }] });
-    var sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.(\/|\\|$))+/, "");
+    if (!req.body.path) res.status(400).json({ errors: [{ msg: 'Missing Path' }] });
+    var sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.(\/|\\|$))+/, '');
     var search = path.join(basePath, sanitizedPath);
     var rfiles = [];
     fs.readdir(search, { withFileTypes: true }, (err, files) => {
@@ -205,14 +205,14 @@ router.post("/scan", auth.block(auth.roles.read), (req, res) => {
 //@route GET api/logs/:id
 //@desc  Return Specific Log
 //@access Public but more info is private
-router.get("/:id", auth.read, (req, res) => {
+router.get('/:id', auth.read, (req, res) => {
     var Source;
-    if (req.query.type === "old") Source = OldLog;
+    if (req.query.type === 'old') Source = OldLog;
     else Source = Log;
     if (req.roles && req.roles[auth.roles.read]) {
         Source.findById(req.params.id, (err, doc) => {
             if (err) return res.sendStatus(500);
-            Update.findOne({ "newLog.id": Types.ObjectId(req.params.id) }, (oErr, oDoc) => {
+            Update.findOne({ 'newLog.id': Types.ObjectId(req.params.id) }, (oErr, oDoc) => {
                 if (oDoc !== null) res.json({ ...doc, oData: oDoc.oldLog });
                 else res.json(doc);
             }).lean();
@@ -222,20 +222,20 @@ router.get("/:id", auth.read, (req, res) => {
             if (err) return res.sendStatus(500);
             res.json(data);
         }).select(
-            req.query.type === "old"
-                ? "title description genre"
-                : "title description genre rating year digitalInfo"
+            req.query.type === 'old'
+                ? 'title description genre'
+                : 'title description genre rating year digitalInfo'
         );
     }
 });
 
-router.delete("/:id", auth.block(auth.roles.write), (req, res) => {
+router.delete('/:id', auth.block(auth.roles.write), (req, res) => {
     var Source;
     if (req.body.old) Source = OldLog;
     else Source = Log;
     Source.findByIdAndDelete(req.params.id, (err, doc) => {
         if (err) return res.sendStatus(500);
-        res.json({ msg: "Delete Sucessful" });
+        res.json({ msg: 'Delete Sucessful' });
     });
 });
 

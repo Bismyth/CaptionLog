@@ -62,7 +62,7 @@ const AtoZ = ({ match: { params }, location: { scroll } }) => {
                 <Spinner color="primary" />
             ) : (
                 <>
-                    {loggedIn && userRoles.write ? (
+                    {loggedIn && userRoles.admin ? (
                         <Alert color="info">{`Old Logs: ${
                             data.filter((x) => x.old).length
                         }, New Logs: ${data.filter((x) => !x.old).length}`}</Alert>
