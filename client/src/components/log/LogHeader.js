@@ -1,12 +1,12 @@
-import React, { Fragment } from "react";
-import { Badge } from "reactstrap";
+import React, { Fragment } from 'react';
+import { Badge } from 'reactstrap';
 
 const ratingColours = {
-    E: { bg: "#818286", c: "#fff" },
-    G: { bg: "#33a02c", c: "#fff" },
-    PG: { bg: "#ffff00", c: "#000" },
-    M: { bg: "#00a0c6", c: "#fff" },
-    "MA15+": { bg: "#ff0000", c: "#fff" },
+    E: { bg: '#818286', c: '#fff' },
+    G: { bg: '#33a02c', c: '#fff' },
+    PG: { bg: '#ffff00', c: '#000' },
+    M: { bg: '#00a0c6', c: '#fff' },
+    'MA15+': { bg: '#ff0000', c: '#fff' },
 };
 const LogHeader = ({ title, year, rating, old }) => {
     var badgeStyle;
@@ -18,7 +18,7 @@ const LogHeader = ({ title, year, rating, old }) => {
         };
         ratingDisplay = (
             <Fragment>
-                {" "}
+                {' '}
                 <Badge style={badgeStyle}>{rating}</Badge>
             </Fragment>
         );

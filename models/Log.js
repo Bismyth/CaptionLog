@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const DigitalInfoSchema = new Schema({
@@ -37,8 +37,8 @@ const LogSchema = new Schema({
 });
 
 LogSchema.index(
-    { title: "text", description: "text" },
-    { name: "Search", weights: { title: 20, description: 1 } }
+    { title: 'text', description: 'text' },
+    { name: 'Search', weights: { title: 20, description: 1 } }
 );
 
-module.exports = Log = mongoose.model("log", LogSchema);
+module.exports = Log = mongoose.model('log', LogSchema);

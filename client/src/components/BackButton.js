@@ -1,8 +1,8 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
-import { ReactComponent as BackArrow } from "../icons/arrow_back-black-24dp.svg";
-import { useSelector, useDispatch } from "react-redux";
-import { clearPage } from "../redux/actions/pageActions";
+import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { ReactComponent as BackArrow } from '../icons/arrow_back-black-24dp.svg';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearPage } from '../redux/actions/pageActions';
 const BackButton = ({ className, back }) => {
     const style = `link-arrow mr-1 ${className}`;
     const { page, scrollPos } = useSelector((state) => state.page);

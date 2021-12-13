@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
-const Log = require("../models/Log");
-const path = require("path");
-const genThumbnail = require("simple-thumbnail");
-const ffprobe = require("ffprobe");
-const ffprobeStatic = require("ffprobe-static");
-const ffmpegStatic = require("ffmpeg-static");
+const mongoose = require('mongoose');
+require('dotenv').config();
+const Log = require('../models/Log');
+const path = require('path');
+const genThumbnail = require('simple-thumbnail');
+const ffprobe = require('ffprobe');
+const ffprobeStatic = require('ffprobe-static');
+const ffmpegStatic = require('ffmpeg-static');
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
     }
 };
 
-var magic = "5facf369a7ae8d16e0742fec";
+var magic = '5facf369a7ae8d16e0742fec';
 
 mongoose
     .connect(process.env.MONGO_URI, {
@@ -22,7 +22,7 @@ mongoose
         useFindAndModify: false,
     })
     .then(async () => {
-        const ids = (await Log.find({}).select("_id").lean()).map((v) => v._id);
+        const ids = (await Log.find({}).select('_id').lean()).map((v) => v._id);
         await asyncForEach(ids.slice(0, 50), async (v) => {
             var data = await Log.findById(v).lean();
             console.log(data.title);
@@ -45,10 +45,10 @@ mongoose
                             path.join(process.env.MEDIA_ROOT, v.location),
                             path.join(
                                 //process.env.MEDIA_ROOT,
-                                "/home/ben/Documents/Coding/Captioning Browser/Test Data",
+                                '/home/ben/Documents/Coding/Captioning Browser/Test Data',
                                 `/Thumbnails/m-${data._id + v._id}.jpg`
                             ),
-                            "250x?",
+                            '250x?',
                             {
                                 seek: randomTime,
                                 path: ffmpegStatic.path,
@@ -60,6 +60,6 @@ mongoose
                 }
             });
         });
-        console.log("Done");
+        console.log('Done');
     })
     .catch((err) => console.error(err));

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
@@ -6,14 +6,14 @@ const asyncForEach = async (array, callback) => {
     }
 };
 
-const fs = require("fs");
-let rawdata = fs.readFileSync("./oldData/logs.json");
+const fs = require('fs');
+let rawdata = fs.readFileSync('./oldData/logs.json');
 let logs = JSON.parse(rawdata);
 
-const { OldLog } = require("../models/OldLog");
+const { OldLog } = require('../models/OldLog');
 
-require("dotenv").config();
-const uploadConfig = [{ db: OldLog, items: logs, name: "Old Logs", filter: "title" }];
+require('dotenv').config();
+const uploadConfig = [{ db: OldLog, items: logs, name: 'Old Logs', filter: 'title' }];
 
 mongoose
     .connect(process.env.MONGO_URI, {
@@ -22,7 +22,7 @@ mongoose
         useCreateIndex: true,
     })
     .then(() => {
-        console.log("MongoDB Connected....");
+        console.log('MongoDB Connected....');
         uploadConfig.forEach(({ db, items, name, filter }) => {
             asyncForEach(items, async (v) => {
                 await db.updateOne({ [filter]: v[filter] }, v);

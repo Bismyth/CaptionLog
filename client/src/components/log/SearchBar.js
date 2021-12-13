@@ -1,6 +1,6 @@
-import React from "react";
-import { ReactComponent as SearchIcon } from "../../icons/search-black-24dp.svg";
-import { InputGroup, Input, InputGroupAddon, InputGroupText } from "reactstrap";
+import React from 'react';
+import { ReactComponent as SearchIcon } from '../../icons/search-black-24dp.svg';
+import { InputGroup, Input, InputGroupAddon, InputGroupText } from 'reactstrap';
 const SearchBar = ({ className, update, value }) => {
     return (
         <InputGroup className={className}>

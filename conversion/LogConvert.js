@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
-const Log = require("../models/Log");
+const mongoose = require('mongoose');
+require('dotenv').config();
+const Log = require('../models/Log');
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
@@ -15,8 +15,8 @@ mongoose
         useFindAndModify: false,
     })
     .then(async () => {
-        console.log("MongoDB Connected....");
-        const ids = (await Log.find({}).select("_id").lean()).map((v) => v._id);
+        console.log('MongoDB Connected....');
+        const ids = (await Log.find({}).select('_id').lean()).map((v) => v._id);
         await asyncForEach(ids, async (v, i) => {
             var data = await Log.findById(v).lean();
             var isPrivate = false;
@@ -38,15 +38,15 @@ mongoose
             if (data.movieInfo) {
                 data = {
                     ...data,
-                    rating: data.movieInfo.rating || "",
-                    year: data.movieInfo.year || "",
+                    rating: data.movieInfo.rating || '',
+                    year: data.movieInfo.year || '',
                 };
                 data.movieInfo = undefined;
             } else {
                 data = {
                     ...data,
-                    rating: "",
-                    year: "",
+                    rating: '',
+                    year: '',
                 };
             }
             if (data.copyrightInfo) {
@@ -63,7 +63,7 @@ mongoose
             data.physicalInfo = undefined;
             await Log.findByIdAndUpdate(v, data, { strict: false, overwrite: true });
         });
-        console.log("Done.");
+        console.log('Done.');
     })
     .catch((err) => console.error(err));
 

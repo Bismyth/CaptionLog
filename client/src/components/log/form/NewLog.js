@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-import LogForm from "./LogForm";
-import { useMutation } from "react-query";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useHistory, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import LogForm from './LogForm';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 const NewLog = () => {
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
@@ -21,7 +21,7 @@ const NewLog = () => {
     const [upload] = useMutation(
         async (values) => {
             const { data } = await axios({
-                method: "post",
+                method: 'post',
                 url: `/api/logs`,
                 data: values,
             });

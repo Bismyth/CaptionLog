@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink, Tooltip } from "reactstrap";
+import React, { useState } from 'react';
+import { NavLink, Tooltip } from 'reactstrap';
 
 const IconTooltip = ({ Icon, className: { link, icon }, tooltip, id, onClick, tag, to }) => {
     const [isOpen, setIsOpen] = useState(false);

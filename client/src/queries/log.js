@@ -1,20 +1,20 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const fetchLog = async (key, { id, old }) => {
     var config = {
         url: `/api/logs/${id}`,
-        method: "get",
+        method: 'get',
     };
-    if (old) config.params = { type: "old" };
+    if (old) config.params = { type: 'old' };
     const { data } = await axios(config);
     return data;
 };
 
 export const fetchLogs = async (key, { params }) => {
-    if (decodeURIComponent(params.search) === "#") params.search = "[(0-9]";
+    if (decodeURIComponent(params.search) === '#') params.search = '[(0-9]';
     var config = {
         url: `/api/logs`,
-        method: "get",
+        method: 'get',
         params,
     };
     const { data } = await axios(config);
@@ -22,10 +22,10 @@ export const fetchLogs = async (key, { params }) => {
 };
 
 export const searchLogs = async (key, { params }) => {
-    if (decodeURIComponent(params.search) === "#") params.search = "[(0-9]";
+    if (decodeURIComponent(params.search) === '#') params.search = '[(0-9]';
     var config = {
         url: `/api/logs/search`,
-        method: "get",
+        method: 'get',
         params,
     };
     const { data } = await axios(config);

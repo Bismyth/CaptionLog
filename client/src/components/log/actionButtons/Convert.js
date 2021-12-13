@@ -1,6 +1,6 @@
-import React from "react";
-import { ReactComponent as ConvertButton } from "../../../icons/build-black-24dp.svg";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { ReactComponent as ConvertButton } from '../../../icons/build-black-24dp.svg';
+import { Link } from 'react-router-dom';
 
 const Convert = ({ id, className }) => {
     return (

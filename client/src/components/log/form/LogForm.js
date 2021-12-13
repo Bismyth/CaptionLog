@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
-import axios from "axios";
+import React, { useState, useEffect, Fragment } from 'react';
+import axios from 'axios';
 import {
     Spinner,
     Alert,
@@ -11,20 +11,20 @@ import {
     ModalFooter,
     Label,
     Input,
-} from "reactstrap";
-import { Formik, Form } from "formik";
-import { title, submitBtn, blankForm, display, selectorsFormat, blank } from "./FormData.json";
-import FormSection from "./FormSection";
-import FormMSection from "./FormMSection";
-import BackButton from "../../BackButton";
-import OldLogInfo from "../logActions/OldLogInfo";
-import { ReactComponent as eInfoBtn } from "../../../icons/sort-black-24dp.svg";
-import { classHeading, asyncForEach } from "../../../config";
-import * as Yup from "yup";
-import IconTooltip from "../../IconTooltip";
+} from 'reactstrap';
+import { Formik, Form } from 'formik';
+import { title, submitBtn, blankForm, display, selectorsFormat, blank } from './FormData.json';
+import FormSection from './FormSection';
+import FormMSection from './FormMSection';
+import BackButton from '../../BackButton';
+import OldLogInfo from '../logActions/OldLogInfo';
+import { ReactComponent as eInfoBtn } from '../../../icons/sort-black-24dp.svg';
+import { classHeading, asyncForEach } from '../../../config';
+import * as Yup from 'yup';
+import IconTooltip from '../../IconTooltip';
 
 const LogSchema = Yup.object().shape({
-    title: Yup.string().required("Please add a title."),
+    title: Yup.string().required('Please add a title.'),
     description: Yup.string(),
     genre: Yup.string(),
     folder: Yup.string(),
@@ -65,7 +65,7 @@ const LogForm = (props) => {
                 return v.filter((x) => x !== name);
             });
         } else {
-            console.error("Extra Info function screwed up.");
+            console.error('Extra Info function screwed up.');
         }
     };
     const eInfoSubmit = (e, setFieldValue, values) => {
@@ -83,7 +83,7 @@ const LogForm = (props) => {
                 });
             }
         });
-        setFieldValue("digitalInfo", newDig);
+        setFieldValue('digitalInfo', newDig);
         setUniqueInfo(eInfoTrack);
         toggle();
     };
@@ -92,7 +92,7 @@ const LogForm = (props) => {
             setLoading(true);
             await asyncForEach(selectorsFormat, async (selector) => {
                 var config = {
-                    method: "get",
+                    method: 'get',
                     url: `/api/lists/${selector}`,
                 };
                 const { data: result } = await axios(config);
@@ -100,7 +100,7 @@ const LogForm = (props) => {
                 updateSelectors((v) => {
                     return {
                         ...v,
-                        [selector]: ["", ...result.map((v) => v.name)],
+                        [selector]: ['', ...result.map((v) => v.name)],
                     };
                 });
             });
@@ -130,7 +130,7 @@ const LogForm = (props) => {
                                     Icon={eInfoBtn}
                                     tooltip="Extra Info"
                                     id="eInfo"
-                                    className={{ icon: "link-arrow" }}
+                                    className={{ icon: 'link-arrow' }}
                                 />
                                 <Modal isOpen={modal} toggle={toggle} size="md">
                                     <ModalHeader toggle={toggle}>Extra Info</ModalHeader>
@@ -180,14 +180,14 @@ const LogForm = (props) => {
                                     section: key,
                                     uniqueInfo,
                                 };
-                                if (type === "single") {
+                                if (type === 'single') {
                                     return (
                                         <Fragment key={key}>
                                             {name ? <h3 className="mb-3">{name}</h3> : null}
                                             <FormSection {...uni} />
                                         </Fragment>
                                     );
-                                } else if (type === "multi") {
+                                } else if (type === 'multi') {
                                     var valuesLength = values[key].length;
                                     return (
                                         <FormMSection

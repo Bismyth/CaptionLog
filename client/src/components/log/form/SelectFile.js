@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect } from 'react';
 import {
     Modal,
     ModalHeader,
@@ -10,42 +10,42 @@ import {
     ModalBody,
     Button,
     ModalFooter,
-} from "reactstrap";
-import axios from "axios";
-import folderIcon from "../../../icons/folder-black-24dp.svg";
-import backIcon from "../../../icons/keyboard_return-black-24dp.svg";
-import { useQuery } from "react-query";
-import SearchBar from "../SearchBar";
+} from 'reactstrap';
+import axios from 'axios';
+import folderIcon from '../../../icons/folder-black-24dp.svg';
+import backIcon from '../../../icons/keyboard_return-black-24dp.svg';
+import { useQuery } from 'react-query';
+import SearchBar from '../SearchBar';
 
-import { useFormikContext } from "formik";
-import { ReactComponent as FileAdd } from "../../../icons/note_add-black-24dp.svg";
+import { useFormikContext } from 'formik';
+import { ReactComponent as FileAdd } from '../../../icons/note_add-black-24dp.svg';
 const shortenPath = (path) => {
     return path
-        .split("/")
-        .map((v) => v.substr(0, 4).replace(/ /g, ""))
-        .join("");
+        .split('/')
+        .map((v) => v.substr(0, 4).replace(/ /g, ''))
+        .join('');
 };
 
 const SelectFile = ({ sName }) => {
     const {
-        values: { folder = "" },
+        values: { folder = '' },
         handleChange: change,
     } = useFormikContext();
     const [folderChain, setFolderChain] = useState(
-        folder.split("/").map((v, i, arr) => {
+        folder.split('/').map((v, i, arr) => {
             return {
-                id: v === "" ? "/" : arr.slice(0, i + 1).join("/"),
-                name: v === "" ? "Content" : v,
+                id: v === '' ? '/' : arr.slice(0, i + 1).join('/'),
+                name: v === '' ? 'Content' : v,
                 isDir: true,
             };
         })
     );
     useEffect(() => {
-        setCurrentDIR(folder || "/");
+        setCurrentDIR(folder || '/');
     }, [folder]);
-    const [currentDIR, setCurrentDIR] = useState(folder || "/");
-    const [fileSelected, setFileSelected] = useState("");
-    const [search, setSearch] = useState("");
+    const [currentDIR, setCurrentDIR] = useState(folder || '/');
+    const [fileSelected, setFileSelected] = useState('');
+    const [search, setSearch] = useState('');
     const [modal, setModal] = useState(false);
     const toggle = (e) => {
         setModal(!modal);
@@ -54,7 +54,7 @@ const SelectFile = ({ sName }) => {
         [`file-${shortenPath(currentDIR)}`, { path: currentDIR }],
         async (key, path) => {
             const { data } = await axios({
-                method: "post",
+                method: 'post',
                 url: `/api/logs/scan`,
                 data: path,
             });
@@ -62,15 +62,15 @@ const SelectFile = ({ sName }) => {
         },
         {
             onError: (err) => {
-                setCurrentDIR("/");
+                setCurrentDIR('/');
             },
         }
     );
     const fileDown = (e, file) => {
         e.preventDefault();
-        setSearch("");
+        setSearch('');
         if (file.isDir) {
-            setFileSelected("");
+            setFileSelected('');
             setCurrentDIR(file.id);
             setFolderChain([...folderChain, file]);
         } else {
@@ -79,15 +79,15 @@ const SelectFile = ({ sName }) => {
     };
     const goToFolder = (e, folder) => {
         e.preventDefault();
-        setSearch("");
-        setFileSelected("");
+        setSearch('');
+        setFileSelected('');
         setCurrentDIR(folder.id);
         setFolderChain((value) => {
             return value.splice(0, value.indexOf(folder) + 1);
         });
     };
     const goUp = (e) => {
-        setSearch("");
+        setSearch('');
         if (folderChain.length === 1) {
             e.preventDefault();
         } else {
@@ -95,8 +95,8 @@ const SelectFile = ({ sName }) => {
         }
     };
     const selectFile = (e) => {
-        setSearch("");
-        change({ target: { name: "folder", value: currentDIR } }, "main");
+        setSearch('');
+        change({ target: { name: 'folder', value: currentDIR } }, 'main');
         change({ target: { name: sName, value: fileSelected } });
         setModal(!modal);
     };
@@ -112,7 +112,7 @@ const SelectFile = ({ sName }) => {
                             alt="goUp"
                             className="link-arrow"
                             onClick={goUp}
-                            style={{ paddingRight: "5px" }}
+                            style={{ paddingRight: '5px' }}
                         />
 
                         {folderChain.map((folder, i) => {
@@ -137,12 +137,12 @@ const SelectFile = ({ sName }) => {
                         {!isLoading ? (
                             files
                                 .filter((v) => {
-                                    return new RegExp(`^${search}`, "i").test(v.name);
+                                    return new RegExp(`^${search}`, 'i').test(v.name);
                                 })
                                 .map((file) => {
                                     return (
                                         <ListGroupItem
-                                            tag={file.isDir ? "a" : "button"}
+                                            tag={file.isDir ? 'a' : 'button'}
                                             href="#"
                                             onClick={(e) => fileDown(e, file)}
                                             action={!file.isDir}
@@ -154,8 +154,8 @@ const SelectFile = ({ sName }) => {
                                                     src={folderIcon}
                                                     alt="folder-icon"
                                                     style={{
-                                                        paddingRight: "5px",
-                                                        color: "grey",
+                                                        paddingRight: '5px',
+                                                        color: 'grey',
                                                     }}
                                                 />
                                             ) : null}
@@ -169,7 +169,7 @@ const SelectFile = ({ sName }) => {
                     </ListGroup>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" disabled={fileSelected === ""} onClick={selectFile}>
+                    <Button color="primary" disabled={fileSelected === ''} onClick={selectFile}>
                         Select File
                     </Button>
                 </ModalFooter>

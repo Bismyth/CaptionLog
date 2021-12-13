@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect } from 'react';
 import {
     Modal,
     ModalHeader,
@@ -10,28 +10,28 @@ import {
     ModalBody,
     Button,
     ModalFooter,
-} from "reactstrap";
-import axios from "axios";
+} from 'reactstrap';
+import axios from 'axios';
 
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query';
 
-import { getIn, connect } from "formik";
-import { ReactComponent as EmailBtn } from "../../../icons/contact_mail-black-24dp.svg";
+import { getIn, connect } from 'formik';
+import { ReactComponent as EmailBtn } from '../../../icons/contact_mail-black-24dp.svg';
 
 const Email = () => {
-    const folder = getIn(formik.values.folder) || "";
+    const folder = getIn(formik.values.folder) || '';
     const change = getIn(formik.handleChange);
     const [folderChain, setFolderChain] = useState(
-        folder.split("/").map((v, i, arr) => {
+        folder.split('/').map((v, i, arr) => {
             return {
-                id: v === "" ? "/" : arr.slice(0, i + 1).join("/"),
-                name: v === "" ? "Content" : v,
+                id: v === '' ? '/' : arr.slice(0, i + 1).join('/'),
+                name: v === '' ? 'Content' : v,
                 isDir: true,
             };
         })
     );
     useEffect(() => {
-        setCurrentDIR(folder || "/");
+        setCurrentDIR(folder || '/');
     }, [folder]);
     const [modal, setModal] = useState(false);
     const toggle = (e) => {

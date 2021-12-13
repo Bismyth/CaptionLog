@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const OldLogSchema = new Schema({
@@ -56,12 +56,12 @@ const UpdateSchema = new Schema({
     oldLog: { _id: false, type: OldLogSchema },
 });
 OldLogSchema.index(
-    { title: "text", description: "text" },
-    { name: "Search", weights: { title: 20, description: 1 } }
+    { title: 'text', description: 'text' },
+    { name: 'Search', weights: { title: 20, description: 1 } }
 );
 
-const OldLog = mongoose.model("oldlog", OldLogSchema);
-const Update = mongoose.model("update", UpdateSchema);
+const OldLog = mongoose.model('oldlog', OldLogSchema);
+const Update = mongoose.model('update', UpdateSchema);
 module.exports = {
     OldLog,
     Update,

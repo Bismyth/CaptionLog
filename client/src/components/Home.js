@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { Nav, NavItem, NavLink, TabContent, TabPane, Tooltip } from "reactstrap";
-import captionRoom from "../captionRoom.jpg";
-import { ReactComponent as Contact } from "../icons/contact_mail-black-24dp.svg";
-import { classHeading } from "../config";
-import data from "./copyInfo.json";
+import React, { useState } from 'react';
+import { Nav, NavItem, NavLink, TabContent, TabPane, Tooltip } from 'reactstrap';
+import captionRoom from '../captionRoom.jpg';
+import { ReactComponent as Contact } from '../icons/contact_mail-black-24dp.svg';
+import { classHeading } from '../config';
+import data from './copyInfo.json';
 const Home = () => {
-    const [activeTab, setActiveTab] = useState("0");
+    const [activeTab, setActiveTab] = useState('0');
     const [tooltip, setTooltip] = useState({});
     const toggle = (e) => {
         var tab = data.findIndex((x) => x.name === e.target.text).toString();
         if (activeTab !== tab) setActiveTab(tab);
     };
     const tToggle = (e) => {
-        const tar = e.target.closest("a") || e.target.closest("svg");
+        const tar = e.target.closest('a') || e.target.closest('svg');
         setTooltip((v) => {
             return {
                 ...v,
@@ -27,10 +27,10 @@ const Home = () => {
                 <a className="ml-auto" id="contact" href="mailto:lisa.june@education.wa.edu.au">
                     <Contact
                         className="w-auto link-arrow contactBtn"
-                        style={{ height: "50px", fill: "var(--sBlue)" }}
+                        style={{ height: '50px', fill: 'var(--sBlue)' }}
                     />
                 </a>
-                <Tooltip target="contact" toggle={tToggle} isOpen={tooltip["contact"]}>
+                <Tooltip target="contact" toggle={tToggle} isOpen={tooltip['contact']}>
                     Contact the Captioning Office
                 </Tooltip>
             </div>
@@ -42,8 +42,8 @@ const Home = () => {
                             <h5 className="mb-0">
                                 <NavLink
                                     className={
-                                        "cursor-pointer " +
-                                        (activeTab === i.toString() ? "active" : "")
+                                        'cursor-pointer ' +
+                                        (activeTab === i.toString() ? 'active' : '')
                                     }
                                     onClick={toggle}
                                 >
@@ -56,15 +56,15 @@ const Home = () => {
             </Nav>
             <TabContent activeTab={activeTab}>
                 {data.map((v, i) => (
-                    <TabPane tabId={i.toString()} key={i} style={{ fontSize: "1.1rem" }}>
-                        {typeof v.text === "object"
+                    <TabPane tabId={i.toString()} key={i} style={{ fontSize: '1.1rem' }}>
+                        {typeof v.text === 'object'
                             ? v.text.map((v, i) => (
                                   <span key={i}>
                                       <i>{v.title}</i>
                                       <p>{v.body}</p>
                                   </span>
                               ))
-                            : v.text.split("\n").map((v, i) => (
+                            : v.text.split('\n').map((v, i) => (
                                   <p className="mb-4" key={i}>
                                       {v}
                                   </p>

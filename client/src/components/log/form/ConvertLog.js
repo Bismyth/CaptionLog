@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-import LogForm from "./LogForm";
-import { Spinner } from "reactstrap";
-import { useQuery, useMutation } from "react-query";
-import { blank, blankForm } from "./FormData.json";
-import { fetchLog } from "../../../queries/log";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useHistory, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import LogForm from './LogForm';
+import { Spinner } from 'reactstrap';
+import { useQuery, useMutation } from 'react-query';
+import { blank, blankForm } from './FormData.json';
+import { fetchLog } from '../../../queries/log';
+import axios from 'axios';
 
 const ConvertLog = ({
     match: {
@@ -30,7 +30,7 @@ const ConvertLog = ({
     const [upload] = useMutation(
         async (data) => {
             const { data: result } = await axios({
-                method: "post",
+                method: 'post',
                 url: `/api/logs/convert`,
                 data,
             });
@@ -41,7 +41,7 @@ const ConvertLog = ({
                 history.push(`/log/${data._id}`);
             },
             onError: ({ response }) => {
-                if (response.status === 422) setErrors(response.data["errors"]);
+                if (response.status === 422) setErrors(response.data['errors']);
             },
         }
     );
@@ -54,24 +54,24 @@ const ConvertLog = ({
             var newData = {
                 ...blankForm,
                 _id: oData._id,
-                title: oData["title"] || "",
-                genre: oData["genre"] || "",
-                description: oData["description"] || "",
-                videoSource: oData.video_source || "",
-                captionSource: oData.caption_source || "",
-                originalLocation: oData.original_copy_location || "",
+                title: oData['title'] || '',
+                genre: oData['genre'] || '',
+                description: oData['description'] || '',
+                videoSource: oData.video_source || '',
+                captionSource: oData.caption_source || '',
+                originalLocation: oData.original_copy_location || '',
             };
-            if (oData.description.includes("<iframe")) {
-                newData["description"] = oData["description"].split("\r\n")[0] || "";
+            if (oData.description.includes('<iframe')) {
+                newData['description'] = oData['description'].split('\r\n')[0] || '';
                 newData.digitalInfo = [
                     {
                         ...blank,
-                        length: oData.length || "",
+                        length: oData.length || '',
                         externalLink: oData.description
-                            .replace(/(\r\n|\n|\r)/gm, " ")
-                            .split(" ")
+                            .replace(/(\r\n|\n|\r)/gm, ' ')
+                            .split(' ')
                             .filter((v) => {
-                                return v.includes("https://click");
+                                return v.includes('https://click');
                             })[0],
                     },
                 ];

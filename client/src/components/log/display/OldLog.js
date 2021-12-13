@@ -1,29 +1,29 @@
-import React from "react";
+import React from 'react';
 import {
     Spinner,
     ListGroup,
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-} from "reactstrap";
-import { useSelector } from "react-redux";
-import BackButton from "../../BackButton";
-import Convert from "../logActions/Convert";
-import Delete from "../logActions/Delete";
-import { useHistory } from "react-router-dom";
-import { classHeading } from "../../../config";
-import { useQuery } from "react-query";
-import { fetchLog } from "../../../queries/log";
+} from 'reactstrap';
+import { useSelector } from 'react-redux';
+import BackButton from '../../BackButton';
+import Convert from '../logActions/Convert';
+import Delete from '../logActions/Delete';
+import { useHistory } from 'react-router-dom';
+import { classHeading } from '../../../config';
+import { useQuery } from 'react-query';
+import { fetchLog } from '../../../queries/log';
 
 const display = {
-    description: "Description:",
-    disks: "Disks:",
-    length: "Length:",
-    genre: "Genre:",
-    caption_source: "Caption Source:",
-    original_copy_location: "Original Copy Location:",
-    video_source: "Video Source:",
-    other: "Other: ",
+    description: 'Description:',
+    disks: 'Disks:',
+    length: 'Length:',
+    genre: 'Genre:',
+    caption_source: 'Caption Source:',
+    original_copy_location: 'Original Copy Location:',
+    video_source: 'Video Source:',
+    other: 'Other: ',
 };
 
 const OldLog = ({
@@ -70,7 +70,7 @@ const OldLog = ({
                 {data.completed && data.date_of_completion ? (
                     <ListGroupItem>
                         <ListGroupItemHeading>
-                            {data.completed ? "Completed" : "Incomplete"}
+                            {data.completed ? 'Completed' : 'Incomplete'}
                         </ListGroupItemHeading>
                         <ListGroupItemText>
                             Completed on {new Date(data.date_of_completion).toDateString()}

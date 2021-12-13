@@ -1,1 +1,1 @@
-module.exports = { admin: "admin", read: "read", write: "write" };
+module.exports = { admin: 'admin', read: 'read', write: 'write' };

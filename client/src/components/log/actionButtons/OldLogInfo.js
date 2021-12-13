@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from "react";
-import { Popover, PopoverBody, PopoverHeader } from "reactstrap";
+import React, { Fragment, useState } from 'react';
+import { Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 
-import { ReactComponent as InfoButton } from "../../../icons/info-black-24dp.svg";
-import { ReactComponent as NoButton } from "../../../icons/clear-black-24dp.svg";
+import { ReactComponent as InfoButton } from '../../../icons/info-black-24dp.svg';
+import { ReactComponent as NoButton } from '../../../icons/clear-black-24dp.svg';
 
 const OldLogInfo = ({ data, className }) => {
     const [pOpen, setPOpen] = useState(false);
@@ -10,15 +10,15 @@ const OldLogInfo = ({ data, className }) => {
     return (
         <Fragment>
             <InfoButton
-                id={`d-${data.title.replace(/\s/g, "").substr(0, 4).toLowerCase()}`}
+                id={`d-${data.title.replace(/\s/g, '').substr(0, 4).toLowerCase()}`}
                 alt="Info"
                 className={`link-arrow ${className}`}
             />
             <Popover
-                target={`d-${data.title.replace(/\s/g, "").substr(0, 4).toLowerCase()}`}
+                target={`d-${data.title.replace(/\s/g, '').substr(0, 4).toLowerCase()}`}
                 isOpen={pOpen}
                 toggle={toggle}
-                placement={"left-start"}
+                placement={'left-start'}
             >
                 <PopoverHeader>
                     Old Log Data: <NoButton className="link-arrow" alt="No" onClick={toggle} />

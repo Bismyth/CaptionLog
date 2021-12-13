@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react';
 import {
     Spinner,
     ListGroup,
@@ -6,18 +6,18 @@ import {
     ListGroupItemHeading,
     ListGroupItemText,
     Alert,
-} from "reactstrap";
-import { useSelector } from "react-redux";
-import BackButton from "../../BackButton";
-import { format } from "./LogDisplay.json";
-import Edit from "../../actionButtons/Edit";
-import Delete from "../logActions/Delete";
-import LogHeader from "../LogHeader";
-import { classHeading } from "../../../config";
-import { useQuery } from "react-query";
-import { fetchLog } from "../../../queries/log";
-import OldLogInfo from "../logActions/OldLogInfo";
-import Video from "./Video";
+} from 'reactstrap';
+import { useSelector } from 'react-redux';
+import BackButton from '../../BackButton';
+import { format } from './LogDisplay.json';
+import Edit from '../../actionButtons/Edit';
+import Delete from '../logActions/Delete';
+import LogHeader from '../LogHeader';
+import { classHeading } from '../../../config';
+import { useQuery } from 'react-query';
+import { fetchLog } from '../../../queries/log';
+import OldLogInfo from '../logActions/OldLogInfo';
+import Video from './Video';
 
 const Log = ({
     match: {
@@ -46,7 +46,7 @@ const Log = ({
                     <LogHeader title={data.title} rating={data.rating} year={data.year} />
                 </h2>
                 {userRoles.write ? (
-                    <div className="ml-auto" style={{ minWidth: "72px" }}>
+                    <div className="ml-auto" style={{ minWidth: '72px' }}>
                         {data.oData ? <OldLogInfo data={data.oData} /> : null}
                         <Edit action={{ link: `/edit/${data._id}` }} />
                         <Delete id={data._id} back={true} />
@@ -54,7 +54,7 @@ const Log = ({
                 ) : null}
             </div>
             {Object.entries(format).map(([key, [{ heading, type }, ...entries]]) => {
-                if (type === "multi") {
+                if (type === 'multi') {
                     if (Object.keys(data).includes(key) && data[key].length > 0) {
                         return (
                             <Fragment key={key}>
@@ -70,7 +70,7 @@ const Log = ({
                                             <ListGroupItemText className="d-flex align-items-center">
                                                 {entries
                                                     .filter((value) => {
-                                                        return value.align === "left";
+                                                        return value.align === 'left';
                                                     })
                                                     .map((v, i) => {
                                                         if (Object.keys(value).includes(v.value)) {
@@ -92,7 +92,7 @@ const Log = ({
                                                     })}
                                                 <span className="ml-auto">
                                                     {(isLocal || loggedIn) &&
-                                                    key === "digitalInfo" ? (
+                                                    key === 'digitalInfo' ? (
                                                         <Video
                                                             id={data._id}
                                                             title={data.title}
@@ -111,18 +111,18 @@ const Log = ({
                     }
                 } else {
                     if (
-                        type === "sub" &&
+                        type === 'sub' &&
                         !entries.map((v) => v.value).some((v) => Object.keys(data).includes(v))
                     )
                         return null;
                     return (
                         <Fragment key={key}>
-                            {type === "sub" ? <h3 className="mt-2">{heading}</h3> : <Fragment />}
+                            {type === 'sub' ? <h3 className="mt-2">{heading}</h3> : <Fragment />}
                             <ListGroup>
                                 {entries.map((v) => {
                                     if (
                                         Object.keys(data).includes(v.value) &&
-                                        data[v.value] !== ""
+                                        data[v.value] !== ''
                                     ) {
                                         return (
                                             <ListGroupItem key={`${key[0]}-${v.value}`}>
@@ -131,9 +131,9 @@ const Log = ({
                                                 </ListGroupItemHeading>
                                                 <ListGroupItemText
                                                     className="text-break"
-                                                    style={{ whiteSpace: "pre-line" }}
+                                                    style={{ whiteSpace: 'pre-line' }}
                                                 >
-                                                    {v.special === "date"
+                                                    {v.special === 'date'
                                                         ? new Date(data[v.value]).toDateString()
                                                         : data[v.value]}
                                                 </ListGroupItemText>

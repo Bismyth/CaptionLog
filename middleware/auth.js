@@ -1,17 +1,17 @@
-const UserRoles = require("../models/UserRoles");
-const cas = require("../CAS");
-const userRoles = require("../models/UserRoles.json");
-require("dotenv").config({ path: "../" });
+const UserRoles = require('../models/UserRoles');
+const cas = require('../CAS');
+const userRoles = require('../models/UserRoles.json');
+require('dotenv').config({ path: '../' });
 
 const read = (req, res, next) => {
     if (req.session[cas.session_name]) {
         const groups = req.session.user.memberof.map((v) => {
             return v
-                .split(",")
+                .split(',')
                 .filter((r) => {
-                    return r.includes("CN");
+                    return r.includes('CN');
                 })[0]
-                .split("=")[1];
+                .split('=')[1];
         });
         UserRoles.find(
             { $or: [{ doeNumber: req.session.user.cn }, { adGroup: groups }] },

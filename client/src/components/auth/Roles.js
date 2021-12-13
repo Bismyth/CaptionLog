@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from "react";
-import { useQuery, useMutation, queryCache } from "react-query";
-import axios from "axios";
+import React, { useState, Fragment } from 'react';
+import { useQuery, useMutation, queryCache } from 'react-query';
+import axios from 'axios';
 import {
     ListGroup,
     Spinner,
@@ -18,29 +18,29 @@ import {
     Input,
     ModalFooter,
     Button,
-} from "reactstrap";
-import { classHeading, getRoles } from "../../config";
-import BackButton from "../BackButton";
-import { ReactComponent as AddRole } from "../../icons/person_add-black-24dp.svg";
-import { blankNew, selector, roleDesc } from "./RoleData.json";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-import Edit from "../actionButtons/Edit";
-import Delete from "../actionButtons/Delete";
+} from 'reactstrap';
+import { classHeading, getRoles } from '../../config';
+import BackButton from '../BackButton';
+import { ReactComponent as AddRole } from '../../icons/person_add-black-24dp.svg';
+import { blankNew, selector, roleDesc } from './RoleData.json';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Edit from '../actionButtons/Edit';
+import Delete from '../actionButtons/Delete';
 
 const fetchRoles = async () => {
     var config = {
         url: `/api/auth/roles`,
-        method: "get",
+        method: 'get',
     };
     const { data } = await axios(config);
     return data;
 };
 const postRole = async ([iData, type]) => {
-    var data = Object.fromEntries(Object.entries(iData).filter(([key, value]) => value !== ""));
+    var data = Object.fromEntries(Object.entries(iData).filter(([key, value]) => value !== ''));
     var config = {
         url: `/api/auth/roles`,
-        method: type === "edit" ? "put" : type === "delete" ? "delete" : "post",
+        method: type === 'edit' ? 'put' : type === 'delete' ? 'delete' : 'post',
         data,
     };
     const { data: result } = await axios(config);
@@ -51,33 +51,33 @@ blankNew.roles = Object.fromEntries(Object.entries(roleDesc).map(([key]) => [key
 const Roles = (props) => {
     const userRoles = { ...useSelector(getRoles) };
     const loggedIn = useSelector((state) => state.auth.isAuthenticated);
-    const { data, isLoading } = useQuery("roles", fetchRoles);
+    const { data, isLoading } = useQuery('roles', fetchRoles);
     const [newRoleModal, setNewRoleModal] = useState(false);
     const [formData, setFormData] = useState(blankNew);
-    const [formType, setFormType] = useState("");
+    const [formType, setFormType] = useState('');
     const [cSelect, setCSelect] = useState(Object.keys(selector)[0]);
     const [submit, { isLoading: sLoading }] = useMutation(postRole, {
         onSuccess: () => {
-            queryCache.invalidateQueries("roles");
+            queryCache.invalidateQueries('roles');
             setNewRoleModal(false);
         },
     });
     const modalToggle = async (e) => {
         var type;
-        if (e.target.closest("svg")) type = e.target.closest("svg").id;
+        if (e.target.closest('svg')) type = e.target.closest('svg').id;
         if (!newRoleModal) {
-            if (type === "new") {
-                setFormType("new");
+            if (type === 'new') {
+                setFormType('new');
                 setFormData(blankNew);
                 setCSelect(Object.keys(selector)[0]);
-            } else if (type.includes("edit")) {
-                setFormType("edit");
+            } else if (type.includes('edit')) {
+                setFormType('edit');
                 const d = data.find((v) => {
-                    return v._id === type.split("-")[1];
+                    return v._id === type.split('-')[1];
                 });
                 setFormData(d);
                 setCSelect(
-                    Object.entries(d).find(([key]) => !["roles", "_id", "__v"].includes(key))[0]
+                    Object.entries(d).find(([key]) => !['roles', '_id', '__v'].includes(key))[0]
                 );
             }
         }
@@ -88,13 +88,13 @@ const Roles = (props) => {
         const select = e.target.value;
         setCSelect(select);
         setFormData((v) => {
-            return { [select]: "", roles: v.roles };
+            return { [select]: '', roles: v.roles };
         });
     };
     const formChange = (e) => {
         const { name, value, id, checked } = e.target;
-        if (name === "roles") {
-            if (id === "admin") {
+        if (name === 'roles') {
+            if (id === 'admin') {
                 setFormData((v) => {
                     var t = Object.fromEntries(
                         Object.entries(v.roles).map(([key]) => [key, checked])
@@ -136,7 +136,7 @@ const Roles = (props) => {
                 <div className="ml-auto d-flex align-items-center">
                     <AddRole
                         className="w-auto link-arrow"
-                        style={{ height: "30px" }}
+                        style={{ height: '30px' }}
                         id="new"
                         onClick={modalToggle}
                     />
@@ -144,7 +144,7 @@ const Roles = (props) => {
             </div>
             <Modal isOpen={newRoleModal} toggle={modalToggle}>
                 <ModalHeader toggle={modalToggle}>{`${
-                    formType === "new" ? "New" : "Edit"
+                    formType === 'new' ? 'New' : 'Edit'
                 } Permission`}</ModalHeader>
                 <ModalBody>
                     <Form>
@@ -163,7 +163,7 @@ const Roles = (props) => {
                                 type="text"
                                 name={cSelect}
                                 placeholder={selector[cSelect].desc}
-                                value={formData[cSelect] || ""}
+                                value={formData[cSelect] || ''}
                                 onChange={formChange}
                             />
                         </InputGroup>
@@ -177,7 +177,7 @@ const Roles = (props) => {
                                         onChange={formChange}
                                         name="roles"
                                         checked={formData.roles[key]}
-                                        disabled={formData.roles.admin && key !== "admin"}
+                                        disabled={formData.roles.admin && key !== 'admin'}
                                     />
                                     {` ${key.charAt(0).toUpperCase() + key.slice(1)}: ${desc}`}
                                     <br />
@@ -190,7 +190,7 @@ const Roles = (props) => {
                     <Button
                         color="primary"
                         onClick={() => {
-                            submit([formData, formType.split("-")[0]]);
+                            submit([formData, formType.split('-')[0]]);
                         }}
                         disabled={sLoading}
                     >
@@ -204,11 +204,11 @@ const Roles = (props) => {
                         <ListGroupItem key={v._id}>
                             <ListGroupItemHeading className="d-flex vertical-align-center">
                                 {v.adGroup ? `Group: ${v.adGroup}` : `User: ${v.doeNumber}`}
-                                <div className="ml-auto mr-3" style={{ minWidth: "52px" }}>
+                                <div className="ml-auto mr-3" style={{ minWidth: '52px' }}>
                                     <Edit action={modalToggle} id={`edit-${v._id}`} />
                                     <Delete
                                         action={() => {
-                                            submit([{ id: v._id }, "delete"]);
+                                            submit([{ id: v._id }, 'delete']);
                                         }}
                                         id={v._id}
                                     />
@@ -218,7 +218,7 @@ const Roles = (props) => {
                                 {Object.entries(v.roles)
                                     .filter((r) => r[1])
                                     .map((r) => r[0])
-                                    .join(", ")}
+                                    .join(', ')}
                             </ListGroupItemText>
                         </ListGroupItem>
                     ))}

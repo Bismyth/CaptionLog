@@ -1,9 +1,9 @@
-import React, { Fragment, useCallback } from "react";
-import { Alert } from "reactstrap";
-import { useSelector, useDispatch } from "react-redux";
-import { setPage } from "../../redux/actions/pageActions";
-import LogCard from "./LogCard";
-import { getRoles } from "../../config";
+import React, { Fragment, useCallback } from 'react';
+import { Alert } from 'reactstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { setPage } from '../../redux/actions/pageActions';
+import LogCard from './LogCard';
+import { getRoles } from '../../config';
 
 const LogListItem = ({ data, page }) => {
     const userRoles = {
@@ -14,7 +14,7 @@ const LogListItem = ({ data, page }) => {
         dispatch(
             setPage({
                 page,
-                scrollPos: document.getElementById("scroll").scrollTop,
+                scrollPos: document.getElementById('scroll').scrollTop,
             })
         );
     }, [dispatch, page]);

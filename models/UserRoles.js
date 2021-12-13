@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 //const accessLevels = require("./AccessLevel");
 
@@ -19,4 +19,4 @@ const UserRolesSchema = new Schema({
     roles: Roles,
 });
 
-module.exports = UserRoles = mongoose.model("userroles", UserRolesSchema);
+module.exports = UserRoles = mongoose.model('userroles', UserRolesSchema);

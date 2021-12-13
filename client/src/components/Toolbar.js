@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from 'react';
 import {
     Collapse,
     Navbar,
@@ -9,21 +9,21 @@ import {
     Container,
     NavLink,
     Form,
-} from "reactstrap";
-import Login from "./auth/Login";
-import Logout from "./auth/Logout";
-import { useSelector } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { ReactComponent as Logo } from "../logos/MainLogo.svg";
-import { ReactComponent as SLogo } from "../logos/SLogo.svg";
-import { ReactComponent as SMLogo } from "../logos/SmallLogo.svg";
-import { ReactComponent as NewLog } from "../icons/post_add-black-24dp.svg";
-import { ReactComponent as UserRole } from "../icons/supervisor_account-black-24dp.svg";
-import SearchBar from "./log/SearchBar";
-import { useWindowDimensions, getRoles } from "../config";
+} from 'reactstrap';
+import Login from './auth/Login';
+import Logout from './auth/Logout';
+import { useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { ReactComponent as Logo } from '../logos/MainLogo.svg';
+import { ReactComponent as SLogo } from '../logos/SLogo.svg';
+import { ReactComponent as SMLogo } from '../logos/SmallLogo.svg';
+import { ReactComponent as NewLog } from '../icons/post_add-black-24dp.svg';
+import { ReactComponent as UserRole } from '../icons/supervisor_account-black-24dp.svg';
+import SearchBar from './log/SearchBar';
+import { useWindowDimensions, getRoles } from '../config';
 
-import "./Toolbar.css";
-import IconTooltip from "./IconTooltip";
+import './Toolbar.css';
+import IconTooltip from './IconTooltip';
 
 const Toolbar = (props) => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -31,13 +31,13 @@ const Toolbar = (props) => {
     const isLoading = useSelector((state) => state.auth.isLoading);
     const user = useSelector((state) => state.auth.user);
     const [isOpen, toggle] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
     const [page, setPage] = useState(true);
     const { width } = useWindowDimensions();
     const history = useHistory();
     const location = useLocation();
     useEffect(() => {
-        setPage(location.pathname.split("/")[1]);
+        setPage(location.pathname.split('/')[1]);
     }, [location]);
     const closeNav = () => {
         if (isOpen) {
@@ -48,18 +48,18 @@ const Toolbar = (props) => {
         <Fragment>
             <NavItem>
                 <span className="navbar-text mr-3">
-                    {user ? `Welcome ${user.displayname}` : ""}
+                    {user ? `Welcome ${user.displayname}` : ''}
                 </span>
             </NavItem>
             {userRoles.write ? (
                 <NavItem>
                     <IconTooltip
                         tag={Link}
-                        to={"/newLog"}
+                        to={'/newLog'}
                         id="newLog"
                         className={{
-                            link: "mr-3",
-                            icon: `topIcon ${page === "newLog" ? "active" : ""}`,
+                            link: 'mr-3',
+                            icon: `topIcon ${page === 'newLog' ? 'active' : ''}`,
                         }}
                         Icon={NewLog}
                         tooltip="New Log"
@@ -70,11 +70,11 @@ const Toolbar = (props) => {
                 <NavItem>
                     <IconTooltip
                         tag={Link}
-                        to={"/permissions"}
+                        to={'/permissions'}
                         id="roles"
                         className={{
-                            link: "mr-3",
-                            icon: `topIcon ${page === "permissions" ? "active" : ""}`,
+                            link: 'mr-3',
+                            icon: `topIcon ${page === 'permissions' ? 'active' : ''}`,
                         }}
                         Icon={UserRole}
                         tooltip="User Permissions"
@@ -100,7 +100,7 @@ const Toolbar = (props) => {
                     <Nav navbar className="flex-row ml-auto">
                         <Container>
                             {isLoading ? (
-                                <p style={{ color: "var(--sBlue)" }}>fill</p>
+                                <p style={{ color: 'var(--sBlue)' }}>fill</p>
                             ) : isAuthenticated ? (
                                 authLinks
                             ) : (
@@ -111,8 +111,8 @@ const Toolbar = (props) => {
                 </Container>
             </Navbar>
             <Navbar color="light" light expand="md">
-                <Container style={{ flexWrap: "wrap" }}>
-                    <NavbarBrand tag={Link} to={"/"}>
+                <Container style={{ flexWrap: 'wrap' }}>
+                    <NavbarBrand tag={Link} to={'/'}>
                         {width > 420 ? (
                             <Logo className="logo w-auto" alt="logo" />
                         ) : width > 280 ? (
@@ -123,24 +123,24 @@ const Toolbar = (props) => {
                     </NavbarBrand>
                     <NavbarToggler onClick={() => toggle(!isOpen)} />
                     <Collapse isOpen={isOpen} navbar>
-                        <Nav className="mr-auto" navbar style={{ width: "max-content" }}>
-                            <NavLink tag={Link} to={`/`} active={page === ""} onClick={closeNav}>
+                        <Nav className="mr-auto" navbar style={{ width: 'max-content' }}>
+                            <NavLink tag={Link} to={`/`} active={page === ''} onClick={closeNav}>
                                 Home
                             </NavLink>
                             <NavLink
                                 tag={Link}
                                 to={`/atoz/a`}
-                                active={page === "atoz"}
+                                active={page === 'atoz'}
                                 onClick={closeNav}
                             >
                                 #A-Z
                             </NavLink>
                         </Nav>
                     </Collapse>
-                    {!["search"].includes(page) ? (
+                    {!['search'].includes(page) ? (
                         <Form
                             onSubmit={(e) => {
-                                setValue("");
+                                setValue('');
                                 history.push(`/search/${encodeURIComponent(value)}`);
                                 e.preventDefault();
                             }}

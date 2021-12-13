@@ -1,13 +1,13 @@
-import React, { Fragment, useState } from "react";
-import ReactPlayer from "react-player";
-import { Alert, Modal, ModalHeader, ModalBody, Tooltip } from "reactstrap";
-import { getRoles } from "../../../config";
-import { useSelector } from "react-redux";
-import { ReactComponent as PlayVideo } from "../../../icons/video_library-black-24dp.svg";
-import { ReactComponent as DownloadVideo } from "../../../icons/save_alt-black-24dp.svg";
-import { ReactComponent as DownloadSub } from "../../../icons/subtitles-black-24dp.svg";
+import React, { Fragment, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { Alert, Modal, ModalHeader, ModalBody, Tooltip } from 'reactstrap';
+import { getRoles } from '../../../config';
+import { useSelector } from 'react-redux';
+import { ReactComponent as PlayVideo } from '../../../icons/video_library-black-24dp.svg';
+import { ReactComponent as DownloadVideo } from '../../../icons/save_alt-black-24dp.svg';
+import { ReactComponent as DownloadSub } from '../../../icons/subtitles-black-24dp.svg';
 
-import "./Video.css";
+import './Video.css';
 
 const Video = ({
     id,
@@ -18,7 +18,7 @@ const Video = ({
         ...useSelector(getRoles),
     };
     const vname = iName || title;
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
     const [mOpen, setMOpen] = useState(false);
     const [tooltip, setTooltip] = useState({});
     if (isPrivate && !userRoles.admin) return null;
@@ -26,7 +26,7 @@ const Video = ({
         setMOpen((v) => !v);
     };
     const tToggle = (e) => {
-        const tar = e.target.closest("a") || e.target.closest("svg");
+        const tar = e.target.closest('a') || e.target.closest('svg');
         setTooltip((v) => {
             return {
                 ...v,
@@ -95,7 +95,7 @@ const Video = ({
                                 setError("Video can't be found");
                             }}
                             onReady={() => {
-                                setError("");
+                                setError('');
                             }}
                             controls
                         />

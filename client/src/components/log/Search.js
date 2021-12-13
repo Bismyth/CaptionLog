@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Form, Spinner } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import LogListItem from "./LogListItem";
-import SearchBar from "./SearchBar";
-import { useQuery } from "react-query";
-import { searchLogs } from "../../queries/log";
+import React, { useState, useEffect } from 'react';
+import { Form, Spinner } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
+import LogListItem from './LogListItem';
+import SearchBar from './SearchBar';
+import { useQuery } from 'react-query';
+import { searchLogs } from '../../queries/log';
 
 const Search = ({ match: { params }, location: { scroll } }) => {
     useEffect(() => {
-        if (scroll) document.getElementById("scroll").scroll(0, scroll);
+        if (scroll) document.getElementById('scroll').scroll(0, scroll);
     }, [scroll]);
     const { term } = params;
     const history = useHistory();
     const [value, setValue] = useState(decodeURIComponent(term));
-    const { isLoading, data } = useQuery(["getLogs", { params }], searchLogs, {
+    const { isLoading, data } = useQuery(['getLogs', { params }], searchLogs, {
         onError: (err) => {
             console.error(err);
         },

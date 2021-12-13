@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react';
 
-import { Field } from "formik";
+import { Field } from 'formik';
 import {
     Input,
     FormGroup,
@@ -10,9 +10,9 @@ import {
     InputGroup,
     InputGroupAddon,
     InputGroupText,
-} from "reactstrap";
-import SelectFile from "./SelectFile";
-import TextareaAutosize from "react-autosize-textarea/lib";
+} from 'reactstrap';
+import SelectFile from './SelectFile';
+import TextareaAutosize from 'react-autosize-textarea/lib';
 
 const returnNewObjectOnlyValidKeys = (obj, validKeys) => {
     const newObject = {};
@@ -23,7 +23,7 @@ const returnNewObjectOnlyValidKeys = (obj, validKeys) => {
 };
 
 const FileAddon = React.memo(({ fName, type }) => {
-    if (type !== "fileSelect") return null;
+    if (type !== 'fileSelect') return null;
     return (
         <InputGroupAddon addonType="prepend">
             <InputGroupText>
@@ -34,7 +34,7 @@ const FileAddon = React.memo(({ fName, type }) => {
 });
 
 const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optional }) => {
-    var sName = "";
+    var sName = '';
     if (index !== undefined) {
         sName = `${section}.${index}.`;
         format = { ...format, ...returnNewObjectOnlyValidKeys(optional, uniqueInfo) };
@@ -43,11 +43,11 @@ const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optio
         <Fragment>
             {Object.entries(format).map(([key, { name, type }]) => {
                 const fName = sName + key;
-                const tag = type === "textarea" ? TextareaAutosize : null;
+                const tag = type === 'textarea' ? TextareaAutosize : null;
                 const children = selectors[key]
                     ? selectors[key].map((v) => (
                           <option key={v} value={v}>
-                              {v || name + "..."}
+                              {v || name + '...'}
                           </option>
                       ))
                     : null;
@@ -65,15 +65,15 @@ const FormSection = ({ format, section, selectors = {}, index, uniqueInfo, optio
                                             <FileAddon type={type} fName={fName} />
                                             <Input
                                                 {...field}
-                                                placeholder={name + "..."}
-                                                type={type === "fileSelect" ? "text" : type}
+                                                placeholder={name + '...'}
+                                                type={type === 'fileSelect' ? 'text' : type}
                                                 invalid={!!(meta.touched && meta.error)}
                                                 tag={tag}
                                                 children={children}
-                                                checked={type === "checkbox" && field.value}
+                                                checked={type === 'checkbox' && field.value}
                                                 style={
-                                                    type === "checkbox"
-                                                        ? { marginLeft: ".1rem" }
+                                                    type === 'checkbox'
+                                                        ? { marginLeft: '.1rem' }
                                                         : null
                                                 }
                                             />
